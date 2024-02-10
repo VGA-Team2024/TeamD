@@ -2,7 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class UpgradeBase : ShopItemBase
+/// <summary>
+/// アップグレードの基底クラス
+/// </summary>
+public class UpgradeBase : ShopItemBase
 {
 
+    public override void Buy()
+    {
+        throw new System.NotImplementedException();
+    }
 }
