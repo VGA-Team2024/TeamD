@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopItemBase : MonoBehaviour
+public abstract class ShopItemBase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private string _name;
+    [SerializeField] protected LargeNumber _price;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void Buy();
 }

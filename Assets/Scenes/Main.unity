@@ -891,7 +891,7 @@ GameObject:
   - component: {fileID: 1297357265}
   - component: {fileID: 1297357264}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: ShopNamaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1105,7 +1105,7 @@ GameObject:
   - component: {fileID: 1377047894}
   - component: {fileID: 1377047893}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: ShopPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
