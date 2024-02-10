@@ -6,8 +6,6 @@ public class PlayerManager
     public decimal AutoGenerateCount { get; private set; } = 1;
     public decimal ManualGenerateCount { get; private set; } = 10000;
 
-    private float a;
-
     public void AddResource(decimal resource)
     {
         PlayerResources += resource;
