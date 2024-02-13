@@ -1,18 +1,20 @@
+using System.Collections.Generic;
+
 public class PlayerManager
 {
     /// <summary>所持リソース数管理変数</summary>
-    public LargeNumber PlayerResources { get; private set; }
-
-    /// <summary>自動生成量格納変数</summary>
-    public LargeNumber AutoGenerateCount { get; private set; }
-
-    /// <summary>手動生成量格納変数</summary>
-    public LargeNumber ManualGenerateCount { get; private set; }
+    public LargeNumber PlayerResources { get; private set; } = new(0, 0);
 
     private static PlayerManager _instance = null;
-
-    private PlayerManager() { }
     
+    public SortedDictionary<int, FactoryInfo> AutoGeneratorDictionary { get; private set; } = new();
+
+    public FactoryInfo ManualGenerateCount = new();
+
+    private PlayerManager()
+    {
+    }
+
     public static PlayerManager Instance
     {
         get
@@ -25,7 +27,7 @@ public class PlayerManager
             return _instance;
         }
     }
-    
+
     public void AddResource(LargeNumber value)
     {
         PlayerResources = LargeNumber.Add(PlayerResources, value);
@@ -36,13 +38,8 @@ public class PlayerManager
         PlayerResources = LargeNumber.Subtract(PlayerResources, value);
     }
 
-    public void AddAutoGenerateCount(LargeNumber value)
+    public void AddAutoGenerateCount(FactoryInfo info)
     {
-        AutoGenerateCount = LargeNumber.Add(AutoGenerateCount, value);
-    }
-
-    public void AddManualGenerateCount(LargeNumber value)
-    {
-        ManualGenerateCount = LargeNumber.Add(ManualGenerateCount, value);
+        AutoGeneratorDictionary.Add(info.BaseId, info);
     }
 }
