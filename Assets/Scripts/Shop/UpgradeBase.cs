@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class UpgradeBase : ShopItemBase
 {
-    public override void Buy()
+    public override void Buy(FactoryInfo factoryInfo)
     {
         this.GetComponent<IUpgrade>()?.ApplyUpgrade();
     }

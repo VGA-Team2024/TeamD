@@ -1,12 +1,12 @@
 public struct FactoryInfo
 {
-    public int BaseId;
+    public string Name;
     public LargeNumber BaseGeneratorValue;
     public double BaseScale;
 
-    public FactoryInfo(int id, LargeNumber value, double scale)
+    public FactoryInfo(string name, LargeNumber value, double scale)
     {
-        BaseId = id;
+        Name = name;
         BaseGeneratorValue = value;
         BaseScale = scale;
     }

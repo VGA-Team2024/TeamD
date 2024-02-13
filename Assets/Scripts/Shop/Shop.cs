@@ -15,9 +15,12 @@ public class Shop : MonoBehaviour
 
     private void Start()
     {
+        int id = 0; //Playerに登録する際のID
         foreach (var factory in _factories)
         {   
             var button = Instantiate(_shopItemButtonPrefab, _shopItemButtonParent).GetComponent<ShopItemButton>();
+            var factoryInfo = new FactoryInfo(factory.name, new(0, 0), 1);
+            PlayerManager.Instance.AutoGeneratorDictionary.Add(factory.name, factoryInfo);
             button.SetItemName(factory.name, true);
             button.SetPrice(factory.Price);
             //購入時の処理を登録する。
@@ -25,13 +28,18 @@ public class Shop : MonoBehaviour
             {
                 if (factory.Price <= PlayerManager.Instance.PlayerResources)
                 {
-                    factory.Buy();
+                    PlayerManager.Instance.SubtractResource(factory.Price);
+                    factory.Buy(factoryInfo);
                     factory.IncreasePrice();
                     button.SetCurrentOwnNum();
                     button.SetPrice(factory.Price);
-                    PlayerManager.Instance.SubtractResource(factory.Price);
+                    //プレイヤーへの処理
+                    //・資源を減らす
+                    //・自動生成数を増やす
+                    //・所持数データを増やす
                 }
             };
+            id++;
         }
 
         foreach (var upgrade in _upgrades)
@@ -39,11 +47,15 @@ public class Shop : MonoBehaviour
             var button = Instantiate(_shopItemButtonPrefab, _shopItemButtonParent).GetComponent<ShopItemButton>();
             button.SetItemName(upgrade.name, false);
             button.SetPrice(upgrade.Price);
+            var dummyFactoryInfo = new FactoryInfo(upgrade.name, upgrade.Price, 1);
             button.OnClickEvent += () =>
             {
                 if (upgrade.Price <= PlayerManager.Instance.PlayerResources)
                 {
-                    upgrade.Buy();
+                    //プレイヤーへの処理
+                    //・資源を減らす
+                    //・倍率を増やす
+                    upgrade.Buy(dummyFactoryInfo);
                     PlayerManager.Instance.SubtractResource(upgrade.Price);
                     Destroy(button.gameObject);
                 }

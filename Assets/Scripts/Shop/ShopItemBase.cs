@@ -12,5 +12,5 @@ public abstract class ShopItemBase : MonoBehaviour
     [SerializeField, Header("’l’i")] protected LargeNumber _price;
     public LargeNumber Price => _price;
 
-    public abstract void Buy();
+    public abstract void Buy(FactoryInfo factoryInfo);
 }

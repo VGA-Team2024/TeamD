@@ -7,9 +7,9 @@ public class PlayerManager
 
     private static PlayerManager _instance = null;
     
-    public SortedDictionary<int, FactoryInfo> AutoGeneratorDictionary { get; private set; } = new();
+    public SortedDictionary<string, FactoryInfo> AutoGeneratorDictionary { get; private set; } = new();
 
-    public FactoryInfo ManualGenerateCount = new();
+    public FactoryInfo ManualGenerateCount = new("manual", new(1, 0), 1);
 
     private PlayerManager()
     {
@@ -38,8 +38,14 @@ public class PlayerManager
         PlayerResources = LargeNumber.Subtract(PlayerResources, value);
     }
 
-    public void AddAutoGenerateCount(FactoryInfo info)
+    /// <summary>
+    /// 自動生成数を増やす。増やす予定の値をもとの値に足して新たにFactoryInfoを作成し、Dictionaryに登録する。
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    public void AddAutoGenerateCount(string name, LargeNumber value)
     {
-        AutoGeneratorDictionary.Add(info.BaseId, info);
+        var newfactoryInfo = new FactoryInfo(name, LargeNumber.Add(AutoGeneratorDictionary[name].BaseGeneratorValue, value), AutoGeneratorDictionary[name].BaseScale);
+        AutoGeneratorDictionary[name] = newfactoryInfo;
     }
 }
