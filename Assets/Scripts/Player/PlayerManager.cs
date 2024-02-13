@@ -1,13 +1,13 @@
 public class PlayerManager
 {
     /// <summary>所持リソース数管理変数</summary>
-    public decimal PlayerResources { get; private set; }
+    public LargeNumber PlayerResources { get; private set; }
 
     /// <summary>自動生成量格納変数</summary>
-    public decimal AutoGenerateCount { get; private set; } = 1;
+    public LargeNumber AutoGenerateCount { get; private set; }
 
     /// <summary>手動生成量格納変数</summary>
-    public decimal ManualGenerateCount { get; private set; } = 10000;
+    public LargeNumber ManualGenerateCount { get; private set; }
 
     private static PlayerManager _instance = null;
 
@@ -25,19 +25,24 @@ public class PlayerManager
             return _instance;
         }
     }
-
-    public void AddResource(decimal resource)
+    
+    public void AddResource(LargeNumber value)
     {
-        PlayerResources += resource;
+        PlayerResources = LargeNumber.Add(PlayerResources, value);
     }
 
-    public void AddAutoGenerateCount(decimal value)
+    public void SubtractResource(LargeNumber value)
     {
-        AutoGenerateCount += value;
+        PlayerResources = LargeNumber.Subtract(PlayerResources, value);
     }
 
-    public void AddManualGenerateCount(decimal value)
+    public void AddAutoGenerateCount(LargeNumber value)
     {
-        ManualGenerateCount += value;
+        AutoGenerateCount = LargeNumber.Add(AutoGenerateCount, value);
+    }
+
+    public void AddManualGenerateCount(LargeNumber value)
+    {
+        ManualGenerateCount = LargeNumber.Add(ManualGenerateCount, value);
     }
 }

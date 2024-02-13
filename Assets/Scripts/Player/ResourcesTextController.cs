@@ -21,6 +21,6 @@ public class ResourcesTextController : MonoBehaviour
     /// </summary>
     public void UpdateText()
     {
-        _text.text = _playerManager.PlayerResources.ToString("F2");
+        _text.text = _playerManager.PlayerResources.ToString();
     }
 }
