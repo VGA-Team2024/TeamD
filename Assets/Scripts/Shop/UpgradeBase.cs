@@ -7,10 +7,8 @@ using UnityEngine;
 /// </summary>
 public class UpgradeBase : ShopItemBase
 {
-    
-
     public override void Buy()
     {
-        throw new System.NotImplementedException();
+        this.GetComponent<IUpgrade>()?.ApplyUpgrade();
     }
 }

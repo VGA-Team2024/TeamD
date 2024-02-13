@@ -878,6 +878,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 174982778}
     m_Modifications:
+    - target: {fileID: 8488882586724853167, guid: ebb7f1019144f114ca60ee97c38ce406, type: 3}
+      propertyPath: m_Spacing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8488882586724853167, guid: ebb7f1019144f114ca60ee97c38ce406, type: 3}
+      propertyPath: m_Padding.m_Bottom
+      value: 218
+      objectReference: {fileID: 0}
+    - target: {fileID: 8488882586724853167, guid: ebb7f1019144f114ca60ee97c38ce406, type: 3}
+      propertyPath: m_ReverseArrangement
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8488882588457086298, guid: ebb7f1019144f114ca60ee97c38ce406, type: 3}
       propertyPath: m_Name
       value: ShopCanvas
@@ -966,5 +978,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8488882588457086303, guid: ebb7f1019144f114ca60ee97c38ce406, type: 3}
+      propertyPath: _upgrades.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8488882588457086303, guid: ebb7f1019144f114ca60ee97c38ce406, type: 3}
+      propertyPath: _upgrades.Array.data[0]
+      value: 
+      objectReference: {fileID: -5171512728400728505, guid: 3fa7d99565370464baac701b7b74d0cb, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ebb7f1019144f114ca60ee97c38ce406, type: 3}

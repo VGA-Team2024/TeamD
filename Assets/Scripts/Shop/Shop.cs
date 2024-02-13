@@ -19,14 +19,17 @@ public class Shop : MonoBehaviour
         {   
             var button = Instantiate(_shopItemButtonPrefab, _shopItemButtonParent).GetComponent<ShopItemButton>();
             button.SetItemName(factory.name, true);
+            button.SetPrice(factory.Price);
             //w“üŽž‚Ìˆ—‚ð“o˜^‚·‚éB
             button.OnClickEvent += () =>
             {
-                //if (factory.Price <= PlayerManager.Instance.PlayerResources)
+                if (factory.Price <= PlayerManager.Instance.PlayerResources)
                 {
                     factory.Buy();
                     factory.IncreasePrice();
                     button.SetCurrentOwnNum();
+                    button.SetPrice(factory.Price);
+                    PlayerManager.Instance.SubtractResource(factory.Price);
                 }
             };
         }
@@ -35,11 +38,13 @@ public class Shop : MonoBehaviour
         {
             var button = Instantiate(_shopItemButtonPrefab, _shopItemButtonParent).GetComponent<ShopItemButton>();
             button.SetItemName(upgrade.name, false);
+            button.SetPrice(upgrade.Price);
             button.OnClickEvent += () =>
             {
-                //if (upgrade.Price <= PlayerManager.Instance.PlayerResources)
+                if (upgrade.Price <= PlayerManager.Instance.PlayerResources)
                 {
                     upgrade.Buy();
+                    PlayerManager.Instance.SubtractResource(upgrade.Price);
                     Destroy(button.gameObject);
                 }
             };
