@@ -39,6 +39,27 @@ public struct LargeNumber
         }
     }
 
+    // 減算メソッド
+    public static LargeNumber Subtract(LargeNumber a, LargeNumber b)
+    {
+        if (a.Multiplier > b.Multiplier)
+        {
+            int scaleDifference = a.Multiplier - b.Multiplier;
+            double scaledBaseValue = b.BaseValue * Math.Pow(10, -scaleDifference);
+            return new LargeNumber(a.BaseValue - scaledBaseValue, a.Multiplier);
+        }
+        else if (a.Multiplier < b.Multiplier)
+        {
+            int scaleDifference = b.Multiplier - a.Multiplier;
+            double scaledBaseValue = a.BaseValue * Math.Pow(10, -scaleDifference);
+            return new LargeNumber(b.BaseValue - scaledBaseValue, b.Multiplier);
+        }
+        else
+        {
+            return new LargeNumber(a.BaseValue - b.BaseValue, a.Multiplier);
+        }
+    }
+
     // LargeNumberの値をスケーリングするメソッド
     public void Scale(int scale)
     {

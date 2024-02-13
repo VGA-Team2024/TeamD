@@ -8,8 +8,11 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class ShopItemButton : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] public Text _itemName;
+    [SerializeField] private Text _itemName;
+    [SerializeField] private Text _currentOwnNumText;
     public event Action OnClickEvent;
+    private int _currentOwnNum = 0;
+    private bool _isFactory = false;
     
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -17,8 +20,21 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
         OnClickEvent?.Invoke();
     }
 
-    public void SetItemName(string name)
+    /// <summary>
+    /// é{ê›Ç»ÇÁtrueÇìnÇ∑
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="isFactory"></param>
+    public void SetItemName(string name, bool isFactory)
     {
         _itemName.text = name;
+        _isFactory = isFactory;
+    }
+
+    public void SetCurrentOwnNum()
+    {
+        if (!_isFactory) return;
+        _currentOwnNum++;
+        _currentOwnNumText.text = _currentOwnNum.ToString();
     }
 }

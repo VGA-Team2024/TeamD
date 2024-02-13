@@ -7,6 +7,7 @@ using UnityEngine;
 /// </summary>
 public class UpgradeBase : ShopItemBase
 {
+    
 
     public override void Buy()
     {

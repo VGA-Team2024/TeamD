@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ショップのクラス
+/// UIに施設とアップグレードボタンを表示し、押下時の処理を登録する。
+/// </summary>
 public class Shop : MonoBehaviour
 {
     [SerializeField] private List<UpgradeBase> _upgrades;
@@ -14,14 +18,15 @@ public class Shop : MonoBehaviour
         foreach (var factory in _factories)
         {   
             var button = Instantiate(_shopItemButtonPrefab, _shopItemButtonParent).GetComponent<ShopItemButton>();
-            button.SetItemName(factory.name);
+            button.SetItemName(factory.name, true);
             //購入時の処理を登録する。
             button.OnClickEvent += () =>
             {
-                //if (factory.Price <= PlayerData.Instance.Money)
+                //if (factory.Price <= PlayerManager.Instance.PlayerResources)
                 {
                     factory.Buy();
                     factory.IncreasePrice();
+                    button.SetCurrentOwnNum();
                 }
             };
         }
@@ -29,6 +34,15 @@ public class Shop : MonoBehaviour
         foreach (var upgrade in _upgrades)
         {
             var button = Instantiate(_shopItemButtonPrefab, _shopItemButtonParent).GetComponent<ShopItemButton>();
+            button.SetItemName(upgrade.name, false);
+            button.OnClickEvent += () =>
+            {
+                //if (upgrade.Price <= PlayerManager.Instance.PlayerResources)
+                {
+                    upgrade.Buy();
+                    Destroy(button.gameObject);
+                }
+            };
         }
     }
 }
