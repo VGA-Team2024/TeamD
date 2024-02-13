@@ -16,7 +16,11 @@ public class ResourceGenerator : MonoBehaviour
     /// </summary>
     public void AutoGenerate()
     {
-        _playerManager.AddResource(_playerManager.AutoGenerateCount);
+        //_playerManager.AddResource(_playerManager.AutoGenerateCount);
+        foreach (var item in _playerManager.AutoGeneratorDictionary.Values)
+        {
+            _playerManager.AddResource(item.BaseGeneratorValue * item.BaseScale);
+        }
     }
 
     /// <summary>
@@ -24,6 +28,6 @@ public class ResourceGenerator : MonoBehaviour
     /// </summary>
     public void ManualGenerate()
     {
-        _playerManager.AddResource(_playerManager.ManualGenerateCount);
+        _playerManager.AddResource(_playerManager.ManualGenerateCount.BaseGeneratorValue * _playerManager.ManualGenerateCount.BaseScale);
     }
 }
