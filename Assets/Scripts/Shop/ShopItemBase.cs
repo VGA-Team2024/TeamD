@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopItemBase : MonoBehaviour
+/// <summary>
+/// ショップで販売するアイテムの基底クラス
+/// 施設とアップグレードの基底クラス
+/// </summary>
+public abstract class ShopItemBase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField, Header("名前")] private string _name;
+    [SerializeField, Header("値段")] protected LargeNumber _price;
+    public LargeNumber Price => _price;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void Buy();
 }
