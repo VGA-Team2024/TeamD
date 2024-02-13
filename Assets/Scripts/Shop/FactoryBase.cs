@@ -9,11 +9,12 @@ public class FactoryBase : ShopItemBase
 {
     [SerializeField, Header("¶¬‚·‚é”")] private LargeNumber _generateNum;
     const double _increaseRate = 1.15d;
+    public LargeNumber GenerateNum => _generateNum;
 
-    public override void Buy()
+    public override void Buy(FactoryInfo factoryInfo)
     {
         //ƒvƒŒƒCƒ„[‚Ì©“®¶¬”‚ğ‘‚â‚·
-        PlayerManager.Instance.AddAutoGenerateCount(_generateNum);
+        PlayerManager.Instance.AddAutoGenerateCount(factoryInfo.Name, _generateNum);
     }
 
     public void IncreasePrice()

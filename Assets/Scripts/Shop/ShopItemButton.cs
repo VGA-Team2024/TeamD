@@ -17,7 +17,6 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("クリック！");
         OnClickEvent?.Invoke();
     }
 

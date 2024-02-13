@@ -8,6 +8,6 @@ public class DoubleCursor : MonoBehaviour, IUpgrade
     {
         //ƒJ[ƒ\ƒ‹‚Ì©“®¶¬”‚ğ2”{‚É‚·‚é
         //è“®¶¬”‚ğ2”{‚É‚·‚é
-        PlayerManager.Instance.AddManualGenerateCount(PlayerManager.Instance.ManualGenerateCount);
+        PlayerManager.Instance.ManualGenerateCount.AddScale(1);
     }
 }
