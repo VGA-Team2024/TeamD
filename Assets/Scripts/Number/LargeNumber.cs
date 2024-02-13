@@ -34,7 +34,11 @@ public struct LargeNumber : IComparable<LargeNumber>, IEquatable<LargeNumber>
     // 数値を文字列として表示するための簡単なメソッド
     public override string ToString()
     {
-        return $"{BaseValue}e{Multiplier}";
+        if (Multiplier == 0)
+        {
+            return BaseValue.ToString("F2");
+        }
+        return $"{BaseValue:0.##}e{Multiplier}";
     }
 
     // 二つのLargeNumberを加算する静的メソッド
@@ -97,13 +101,14 @@ public struct LargeNumber : IComparable<LargeNumber>, IEquatable<LargeNumber>
         double result = BaseValue * multiplier;
         int resultMultiplier = Multiplier;
 
-        while (result >= 10)
+        // 有効桁数が超える場合、Multiplierを調整
+        while (Math.Abs(result) >= double.MaxValue)
         {
             result /= 10;
             resultMultiplier++;
         }
 
-        while (result > 0 && result < 1)
+        while (Math.Abs(result) > 0 && Math.Abs(result) < 1)
         {
             result *= 10;
             resultMultiplier--;

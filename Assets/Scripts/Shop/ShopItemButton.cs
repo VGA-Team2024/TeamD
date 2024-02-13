@@ -10,9 +10,10 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private Text _itemName;
     [SerializeField] private Text _currentOwnNumText;
-    public event Action OnClickEvent;
+    [SerializeField] private Text _priceText;
     private int _currentOwnNum = 0;
     private bool _isFactory = false;
+    public event Action OnClickEvent;
     
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -29,6 +30,10 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
     {
         _itemName.text = name;
         _isFactory = isFactory;
+        if (!_isFactory)
+        {
+            _currentOwnNumText.gameObject.SetActive(false);
+        }
     }
 
     public void SetCurrentOwnNum()
@@ -36,5 +41,10 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
         if (!_isFactory) return;
         _currentOwnNum++;
         _currentOwnNumText.text = _currentOwnNum.ToString();
+    }
+
+    public void SetPrice(LargeNumber price)
+    {
+        _priceText.text = price.ToString();
     }
 }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3324811619423529589}
   - component: {fileID: -5171512728400728505}
+  - component: {fileID: 5459253278338530442}
   m_Layer: 0
   m_Name: DoubleCursor
   m_TagString: Untagged
@@ -44,7 +45,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42f7944c86288f24b8f14c46b94495d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: "\u30AB\u30FC\u30BD\u30EB\u4E8C\u500D"
+  _name: "\u30AB\u30FC\u30BD\u30EB\u53CE\u76CA\u4E8C\u500D"
   _price:
-    BaseValue: 0
+    BaseValue: 100
     Multiplier: 0
+--- !u!114 &5459253278338530442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6099888445662075496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dcc0a1dc3054ff4bb2402c7677351d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

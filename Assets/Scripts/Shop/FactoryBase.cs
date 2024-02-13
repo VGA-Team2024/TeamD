@@ -8,11 +8,12 @@ using UnityEngine;
 public class FactoryBase : ShopItemBase
 {
     [SerializeField, Header("¶¬‚·‚é”")] private LargeNumber _generateNum;
-    const float _increaseRate = 1.15f;
+    const double _increaseRate = 1.15d;
 
     public override void Buy()
     {
         //ƒvƒŒƒCƒ„[‚Ì©“®¶¬”‚ğ‘‚â‚·
+        PlayerManager.Instance.AddAutoGenerateCount(_generateNum);
     }
 
     public void IncreasePrice()
