@@ -1,15 +1,34 @@
 using System;
 
 [Serializable]
-public struct LargeNumber
+public struct LargeNumber : IComparable<LargeNumber>, IEquatable<LargeNumber>
 {
     public double BaseValue;
     public int Multiplier;
+    public const double MaxBaseValue = double.MaxValue;
+    public const double MinBaseValue = double.MinValue;
 
     public LargeNumber(double baseValue, int multiplier)
     {
+        AdjustValues(ref baseValue, ref multiplier);
+
         this.BaseValue = baseValue;
         this.Multiplier = multiplier;
+    }
+
+    private static void AdjustValues(ref double baseValue, ref int multiplier)
+    {
+        while (baseValue > MaxBaseValue)
+        {
+            baseValue /= 10;
+            multiplier++;
+        }
+
+        while (baseValue < MinBaseValue)
+        {
+            baseValue *= 10;
+            multiplier--;
+        }
     }
 
     // 数値を文字列として表示するための簡単なメソッド
@@ -92,4 +111,45 @@ public struct LargeNumber
 
         return new LargeNumber(result, resultMultiplier);
     }
+
+    public int CompareTo(LargeNumber other)
+    {
+        // 基底値が異なる場合、基底値を比較
+        if (BaseValue != other.BaseValue)
+        {
+            return BaseValue.CompareTo(other.BaseValue);
+        }
+        // 基底値が同じ場合、乗数を比較
+        return Multiplier.CompareTo(other.Multiplier);
+    }
+
+    public bool Equals(LargeNumber other)
+    {
+        return BaseValue == other.BaseValue && Multiplier == other.Multiplier;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is LargeNumber)
+        {
+            return Equals((LargeNumber)obj);
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(BaseValue, Multiplier);
+    }
+
+    public static bool operator <=(LargeNumber a, LargeNumber b)
+    {
+        return a.CompareTo(b) <= 0;
+    }
+    
+    public static bool operator >=(LargeNumber a, LargeNumber b)
+    {
+        return a.CompareTo(b) >= 0;
+    }
+
 }
