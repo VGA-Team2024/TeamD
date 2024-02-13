@@ -38,8 +38,14 @@ public class PlayerManager
         PlayerResources = LargeNumber.Subtract(PlayerResources, value);
     }
 
+    /// <summary>
+    /// 自動生成数を増やす。増やす予定の値をもとの値に足して新たにFactoryInfoを作成し、Dictionaryに登録する。
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
     public void AddAutoGenerateCount(string name, LargeNumber value)
     {
-        AutoGeneratorDictionary[name].AddValue(value);
+        var newfactoryInfo = new FactoryInfo(name, LargeNumber.Add(AutoGeneratorDictionary[name].BaseGeneratorValue, value), AutoGeneratorDictionary[name].BaseScale);
+        AutoGeneratorDictionary[name] = newfactoryInfo;
     }
 }
