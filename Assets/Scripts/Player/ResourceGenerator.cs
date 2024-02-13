@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class ResourceGenerator : MonoBehaviour
 {
-    private readonly PlayerManager _playerManager = new();
-
+    private readonly PlayerManager _playerManager = PlayerManager.Instance;
+    
     private void FixedUpdate()
     {
         AutoGenerate();

@@ -4,11 +4,16 @@ using UnityEngine;
 public class ResourcesTextController : MonoBehaviour
 {
     private TextMeshProUGUI _text;
-    private PlayerManager _playerManager = new();
+    private PlayerManager _playerManager = PlayerManager.Instance;
 
     private void Start()
     {
         _text = GetComponent<TextMeshProUGUI>();
+    }
+
+    private void Update()
+    {
+        UpdateText();
     }
 
     /// <summary>
