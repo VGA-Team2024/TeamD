@@ -3,7 +3,7 @@
 public class PlayerManager
 {
     /// <summary>所持リソース数管理変数</summary>
-    public LargeNumber PlayerResources { get; private set; } = new(0, 0);
+    public LargeNumber CookieCount { get; private set; } = new(0, 0);
 
     private static PlayerManager _instance = null;
     
@@ -28,14 +28,14 @@ public class PlayerManager
         }
     }
 
-    public void AddResource(LargeNumber value)
+    public void AddCookie(LargeNumber value)
     {
-        PlayerResources = LargeNumber.Add(PlayerResources, value);
+        CookieCount = LargeNumber.Add(CookieCount, value);
     }
 
-    public void SubtractResource(LargeNumber value)
+    public void SubtractCookie(LargeNumber value)
     {
-        PlayerResources = LargeNumber.Subtract(PlayerResources, value);
+        CookieCount = LargeNumber.Subtract(CookieCount, value);
     }
 
     /// <summary>

@@ -26,9 +26,9 @@ public class Shop : MonoBehaviour
             //購入時の処理を登録する。
             button.OnClickEvent += () =>
             {
-                if (factory.Price <= PlayerManager.Instance.PlayerResources)
+                if (factory.Price <= PlayerManager.Instance.CookieCount)
                 {
-                    PlayerManager.Instance.SubtractResource(factory.Price);
+                    PlayerManager.Instance.SubtractCookie(factory.Price);
                     factory.Buy(factoryInfo);
                     factory.IncreasePrice();
                     button.SetCurrentOwnNum();
@@ -50,13 +50,13 @@ public class Shop : MonoBehaviour
             var dummyFactoryInfo = new FactoryInfo(upgrade.name, upgrade.Price, 1);
             button.OnClickEvent += () =>
             {
-                if (upgrade.Price <= PlayerManager.Instance.PlayerResources)
+                if (upgrade.Price <= PlayerManager.Instance.CookieCount)
                 {
                     //プレイヤーへの処理
                     //・資源を減らす
                     //・倍率を増やす
                     upgrade.Buy(dummyFactoryInfo);
-                    PlayerManager.Instance.SubtractResource(upgrade.Price);
+                    PlayerManager.Instance.SubtractCookie(upgrade.Price);
                     Destroy(button.gameObject);
                 }
             };
