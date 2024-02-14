@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: "\u30AB\u30FC\u30BD\u30EB"
   _price:
-    BaseValue: 10
+    BaseValue: 15
     Multiplier: 0
   _generateNum:
     BaseValue: 0.1
