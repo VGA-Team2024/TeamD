@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,11 +6,11 @@ public class DoubleCursor : MonoBehaviour, IUpgrade
 {
     public void ApplyUpgrade()
     {
-        //ƒJ[ƒ\ƒ‹‚Ì©“®¶¬”‚ğ2”{‚É‚·‚é
+        //ã‚«ãƒ¼ã‚½ãƒ«ã®è‡ªå‹•ç”Ÿæˆæ•°ã‚’2å€ã«ã™ã‚‹
         var cursorAutoGenerateInfo = PlayerManager.Instance.AutoGeneratorDictionary["Cursor"];
         var newfactoryInfo = new FactoryInfo("Cursor", cursorAutoGenerateInfo.BaseGeneratorValue, cursorAutoGenerateInfo.BaseScale + 1);
         cursorAutoGenerateInfo = newfactoryInfo;
-        //è“®¶¬”‚ğ2”{‚É‚·‚é
+        //æ‰‹å‹•ç”Ÿæˆæ•°ã‚’2å€ã«ã™ã‚‹
         PlayerManager.Instance.ManualGenerateCount.AddScale(1);
     }
 }
