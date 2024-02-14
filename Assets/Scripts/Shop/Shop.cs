@@ -19,7 +19,7 @@ public class Shop : MonoBehaviour
         foreach (var factory in _factories)
         {   
             var button = Instantiate(_shopItemButtonPrefab, _shopItemButtonParent).GetComponent<ShopItemButton>();
-            var factoryInfo = new FactoryInfo(factory.name, new(0, 0), 1);
+            var factoryInfo = new FactoryInfo(factory.name, new(0, 0), 0);
             PlayerManager.Instance.AutoGeneratorDictionary.Add(factory.name, factoryInfo);
             button.SetItemName(factory.name, true);
             button.SetPrice(factory.Price);

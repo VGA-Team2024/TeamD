@@ -9,7 +9,7 @@ public class PlayerManager
     
     public SortedDictionary<string, FactoryInfo> AutoGeneratorDictionary { get; private set; } = new();
 
-    public FactoryInfo ManualGenerateCount = new("manual", new(1, 0), 1);
+    public FactoryInfo ManualGenerateCount = new("manual", new(1, 0), 0);
 
     private PlayerManager()
     {
@@ -47,7 +47,7 @@ public class PlayerManager
     {
         // ここで更新したFactoryInfoを生成し、Dictionaryに登録する。
                                          //どの施設か,        元の生成量に増やす予定の生成量を足したもの,                     生成量にかかっている倍率
-        var newfactoryInfo = new FactoryInfo(name, LargeNumber.Add(AutoGeneratorDictionary[name].BaseGeneratorValue, value), AutoGeneratorDictionary[name].BaseScale);
+        var newfactoryInfo = new FactoryInfo(name, LargeNumber.Add(AutoGeneratorDictionary[name].BaseGeneratorValue, value), AutoGeneratorDictionary[name].BasePower);
         AutoGeneratorDictionary[name] = newfactoryInfo;
     }
 }

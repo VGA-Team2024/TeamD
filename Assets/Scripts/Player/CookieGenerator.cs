@@ -24,7 +24,7 @@ public class CookieGenerator : MonoBehaviour
         {
             foreach (var item in _playerManager.AutoGeneratorDictionary.Values)
             {
-                _playerManager.AddCookie(item.BaseGeneratorValue * item.BaseScale);
+                _playerManager.AddCookie(item.BaseGeneratorValue * (1 << (int)item.BasePower));
             }
             await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: ct);
         }
@@ -35,6 +35,6 @@ public class CookieGenerator : MonoBehaviour
     /// </summary>
     public void ManualGenerate()
     {
-        _playerManager.AddCookie(_playerManager.ManualGenerateCount.BaseGeneratorValue * _playerManager.ManualGenerateCount.BaseScale);
+        _playerManager.AddCookie(_playerManager.ManualGenerateCount.BaseGeneratorValue * (1 << (int)_playerManager.ManualGenerateCount.BasePower));
     }
 }

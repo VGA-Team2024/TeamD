@@ -7,13 +7,14 @@ public struct FactoryInfo
 {
     public string Name;
     public LargeNumber BaseGeneratorValue;
-    public double BaseScale;
+    /// <summary>2の累乗の指数の数</summary>
+    public double BasePower;
 
-    public FactoryInfo(string name, LargeNumber value, double scale)
+    public FactoryInfo(string name, LargeNumber value, double power)
     {
         Name = name;
         BaseGeneratorValue = value;
-        BaseScale = scale;
+        BasePower = power;
     }
 
     public void AddValue(LargeNumber value)
@@ -21,8 +22,8 @@ public struct FactoryInfo
         BaseGeneratorValue = LargeNumber.Add(BaseGeneratorValue, value);
     }
 
-    public void AddScale(double scale)
+    public void AddPower(double power)
     {
-        BaseScale += scale;
+        BasePower += power;
     }
 }
