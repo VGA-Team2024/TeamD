@@ -1,20 +1,9 @@
 using System;
 
-/// <summary>
-/// 大きな数値を扱うための構造体
-/// 例えば「1000」は「BaseValue=1, Multiplier=3」または「BaseValue=1000, Multiplier=0」として表現される
-/// </summary>
 [Serializable]
 public struct LargeNumber : IComparable<LargeNumber>, IEquatable<LargeNumber>
 {
-    /// <summary>
-    /// 値がいくつかを示す基底値
-    /// </summary>
     public double BaseValue;
-
-    /// <summary>
-    /// 基底値の桁数を示す乗数。10の乗数を表す。
-    /// </summary>
     public int Multiplier;
     public const double MaxBaseValue = double.MaxValue;
     public const double MinBaseValue = double.MinValue;
