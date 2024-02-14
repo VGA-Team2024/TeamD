@@ -1,3 +1,8 @@
+/// <summary>
+/// 施設の生成情報の構造体
+/// どの施設か、基本の生成数、生成量にかかっている倍率
+/// を持つ
+/// </summary>
 public struct FactoryInfo
 {
     public string Name;
