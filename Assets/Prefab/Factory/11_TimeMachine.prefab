@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3324811619423529589}
   - component: {fileID: 963665551445433007}
   m_Layer: 0
-  m_Name: Cursor
+  m_Name: 11_TimeMachine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515e7a4df73f9ca4fa0816e6b74a714e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: "\u30AB\u30FC\u30BD\u30EB"
+  _name: "\u30BF\u30A4\u30E0\u30DE\u30B7\u30F3"
   _price:
-    BaseValue: 10
+    BaseValue: 14000000000000
     Multiplier: 0
   _generateNum:
-    BaseValue: 0.1
+    BaseValue: 65000000
     Multiplier: 0
