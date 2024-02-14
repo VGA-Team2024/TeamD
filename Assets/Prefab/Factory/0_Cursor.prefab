@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3324811619423529589}
   - component: {fileID: 963665551445433007}
   m_Layer: 0
-  m_Name: Granma
+  m_Name: 0_Cursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515e7a4df73f9ca4fa0816e6b74a714e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: "\u30B0\u30E9\u30F3\u30DE"
+  _name: "\u30AB\u30FC\u30BD\u30EB"
   _price:
-    BaseValue: 100
+    BaseValue: 10
     Multiplier: 0
   _generateNum:
-    BaseValue: 1
+    BaseValue: 0.1
     Multiplier: 0
