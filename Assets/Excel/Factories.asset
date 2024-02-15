@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a68ec687fe641e43ae5cb9429b90f8b, type: 3}
+  m_Name: Factories
+  m_EditorClassIdentifier: 
+  Entities:
+  - Key: 0
+    Name: "\u30AB\u30FC\u30BD\u30EB"
+    BasePrice: 15
+    CpS: 0.1
+  - Key: 1
+    Name: "\u30B0\u30E9\u30F3\u30DE"
+    BasePrice: 100
+    CpS: 1
+  - Key: 2
+    Name: "\u8FB2\u5834"
+    BasePrice: 1100
+    CpS: 8
+  - Key: 3
+    Name: "\u9271\u5C71"
+    BasePrice: 12000
+    CpS: 47
+  - Key: 4
+    Name: "\u5DE5\u5834"
+    BasePrice: 130000
+    CpS: 260
+  - Key: 5
+    Name: "\u9280\u884C"
+    BasePrice: 1400000
+    CpS: 1400
+  - Key: 6
+    Name: "\u795E\u6BBF"
+    BasePrice: 20000000
+    CpS: 7800
+  - Key: 7
+    Name: "\u9B54\u6CD5\u4F7F\u3044\u306E\u5854"
+    BasePrice: 330000000
+    CpS: 44000
+  - Key: 8
+    Name: "\u5B87\u5B99\u8239"
+    BasePrice: 5100000000
+    CpS: 260000
+  - Key: 9
+    Name: "\u932C\u91D1\u8853\u5BA4"
+    BasePrice: 75000000000
+    CpS: 1600000
+  - Key: 10
+    Name: "\u30DD\u30FC\u30BF\u30EB"
+    BasePrice: 1000000000000
+    CpS: 10000000
+  - Key: 11
+    Name: "\u30BF\u30A4\u30E0\u30DE\u30B7\u30F3"
+    BasePrice: 14000000000000
+    CpS: 65000000
+  - Key: 12
+    Name: "\u53CD\u7269\u8CEA\u51DD\u7E2E\u5668"
+    BasePrice: 170000000000000
+    CpS: 430000000
+  - Key: 13
+    Name: "\u30D7\u30EA\u30BA\u30E0"
+    BasePrice: 2100000000000000
+    CpS: 2900000000
+  - Key: 14
+    Name: "\u30C1\u30E3\u30F3\u30B9\u30E1\u30FC\u30AB\u30FC"
+    BasePrice: 26000000000000000
+    CpS: 21000000000
+  - Key: 15
+    Name: "\u81EA\u5DF1\u7121\u9650\u751F\u6210\u30A8\u30F3\u30B8\u30F3"
+    BasePrice: 3.1e+17
+    CpS: 150000000000
+  - Key: 16
+    Name: "Javascript\u30B3\u30F3\u30BD\u30FC\u30EB"
+    BasePrice: 7.1e+19
+    CpS: 1100000000000
+  - Key: 17
+    Name: "\u904A\u4F11\u5B87\u5B99"
+    BasePrice: 1.2e+22
+    CpS: 8300000000000
+  - Key: 18
+    Name: "\u30B3\u30FC\u30C6\u30C3\u30AF\u30B9\u30FB\u30D9\u30A4\u30AB\u30FC"
+    BasePrice: 1.9e+24
+    CpS: 64000000000000
+  - Key: 19
+    Name: "\u3042\u306A\u305F"
+    BasePrice: 5.4e+26
+    CpS: 510000000000000
