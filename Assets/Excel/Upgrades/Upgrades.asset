@@ -1,0 +1,375 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e63ac167bf6b5df40add071d72663bc5, type: 3}
+  m_Name: Upgrades
+  m_EditorClassIdentifier: 
+  Entities:
+  - Key: 0
+    Tier: 0
+    Name: "\u5F37\u5316\u3055\u308C\u305F\u4EBA\u5DEE\u3057\u6307"
+  - Key: 0
+    Tier: 1
+    Name: "\u624B\u6839\u7BA1\u4E88\u9632\u30AF\u30EA\u30FC\u30E0"
+  - Key: 0
+    Tier: 2
+    Name: "\u4E21\u624B\u5229\u304D"
+  - Key: 0
+    Tier: 3
+    Name: "\u5343\u672C\u306E\u6307"
+  - Key: 0
+    Tier: 4
+    Name: "\u767E\u4E07\u672C\u306E\u6307"
+  - Key: 0
+    Tier: 5
+    Name: "\u5341\u5104\u672C\u306E\u6307"
+  - Key: 0
+    Tier: 6
+    Name: "\u4E00\u5146\u672C\u306E\u6307"
+  - Key: 0
+    Tier: 7
+    Name: "\u5343\u5146\u672C\u306E\u6307"
+  - Key: 0
+    Tier: 8
+    Name: "\u767E\u4EAC\u672C\u306E\u6307"
+  - Key: 0
+    Tier: 9
+    Name: "\u5341\u5793\u672C\u306E\u6307"
+  - Key: 0
+    Tier: 10
+    Name: "\u4E00\U00025771\u672C\u306E\u6307"
+  - Key: 0
+    Tier: 11
+    Name: "\u5343\U00025771\u672C\u306E\u6307"
+  - Key: 0
+    Tier: 12
+    Name: "\u767E\u7A63\u672C\u306E\u6307"
+  - Key: 0
+    Tier: 13
+    Name: "\u5341\u6E9D\u672C\u306E\u6307"
+  - Key: 0
+    Tier: 14
+    Name: "\u4E00\u6F64\u672C\u306E\u6307"
+  - Key: 1
+    Tier: 0
+    Name: "\u30B0\u30E9\u30F3\u30DE\u304B\u3089\u306E\u8EE2\u9001\u30E1\u30FC\u30EB"
+  - Key: 1
+    Tier: 1
+    Name: "\u91D1\u5C5E\u88FD\u3081\u3093\u68D2"
+  - Key: 1
+    Tier: 2
+    Name: "\u6ED1\u3089\u304B\u306A\u5165\u308C\u6B6F"
+  - Key: 1
+    Tier: 3
+    Name: "\u30D7\u30EB\u30FC\u30F3\u30B8\u30E5\u30FC\u30B9"
+  - Key: 1
+    Tier: 4
+    Name: "\u539A\u307F\u304C\u4E8C\u500D\u306E\u30E1\u30AC\u30CD"
+  - Key: 1
+    Tier: 5
+    Name: "\u9AD8\u9F62\u5316\u30A8\u30FC\u30B8\u30A7\u30F3\u30C8"
+  - Key: 1
+    Tier: 6
+    Name: "\u904E\u6FC0\u306A\u6B69\u884C\u5668"
+  - Key: 1
+    Tier: 7
+    Name: "\u675F\u7E1B\u304B\u3089\u89E3\u304D\u653E\u305F\u308C\u305F\u8005"
+  - Key: 1
+    Tier: 8
+    Name: "\u8A8D\u77E5\u75C7\u304B\u3089\u306E\u56DE\u5FA9"
+  - Key: 1
+    Tier: 9
+    Name: "\u8272\u843D\u3061\u3057\u306A\u3044\u30D8\u30A2\u30AB\u30E9\u30FC"
+  - Key: 1
+    Tier: 10
+    Name: "\u826F\u3044\u30DE\u30CA\u30FC"
+  - Key: 1
+    Tier: 11
+    Name: "\u4E16\u4EE3\u5F8C\u9000"
+  - Key: 1
+    Tier: 12
+    Name: "\u7ACB\u3061\u5BC4\u308A"
+  - Key: 1
+    Tier: 13
+    Name: "\u53F0\u6240\u306E\u6238\u68DA"
+  - Key: 1
+    Tier: 14
+    Name: "\u6756\u5148\u306B\u4ED8\u3051\u305F\u30B9\u30DD\u30F3\u30B8\u30AB\u30D0\u30FC"
+  - Key: 2
+    Tier: 0
+    Name: "\u5B89\u7269\u306E\u30AF\u30EF"
+  - Key: 2
+    Tier: 1
+    Name: "\u80A5\u6599"
+  - Key: 2
+    Tier: 2
+    Name: "\u30AF\u30C3\u30AD\u30FC\u306E\u6728"
+  - Key: 2
+    Tier: 3
+    Name: "\u907A\u4F1D\u5B50\u7D44\u307F\u63DB\u3048\u30AF\u30C3\u30AD\u30FC"
+  - Key: 2
+    Tier: 4
+    Name: "\u30B8\u30F3\u30B8\u30E3\u30FC\u30D6\u30EC\u30C3\u30C9\u306E\u30AB\u30AB\u30B7"
+  - Key: 2
+    Tier: 5
+    Name: "\u30D1\u30EB\u30B5\u30FC\u30B9\u30D7\u30EA\u30F3\u30AF\u30E9\u30FC"
+  - Key: 2
+    Tier: 6
+    Name: "\u30D5\u30A1\u30C3\u30B8\u83CC"
+  - Key: 2
+    Tier: 7
+    Name: "\u8089\u98DF\u690D\u7269\u306E\u5C0F\u9EA6\u305F\u3061"
+  - Key: 2
+    Tier: 8
+    Name: "\u4EBA\u9053\u7684\u8FB2\u85AC"
+  - Key: 2
+    Tier: 9
+    Name: "\u30D0\u30FC\u30F3\u30B9\u30BF\u30FC"
+  - Key: 2
+    Tier: 10
+    Name: "\u30EA\u30F3\u30C8\u30F4\u30EB\u30E0"
+  - Key: 2
+    Tier: 11
+    Name: "\u4E16\u754C\u7A2E\u5B50\u8CAF\u8535\u5EAB"
+  - Key: 2
+    Tier: 12
+    Name: "\u9006\u30F4\u30A3\u30FC\u30AC\u30F3\u4E3B\u7FA9"
+  - Key: 2
+    Tier: 13
+    Name: "\u30AF\u30C3\u30AD\u30FC\u30DE\u30EB\u30C1"
+  - Key: 2
+    Tier: 14
+    Name: "\u81EA\u52D5\u904B\u8EE2\u30C8\u30E9\u30AF\u30BF\u30FC"
+  - Key: 3
+    Tier: 0
+    Name: "\u30B7\u30E5\u30AC\u30FC\u30AC\u30B9"
+  - Key: 3
+    Tier: 1
+    Name: "\u30E1\u30AC\u30C9\u30EA\u30EB"
+  - Key: 3
+    Tier: 2
+    Name: "\u30A6\u30EB\u30C8\u30E9\u30C9\u30EA\u30EB"
+  - Key: 3
+    Tier: 3
+    Name: "\u30A6\u30EB\u30C6\u30A3\u30DE\u30C9\u30EA\u30EB"
+  - Key: 3
+    Tier: 4
+    Name: "\u6C34\u7206\u30DE\u30A4\u30CB\u30F3\u30B0"
+  - Key: 3
+    Tier: 5
+    Name: "\u30B3\u30A2\u30D5\u30A9\u30FC\u30B8"
+  - Key: 3
+    Tier: 6
+    Name: "\u60D1\u661F\u3092\u5206\u88C2\u3059\u308B\u8005"
+  - Key: 3
+    Tier: 7
+    Name: "\u30AB\u30CE\u30FC\u30E9\u6CB9\u7530"
+  - Key: 3
+    Tier: 8
+    Name: "\u30E2\u30B0\u30E9\u4EBA\u9593"
+  - Key: 3
+    Tier: 9
+    Name: "\u70AD\u9271\u306E\u30AB\u30CA\u30EA\u30A2"
+  - Key: 3
+    Tier: 10
+    Name: "\u3046\u3093\u3056\u308A\u3059\u308B\u7A74\u6398\u308A"
+  - Key: 3
+    Tier: 11
+    Name: "\u30A8\u30A2\u30FC\u30DE\u30A4\u30CB\u30F3\u30B0"
+  - Key: 3
+    Tier: 12
+    Name: "\u30AD\u30E3\u30E9\u30E1\u30EB\u5408\u91D1"
+  - Key: 3
+    Tier: 13
+    Name: "\u7F8E\u5473\u3057\u3044\u9271\u7269\u5B66"
+  - Key: 3
+    Tier: 14
+    Name: "\u7ACB\u5751\u30B5\u30DD\u30FC\u30C8"
+  - Key: 4
+    Tier: 0
+    Name: "\u9811\u4E08\u306A\u30B3\u30F3\u30D9\u30A2\u30D9\u30EB\u30C8"
+  - Key: 4
+    Tier: 1
+    Name: 
+  - Key: 4
+    Tier: 2
+    Name: 
+  - Key: 4
+    Tier: 3
+    Name: 
+  - Key: 4
+    Tier: 4
+    Name: 
+  - Key: 4
+    Tier: 5
+    Name: 
+  - Key: 4
+    Tier: 6
+    Name: 
+  - Key: 4
+    Tier: 7
+    Name: 
+  - Key: 4
+    Tier: 8
+    Name: 
+  - Key: 4
+    Tier: 9
+    Name: 
+  - Key: 4
+    Tier: 10
+    Name: 
+  - Key: 4
+    Tier: 11
+    Name: 
+  - Key: 4
+    Tier: 12
+    Name: 
+  - Key: 4
+    Tier: 13
+    Name: 
+  - Key: 4
+    Tier: 14
+    Name: 
+  - Key: 5
+    Tier: 0
+    Name: "\u306E\u3063\u307D\u306E\u7A93\u53E3\u4FC2"
+  - Key: 5
+    Tier: 1
+    Name: 
+  - Key: 5
+    Tier: 2
+    Name: 
+  - Key: 5
+    Tier: 3
+    Name: 
+  - Key: 5
+    Tier: 4
+    Name: 
+  - Key: 5
+    Tier: 5
+    Name: 
+  - Key: 5
+    Tier: 6
+    Name: 
+  - Key: 5
+    Tier: 7
+    Name: 
+  - Key: 5
+    Tier: 8
+    Name: 
+  - Key: 5
+    Tier: 9
+    Name: 
+  - Key: 5
+    Tier: 10
+    Name: 
+  - Key: 5
+    Tier: 11
+    Name: 
+  - Key: 5
+    Tier: 12
+    Name: 
+  - Key: 5
+    Tier: 13
+    Name: 
+  - Key: 5
+    Tier: 14
+    Name: 
+  - Key: 6
+    Tier: 0
+    Name: "\u91D1\u8272\u306E\u50CF"
+  - Key: 6
+    Tier: 1
+    Name: 
+  - Key: 6
+    Tier: 2
+    Name: 
+  - Key: 6
+    Tier: 3
+    Name: 
+  - Key: 6
+    Tier: 4
+    Name: 
+  - Key: 6
+    Tier: 5
+    Name: 
+  - Key: 6
+    Tier: 6
+    Name: 
+  - Key: 6
+    Tier: 7
+    Name: 
+  - Key: 6
+    Tier: 8
+    Name: 
+  - Key: 6
+    Tier: 9
+    Name: 
+  - Key: 6
+    Tier: 10
+    Name: 
+  - Key: 6
+    Tier: 11
+    Name: 
+  - Key: 6
+    Tier: 12
+    Name: 
+  - Key: 6
+    Tier: 13
+    Name: 
+  - Key: 6
+    Tier: 14
+    Name: 
+  - Key: 7
+    Tier: 0
+    Name: "\u3068\u3093\u304C\u308A\u5E3D\u5B50"
+  - Key: 7
+    Tier: 1
+    Name: 
+  - Key: 7
+    Tier: 2
+    Name: 
+  - Key: 7
+    Tier: 3
+    Name: 
+  - Key: 7
+    Tier: 4
+    Name: 
+  - Key: 7
+    Tier: 5
+    Name: 
+  - Key: 7
+    Tier: 6
+    Name: 
+  - Key: 7
+    Tier: 7
+    Name: 
+  - Key: 7
+    Tier: 8
+    Name: 
+  - Key: 7
+    Tier: 9
+    Name: 
+  - Key: 7
+    Tier: 10
+    Name: 
+  - Key: 7
+    Tier: 11
+    Name: 
+  - Key: 7
+    Tier: 12
+    Name: 
+  - Key: 7
+    Tier: 13
+    Name: 
+  - Key: 7
+    Tier: 14
+    Name: 
