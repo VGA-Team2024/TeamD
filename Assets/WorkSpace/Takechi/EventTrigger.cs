@@ -1,39 +1,41 @@
 using System;
+using System.Collections.Generic;
+using TeamD.Enum;
+using UniRx;
 using UnityEngine;
 
-public class EventTrigger
+[CreateAssetMenu(menuName = "ScriptableObjects/EventTrigger")]
+public class EventTrigger : ScriptableObject
 {
-    EventTest _testFlag = new();
-
-    void Test()
+    [SerializeField] List<Condition> _conditions;
+    [SerializeReference, SubclassSelector] IEventClip _eventClip;
+    public void CheckEvent(ref ReactiveDictionary<string, int> intParams, Achievement achievement)
     {
-        _testFlag.AddFlag();
-        if (_testFlag.Flag.HasFlag(TestFlag.A))
+        foreach (var condition in _conditions)
         {
-            Debug.Log("HasFlag");
+            if (!condition.CheckCondition(ref intParams, achievement)) return;
         }
+        _eventClip?.StartEvent();
     }
 }
-[Flags]
-public enum TestFlag
+
+public interface IEventClip
 {
-    A = 1 << 0,
-    B = 1 << 1,
-    C = 1 << 2,
-    D = 1 << 3
+    void StartEvent();
 }
 
-public interface IEventCondition<T> where T : Enum
+public class Nothing : IEventClip
 {
-    T Flag { get; set; }
-}
-
-public class EventTest : IEventCondition<TestFlag>
-{
-    public TestFlag Flag { get; set; }
-
-    public void AddFlag()
+    public void StartEvent()
     {
-        Flag |= TestFlag.A;
+        Debug.Log("Event Nothing");
+    }
+}
+public class UnlockAchievement : IEventClip
+{
+    [SerializeField] Achievement _unlockAchievement;
+    public void StartEvent()
+    {
+        StatsManager.AchievementStats |= _unlockAchievement;
     }
 }

@@ -1,18 +1,19 @@
 using System;
+using UnityEngine;
 
 namespace TeamD.Enum
 {
     [Flags]
     public enum Achievement
     {
-        Apocalypse           = 1 << 0, //  アポカリプス
-        GoodbyeGrandma       = 1 << 1, //  ババアグッバイ
-        Lucky                = 1 << 2, //  ラッキー！
-        Reincarnation        = 1 << 3, //  転生者
-        CollapseOfTheWorld   = 1 << 4, //  世界崩壊
-        InfiniteLoop         = 1 << 5, //  無限ループ
-        TheAllKnowingOne     = 1 << 6, //  すべてを知るもの
-        CompletingEveryLevel = 1 << 7, //  全クリ
+        [InspectorName("アポカリプス")] Apocalypse           = 1 << 0, 
+        [InspectorName("ババアグッバイ")] GoodbyeGrandma       = 1 << 1,
+        [InspectorName("ラッキー！")] Lucky                = 1 << 2,
+        [InspectorName("転生者")] Reincarnation        = 1 << 3,
+        [InspectorName("世界崩壊")] CollapseOfTheWorld   = 1 << 4,
+        [InspectorName("無限ループ")] InfiniteLoop         = 1 << 5,
+        [InspectorName("すべてを知るもの")] TheAllKnowingOne     = 1 << 6,
+        [InspectorName("全クリ")] CompletingEveryLevel = 1 << 7,
     }
     public enum FactoryKey
     {
