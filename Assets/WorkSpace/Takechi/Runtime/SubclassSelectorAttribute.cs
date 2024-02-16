@@ -1,4 +1,4 @@
-//  参照先 https://qiita.com/tsukimi_neko/items/7922b2433ed4d8616cce
+//  引用元 https://qiita.com/tsukimi_neko/items/7922b2433ed4d8616cce
 using System;
 using UnityEngine;
 
