@@ -9,7 +9,6 @@ public class EventSystemScript : MonoBehaviour, IPointerClickHandler, ICanvasRay
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("OnClick!");
         _event.Invoke();
     }
 

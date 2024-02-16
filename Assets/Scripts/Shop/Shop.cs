@@ -19,24 +19,37 @@ public class Shop : MonoBehaviour
         foreach (var factory in _factories)
         {   
             var button = Instantiate(_shopItemButtonPrefab, _shopItemButtonParent).GetComponent<ShopItemButton>();
-            var factoryInfo = new FactoryInfo(factory.name, new(0, 0), 0);
+            var factoryInfo = new FactoryInfo(factory.name, 0, 0);
             PlayerManager.Instance.AutoGeneratorDictionary.Add(factory.name, factoryInfo);
             button.SetItemName(factory.name, true);
-            button.SetPrice(factory.Price);
+            button.SetPriceText(factory.Price);
             //購入時の処理を登録する。
-            button.OnClickEvent += () =>
+            button.OnLeftClickEvent += () =>
             {
                 if (factory.Price <= PlayerManager.Instance.CookieCount)
                 {
                     PlayerManager.Instance.SubtractCookie(factory.Price);
                     factory.Buy(factoryInfo);
                     factory.IncreasePrice();
-                    button.SetCurrentOwnNum();
-                    button.SetPrice(factory.Price);
+                    button.SetCurrentOwnNum(1);
+                    button.SetPriceText(factory.Price);
                     //プレイヤーへの処理
                     //・資源を減らす
                     //・自動生成数を増やす
                     //・所持数データを増やす
+                }
+            };
+
+            //売却時の処理を登録する
+            button.OnRightClickEvent += () =>
+            {
+                if (0 < button.CurrentOwnNum)
+                {
+                    PlayerManager.Instance.AddCookie(factory.Price * (2d / 3d));
+                    factory.Sell(factoryInfo);
+                    factory.DecreasePrice();
+                    button.SetCurrentOwnNum(-1);
+                    button.SetPriceText(factory.Price);
                 }
             };
             id++;
@@ -46,9 +59,9 @@ public class Shop : MonoBehaviour
         {
             var button = Instantiate(_shopItemButtonPrefab, _shopItemButtonParent).GetComponent<ShopItemButton>();
             button.SetItemName(upgrade.name, false);
-            button.SetPrice(upgrade.Price);
+            button.SetPriceText(upgrade.Price);
             var dummyFactoryInfo = new FactoryInfo(upgrade.name, upgrade.Price, 1);
-            button.OnClickEvent += () =>
+            button.OnLeftClickEvent += () =>
             {
                 if (upgrade.Price <= PlayerManager.Instance.CookieCount)
                 {

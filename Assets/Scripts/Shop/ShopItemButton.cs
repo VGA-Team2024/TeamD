@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -11,23 +12,30 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Text _itemName;
     [SerializeField] private Text _currentOwnNumText;
     [SerializeField] private Text _priceText;
-    private int _currentOwnNum = 0;
-    private bool _isFactory = false;
-    public event Action OnClickEvent;
-    
+    private bool _isFactory;
+    public event Action OnLeftClickEvent;
+    public event Action OnRightClickEvent;
+
+    public int CurrentOwnNum { get; private set; }
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        OnClickEvent?.Invoke();
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            OnLeftClickEvent?.Invoke();
+        }
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            OnRightClickEvent?.Invoke();
+        }
     }
 
     /// <summary>
     /// 施設ならtrueを渡す
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="isFactory"></param>
-    public void SetItemName(string name, bool isFactory)
+    public void SetItemName(string itemName, bool isFactory)
     {
-        _itemName.text = name;
+        _itemName.text = itemName;
         _isFactory = isFactory;
         if (!_isFactory)
         {
@@ -35,15 +43,15 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    public void SetCurrentOwnNum()
+    public void SetCurrentOwnNum(int addValue)
     {
         if (!_isFactory) return;
-        _currentOwnNum++;
-        _currentOwnNumText.text = _currentOwnNum.ToString();
+        CurrentOwnNum += addValue;
+        _currentOwnNumText.text = CurrentOwnNum.ToString();
     }
 
-    public void SetPrice(LargeNumber price)
+    public void SetPriceText(double price)
     {
-        _priceText.text = price.ToString();
+        _priceText.text = price.ToString(CultureInfo.CurrentCulture);
     }
 }
