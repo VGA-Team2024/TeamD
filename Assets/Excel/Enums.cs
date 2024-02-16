@@ -41,6 +41,7 @@ namespace TeamD.Enum
 
     public enum UpgradeTier
     {
+        NoUpgrade,
         Plain,
         Berrylium,
         Blueberrylium,
