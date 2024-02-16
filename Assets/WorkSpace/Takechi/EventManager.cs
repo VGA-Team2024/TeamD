@@ -11,7 +11,7 @@ public class EventManager : MonoBehaviour
     List<EventTrigger> _eventTriggers;
     
     ReactiveDictionary<string, int> _intParameters = new();
-    ReactiveProperty<Achievement> _achievementParameter;
+    ReactiveProperty<Achievement> _achievementParameter = new();
 
     void Awake()
     {
