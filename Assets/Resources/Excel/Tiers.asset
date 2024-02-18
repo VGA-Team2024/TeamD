@@ -13,63 +13,63 @@ MonoBehaviour:
   m_Name: Tiers
   m_EditorClassIdentifier: 
   Entities:
-  - Tier: 0
+  - Tier: 1
     Name: "\u7D20"
     Condition: 1
     Multiplier: 10
-  - Tier: 1
+  - Tier: 2
     Name: "\u30D9\u30EA\u30FC\u30EA\u30A6\u30E0"
     Condition: 5
     Multiplier: 50
-  - Tier: 2
+  - Tier: 3
     Name: "\u30D6\u30EB\u30FC\u30D9\u30EA\u30FC\u30EA\u30A6\u30E0"
     Condition: 25
     Multiplier: 500
-  - Tier: 3
+  - Tier: 4
     Name: "\u30AB\u30EB\u30BB\u30C9\u30CF\u30CB\u30FC"
     Condition: 50
     Multiplier: 50000
-  - Tier: 4
+  - Tier: 5
     Name: "\u30D0\u30BF\u30FC\u30B4\u30FC\u30EB\u30C9"
     Condition: 100
     Multiplier: 5000000
-  - Tier: 5
+  - Tier: 6
     Name: "\u30C9\u30ED\u30C9\u30ED\u306E\u30B0\u30EC\u30FC\u30BA"
     Condition: 150
     Multiplier: 500000000
-  - Tier: 6
+  - Tier: 7
     Name: "\u30B8\u30A7\u30C3\u30C8\u30DF\u30F3\u30C8"
     Condition: 200
     Multiplier: 500000000000
-  - Tier: 7
+  - Tier: 8
     Name: "\u30C1\u30A7\u30EA\u30FC\u30B7\u30EB\u30D0\u30FC"
     Condition: 250
     Multiplier: 500000000000000
-  - Tier: 8
+  - Tier: 9
     Name: "\u30D8\u30FC\u30BC\u30EB\u30E9\u30EB\u30C9"
     Condition: 300
     Multiplier: 5e+17
-  - Tier: 9
+  - Tier: 10
     Name: "\u6708\u306E\u30AD\u30E3\u30F3\u30C7\u30A3"
     Condition: 350
     Multiplier: 5e+20
-  - Tier: 10
+  - Tier: 11
     Name: "\u661F\u306E\u30D5\u30A1\u30C3\u30B8"
     Condition: 400
     Multiplier: 5e+24
-  - Tier: 11
+  - Tier: 12
     Name: "\u30A2\u30E9\u30D0\u30B9\u30AF\u30EA\u30FC\u30E0"
     Condition: 450
     Multiplier: 5e+28
-  - Tier: 12
+  - Tier: 13
     Name: "\u30A6\u30DE\u30A4\u30EA\u30B8\u30A6\u30E0"
     Condition: 500
     Multiplier: 5e+32
-  - Tier: 13
+  - Tier: 14
     Name: "\u30B0\u30EB\u30B3\u30AA\u30B9\u30DF\u30A6\u30E0"
     Condition: 550
     Multiplier: 5e+36
-  - Tier: 14
+  - Tier: 15
     Name: "\u304D\u3089\u304D\u3089\u30E1\u30EC\u30F3\u30B2"
     Condition: 600
     Multiplier: 5e+40

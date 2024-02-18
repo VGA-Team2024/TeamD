@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExcelAsset]
+[ExcelAsset(AssetPath = "Resources/Excel")]
 public class Factories : ScriptableObject
 {
 	public List<FactoriesEntity> Entities;
