@@ -1,15 +1,19 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using TeamD.Enum;
 using UnityEngine;
 
 public class CookieGenerator : MonoBehaviour
 {
     private const int GoldenCookieAddValue = 7;
     private readonly PlayerManager _playerManager = PlayerManager.Instance;
+    Factories _factories;
 
     private void Start()
     {
+        _factories = Resources.Load<Factories>("Excel/Factories");
         var ct = this.GetCancellationTokenOnDestroy();
         AutoGenerate(ct).Forget();
     }
@@ -25,17 +29,17 @@ public class CookieGenerator : MonoBehaviour
         {
             if (_playerManager.IsGoldenCookieMode)
             {
-                foreach (var item in _playerManager.AutoGeneratorDictionary.Values)
-                {
-                    _playerManager.AddCookie((item.BaseGeneratorValue * (1 << (int)item.BasePower)) * GoldenCookieAddValue);
-                }
+                _playerManager.AddCookie(StatsManager.FactoryStats
+                    .Select(x => _factories.Entities
+                        .Find(e => e.Key == x.Key).CpS * x.Value.Amount * (1 << (int)x.Value.Tier))
+                    .Sum() * GoldenCookieAddValue);
             }
             else
             {
-                foreach (var item in _playerManager.AutoGeneratorDictionary.Values)
-                {
-                    _playerManager.AddCookie(item.BaseGeneratorValue * (1 << (int)item.BasePower));
-                }
+                _playerManager.AddCookie(StatsManager.FactoryStats
+                    .Select(x => _factories.Entities
+                        .Find(e => e.Key == x.Key).CpS * x.Value.Amount * (1 << (int)x.Value.Tier))
+                    .Sum());
             }
 
             await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: ct);
@@ -47,6 +51,6 @@ public class CookieGenerator : MonoBehaviour
     /// </summary>
     public void ManualGenerate()
     {
-        _playerManager.AddCookie(_playerManager.ManualGenerateCount.BaseGeneratorValue * (1 << (int)_playerManager.ManualGenerateCount.BasePower));
+        _playerManager.AddCookie(_playerManager.ManualGenerateCount * (1 << (int)StatsManager.FactoryStats[FactoryKey.Cursor].Tier));
     }
 }

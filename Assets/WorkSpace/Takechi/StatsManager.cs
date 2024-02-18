@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TeamD.Enum;
+using UniRx;
 using UnityEngine;
 
 /// <summary>
@@ -14,11 +15,12 @@ public static class StatsManager
     public static Achievement AchievementStats { get; set; }
 
     /// <summary>施設のアップグレード状況と数</summary>
-    public static Dictionary<FactoryKey, (UpgradeTier Tier, int Amount)> FactoryStats { get; set; }
+    public static ReactiveDictionary<FactoryKey, (UpgradeTier Tier, int Amount)> FactoryStats { get; set; }
 
     static StatsManager()
     {
         var factories = Resources.Load<Factories>("Excel/Factories");
-        FactoryStats = factories.Entities.ToDictionary(entity=>entity.Key, _=>(UpgradeTier.NoUpgrade, 0));
+        FactoryStats = factories.Entities.ToDictionary(entity=>entity.Key, _=>(UpgradeTier.NoUpgrade, 0))
+            .ToReactiveDictionary();
     }
 }
