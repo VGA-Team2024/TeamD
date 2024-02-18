@@ -12,13 +12,13 @@ public class FactoryBase : ShopItemBase
     public override void Buy(FactoryInfo factoryInfo)
     {
         //プレイヤーの自動生成数を増やす
-        PlayerManager.Instance.AddAutoGenerateCount(factoryInfo.Name, _generateNum);
+        //PlayerManager.Instance.AddAutoGenerateCount(factoryInfo.Name, _generateNum);
     }
 
     public void Sell(FactoryInfo factoryInfo)
     {
         //プレイヤーの自動生成数を減らす
-        PlayerManager.Instance.SubtractGeneratorCount(factoryInfo.Name, _generateNum);
+        //PlayerManager.Instance.SubtractGeneratorCount(factoryInfo.Name, _generateNum);
     }
 
     public void IncreasePrice()
