@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -9,9 +10,9 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class ShopItemButton : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] private Text _itemName;
-    [SerializeField] private Text _currentOwnNumText;
-    [SerializeField] private Text _priceText;
+    [SerializeField] private TextMeshProUGUI _itemName;
+    [SerializeField] private TextMeshProUGUI _currentOwnNumText;
+    [SerializeField] private TextMeshProUGUI _priceText;
     private bool _isFactory;
     public event Action OnLeftClickEvent;
     public event Action OnRightClickEvent;
