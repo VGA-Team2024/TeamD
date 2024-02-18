@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Globalization;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 /// <summary>
@@ -53,6 +51,6 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
 
     public void SetPriceText(double price)
     {
-        _priceText.text = price.ToString(CultureInfo.CurrentCulture);
+        _priceText.text = ResourcesTextController.UseDigitRepresentation(price);
     }
 }
