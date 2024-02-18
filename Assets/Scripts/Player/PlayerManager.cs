@@ -2,19 +2,17 @@
 
 public class PlayerManager
 {
-    /// <summary>所持リソース数管理変数</summary>
-    public LargeNumber PlayerResources { get; private set; } = new(0, 0);
-
     private static PlayerManager _instance = null;
-    
+    /// <summary>所持リソース数管理変数</summary>
+    public LargeNumber CookieCount { get; private set; } = new(0, 0);
     public SortedDictionary<string, FactoryInfo> AutoGeneratorDictionary { get; private set; } = new();
-
     public FactoryInfo ManualGenerateCount = new("manual", new(1, 0), 1);
-
+    
     private PlayerManager()
     {
     }
 
+    public bool IsGoldenCookieMode { get; private set; }
     public static PlayerManager Instance
     {
         get
@@ -28,14 +26,14 @@ public class PlayerManager
         }
     }
 
-    public void AddResource(LargeNumber value)
+    public void AddCookie(LargeNumber value)
     {
-        PlayerResources = LargeNumber.Add(PlayerResources, value);
+        CookieCount = LargeNumber.Add(CookieCount, value);
     }
 
-    public void SubtractResource(LargeNumber value)
+    public void SubtractCookie(LargeNumber value)
     {
-        PlayerResources = LargeNumber.Subtract(PlayerResources, value);
+        CookieCount = LargeNumber.Subtract(CookieCount, value);
     }
 
     /// <summary>
@@ -47,7 +45,26 @@ public class PlayerManager
     {
         // ここで更新したFactoryInfoを生成し、Dictionaryに登録する。
                                          //どの施設か,        元の生成量に増やす予定の生成量を足したもの,                     生成量にかかっている倍率
-        var newfactoryInfo = new FactoryInfo(name, LargeNumber.Add(AutoGeneratorDictionary[name].BaseGeneratorValue, value), AutoGeneratorDictionary[name].BaseScale);
-        AutoGeneratorDictionary[name] = newfactoryInfo;
+        var newFactoryInfo = new FactoryInfo(name, LargeNumber.Add(AutoGeneratorDictionary[name].BaseGeneratorValue, value), AutoGeneratorDictionary[name].BasePower);
+        AutoGeneratorDictionary[name] = newFactoryInfo;
+    }
+    
+    /// <summary>
+    /// 自動生成数を減らす。減らす予定の値をもとの値に足して新たにFactoryInfoを作成し、Dictionaryに登録する。
+    /// </summary>
+    public void SubtractGeneratorCount(string name, LargeNumber value)
+    {
+        // ここで更新したFactoryInfoを生成し、Dictionaryに登録する。
+        //どの施設か,        元の生成量に増やす予定の生成量を足したもの,                     生成量にかかっている倍率
+        //AutoGeneratorDictionary[name] = new FactoryInfo(name, LargeNumber.Add(AutoGeneratorDictionary[name].BaseGeneratorValue, value), AutoGeneratorDictionary[name].BaseScale);
+        AutoGeneratorDictionary[name] = new FactoryInfo(name, LargeNumber.Subtract(AutoGeneratorDictionary[name].BaseGeneratorValue, value), AutoGeneratorDictionary[name].BasePower);
+    }
+
+    /// <summary>
+    /// ゴールデンクッキー状態を切り替える
+    /// </summary>
+    public void ChangeGoldenCookieMode(bool flag)
+    {
+        IsGoldenCookieMode = flag;
     }
 }

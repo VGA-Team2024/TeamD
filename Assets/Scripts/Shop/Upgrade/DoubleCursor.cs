@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class DoubleCursor : MonoBehaviour, IUpgrade
 {
+    [SerializeField, Tooltip("カーソル施設のプレハブ名")]
+    string _factoryCursorName;
     public void ApplyUpgrade()
     {
-        //カーソルの自動生成数を2倍にする
-        var cursorAutoGenerateInfo = PlayerManager.Instance.AutoGeneratorDictionary["Cursor"];
-        var newfactoryInfo = new FactoryInfo("Cursor", cursorAutoGenerateInfo.BaseGeneratorValue, cursorAutoGenerateInfo.BaseScale + 1);
+        //カーソルの自動生成数の2の累乗の指数の数を増やす
+        var cursorAutoGenerateInfo = PlayerManager.Instance.AutoGeneratorDictionary[_factoryCursorName];
+        var newfactoryInfo = new FactoryInfo(_factoryCursorName, cursorAutoGenerateInfo.BaseGeneratorValue, cursorAutoGenerateInfo.BasePower + 1);
         cursorAutoGenerateInfo = newfactoryInfo;
-        //手動生成数を2倍にする
-        PlayerManager.Instance.ManualGenerateCount.AddScale(1);
+        //手動生成数の2の累乗の指数の数を増やす
+        PlayerManager.Instance.ManualGenerateCount.AddPower(1);
     }
 }
