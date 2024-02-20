@@ -14,8 +14,7 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
     private bool _isFactory;
     public event Action OnLeftClickEvent;
     public event Action OnRightClickEvent;
-
-    public int CurrentOwnNum { get; private set; }
+    public TextMeshProUGUI CurrentOwnNumText => _currentOwnNumText;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -40,13 +39,6 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
         {
             _currentOwnNumText.gameObject.SetActive(false);
         }
-    }
-
-    public void SetCurrentOwnNum(int addValue)
-    {
-        if (!_isFactory) return;
-        CurrentOwnNum += addValue;
-        _currentOwnNumText.text = CurrentOwnNum.ToString();
     }
 
     public void SetPriceText(double price)

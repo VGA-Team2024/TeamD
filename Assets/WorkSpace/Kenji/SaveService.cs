@@ -1,46 +1,33 @@
 using System;
 using System.IO;
+using System.Text;
 using Editor.EditorClicker.Data;
 using UnityEngine;
 
 namespace Editor.EditorClicker.Scripts
 {
     /// <summary>
-    /// ƒf[ƒ^‚ğƒZ[ƒu‚·‚é    
+    /// ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒ¼ãƒ–ã™ã‚‹    
     /// </summary>
-    public class SaveService
+    public static class SaveService
     {
-        public void Save(UserData data)
+        static readonly string DataPath = Application.dataPath + "/StreamingAssets/";
+        public static void Save(UserData data)
         {
-            string dataJson = JsonUtility.ToJson(data);
-
-            using (StreamWriter streamWriter = new StreamWriter(DefaultData.savePath, false))
-            {
-                streamWriter.Write(dataJson);
-            }
+            string jsonData = JsonUtility.ToJson(data);
+            string path = new StringBuilder().Append(DataPath).Append(nameof(UserData)).Append(".json").ToString();
+            File.WriteAllText(path, jsonData);
         }
 
-        public UserData Load()
+        public static bool Load(out UserData data)
         {
-            //ƒZ[ƒuƒf[ƒ^‚ª‚Â‚­‚ç‚ê‚Ä‚È‚¯‚ê‚Înull‚ğ•Ô‚·
-            if (!File.Exists(DefaultData.savePath)) return null;
-            using var streamReader = new StreamReader(DefaultData.savePath);
-            try
-            {
-                var dataJson = streamReader.ReadToEnd();
-                var data = JsonUtility.FromJson<UserData>(dataJson);
-                if (data != null)
-                {
-                    return data;
-                }
-
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("LoadError: " + e);
-            }
-
-            return null;
+            data = default;
+            string path = new StringBuilder().Append(DataPath).Append(nameof(UserData)).Append(".json").ToString();
+            if (!File.Exists(path)) return false;
+            string jsonData = File.ReadAllText(path);
+            //  TODO: Jsonã‹ã‚‰UserDataã‚¯ãƒ©ã‚¹ã¸ã®å¤‰æ›ã«å¤±æ•—ã—ãŸæ™‚ã®å‡¦ç†ã‚’æ›¸ã„ã¦ãªã„ã®ã§ã„ã¤ã‹æ›¸ãã¾ã™ã€‚
+            data = JsonUtility.FromJson<UserData>(jsonData);
+            return true;
         }
     }
 }
