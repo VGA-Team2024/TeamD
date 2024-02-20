@@ -18,9 +18,9 @@ MonoBehaviour:
     _rightNumber: 1
     _requiredAchievement: 0
   _eventClip:
-    rid: 6388978855970865155
+    rid: 2284272056141611016
   references:
     version: 2
     RefIds:
-    - rid: 6388978855970865155
-      type: {class: StartOver, ns: Story, asm: Assembly-CSharp}
+    - rid: 2284272056141611016
+      type: {class: Nothing, ns: , asm: Assembly-CSharp}
