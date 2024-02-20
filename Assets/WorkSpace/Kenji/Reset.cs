@@ -24,7 +24,7 @@ public class Reset : MonoBehaviour
         void OnButtonReset()
         {
             PlayerManager.Instance.SubtractCookie(PlayerManager.Instance.CookieCount);
-            StatsManager.FactoryStats.Clear();
+            StatsManager.CurrentFactories.Clear();
         }//クッキーの数,施設,アップグレードの値を初期化
     }
 
