@@ -6,20 +6,20 @@
 public struct FactoryInfo
 {
     public string Name;
-    public LargeNumber BaseGeneratorValue;
+    public double BaseGeneratorValue;
     /// <summary>2の累乗の指数の数</summary>
     public double BasePower;
 
-    public FactoryInfo(string name, LargeNumber value, double power)
+    public FactoryInfo(string name, double value, double power)
     {
         Name = name;
         BaseGeneratorValue = value;
         BasePower = power;
     }
 
-    public void AddValue(LargeNumber value)
+    public void AddValue(double value)
     {
-        BaseGeneratorValue = LargeNumber.Add(BaseGeneratorValue, value);
+        BaseGeneratorValue += value;
     }
 
     public void AddPower(double power)

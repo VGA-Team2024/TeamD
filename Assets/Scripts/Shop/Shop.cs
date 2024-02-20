@@ -1,5 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UniRx;
 using UnityEngine;
 
 /// <summary>
@@ -8,55 +9,82 @@ using UnityEngine;
 /// </summary>
 public class Shop : MonoBehaviour
 {
-    [SerializeField] private List<UpgradeBase> _upgrades;
-    [SerializeField] private List<FactoryBase> _factories;
     [SerializeField] private GameObject _shopItemButtonPrefab;
-    [SerializeField] private Transform _shopItemButtonParent;
+    [SerializeField] private Transform _factoryButtonParent;
+    [SerializeField] Transform _upgradeButtonParent;
+    [SerializeField, Tooltip("施設の値上げ倍率")] float _factoryMultiplier = 1.15f;
+
+    [SerializeField, Tooltip("施設売却時の返金割合")]
+    float _sellFactoryRatio = 2f / 3f;
+
+    Factories _factories;
+
+    List<ShopItemButton> _currentButtons = new();
 
     private void Start()
     {
-        int id = 0; //Playerに登録する際のID
-        foreach (var factory in _factories)
+        _factories = Resources.Load<Factories>("Excel/Factories");
+        
+        foreach (var factory in _factories.Entities)
         {   
-            var button = Instantiate(_shopItemButtonPrefab, _shopItemButtonParent).GetComponent<ShopItemButton>();
-            var factoryInfo = new FactoryInfo(factory.name, new(0, 0), 0);
-            PlayerManager.Instance.AutoGeneratorDictionary.Add(factory.name, factoryInfo);
-            button.SetItemName(factory.name, true);
-            button.SetPrice(factory.Price);
+            var button = Instantiate(_shopItemButtonPrefab, _factoryButtonParent).GetComponent<ShopItemButton>();
+            button.SetItemName(factory.Name, true);
+            //  施設のベース価格 × 1.15^施設数
+            button.SetPriceText(factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.FactoryStats[factory.Key].Amount));
             //購入時の処理を登録する。
-            button.OnClickEvent += () =>
+            button.OnLeftClickEvent += () =>
             {
-                if (factory.Price <= PlayerManager.Instance.CookieCount)
+                //  施設のベース価格 × 1.15^施設数
+                var price = factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.FactoryStats[factory.Key].Amount);
+                if (price <= PlayerManager.Instance.CookieCount)
                 {
-                    PlayerManager.Instance.SubtractCookie(factory.Price);
-                    factory.Buy(factoryInfo);
-                    factory.IncreasePrice();
-                    button.SetCurrentOwnNum();
-                    button.SetPrice(factory.Price);
-                    //プレイヤーへの処理
-                    //・資源を減らす
-                    //・自動生成数を増やす
-                    //・所持数データを増やす
+                    PlayerManager.Instance.SubtractCookie(price);
+                    var stat = StatsManager.FactoryStats[factory.Key];
+                    stat.Amount++;
+                    StatsManager.FactoryStats[factory.Key] = stat;
+                    button.SetCurrentOwnNum(1); //  表示の数値を増やす
+                    button.SetPriceText(price * _factoryMultiplier);    //  増えた分値段表示を更新
                 }
             };
-            id++;
-        }
 
-        foreach (var upgrade in _upgrades)
-        {
-            var button = Instantiate(_shopItemButtonPrefab, _shopItemButtonParent).GetComponent<ShopItemButton>();
-            button.SetItemName(upgrade.name, false);
-            button.SetPrice(upgrade.Price);
-            var dummyFactoryInfo = new FactoryInfo(upgrade.name, upgrade.Price, 1);
-            button.OnClickEvent += () =>
+            //売却時の処理を登録する
+            button.OnRightClickEvent += () =>
             {
-                if (upgrade.Price <= PlayerManager.Instance.CookieCount)
+                var price = factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.FactoryStats[factory.Key].Amount);
+                if (0 < StatsManager.FactoryStats[factory.Key].Amount)
                 {
-                    //プレイヤーへの処理
-                    //・資源を減らす
-                    //・倍率を増やす
-                    upgrade.Buy(dummyFactoryInfo);
-                    PlayerManager.Instance.SubtractCookie(upgrade.Price);
+                    //  現在の施設価格 × 2 / 3のクッキーを追加する
+                    PlayerManager.Instance.AddCookie(price * _sellFactoryRatio);
+                    var stat = StatsManager.FactoryStats[factory.Key];
+                    stat.Amount--;
+                    StatsManager.FactoryStats[factory.Key] = stat;
+                    button.SetCurrentOwnNum(-1);    //  表示の数値を減らす
+                    button.SetPriceText(price / _factoryMultiplier); //  減った分値段表示を更新
+                }
+            };
+        }
+        StatsManager.OnUpdateNextUpgrades.Subscribe(GenerateUpgradeShop).AddTo(this);
+    }
+
+    void GenerateUpgradeShop(Dictionary<FactoriesEntity, (TiersEntity Tier, UpgradesEntity UpgradesInfo)> nextUpgrades)
+    {
+        _currentButtons?.ForEach(b=>Destroy(b.gameObject));
+        _currentButtons?.Clear();
+        foreach (var nextUpgrade in nextUpgrades)
+        {
+            var button = Instantiate(_shopItemButtonPrefab, _upgradeButtonParent).GetComponent<ShopItemButton>();
+            _currentButtons.Add(button);
+            var price = nextUpgrade.Key.BasePrice * nextUpgrade.Value.Tier.Multiplier;
+            button.SetItemName(nextUpgrade.Value.UpgradesInfo.Name, false);
+            button.SetPriceText(price);
+            button.OnLeftClickEvent += () =>
+            {
+                if (price <= PlayerManager.Instance.CookieCount)
+                {
+                    var factoryStat = StatsManager.FactoryStats[nextUpgrade.Key.Key];
+                    factoryStat.Tier += 1;
+                    StatsManager.FactoryStats[nextUpgrade.Key.Key] = factoryStat;
+                    PlayerManager.Instance.SubtractCookie(price);
                     Destroy(button.gameObject);
                 }
             };

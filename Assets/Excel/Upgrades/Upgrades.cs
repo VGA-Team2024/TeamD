@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExcelAsset]
+[ExcelAsset(AssetPath = "Resources/Excel")]
 public class Upgrades : ScriptableObject
 {
 	public List<UpgradesEntity> Entities;
