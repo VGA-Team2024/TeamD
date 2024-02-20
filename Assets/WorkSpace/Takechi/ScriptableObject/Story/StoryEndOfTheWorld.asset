@@ -18,9 +18,9 @@ MonoBehaviour:
     _rightNumber: 1
     _requiredAchievement: 0
   _eventClip:
-    rid: 2284272056141611015
+    rid: 6388978855970865153
   references:
     version: 2
     RefIds:
-    - rid: 2284272056141611015
-      type: {class: Nothing, ns: , asm: Assembly-CSharp}
+    - rid: 6388978855970865153
+      type: {class: EndOfTheWorld, ns: Story, asm: Assembly-CSharp}
