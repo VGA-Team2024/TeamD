@@ -18,16 +18,12 @@ public class Shop : MonoBehaviour
     float _sellFactoryRatio = 2f / 3f;
 
     Factories _factories;
-    Tiers _tiers;
-    Upgrades _upgrades;
 
     List<ShopItemButton> _currentButtons = new();
 
     private void Start()
     {
         _factories = Resources.Load<Factories>("Excel/Factories");
-        _tiers = Resources.Load<Tiers>("Excel/Tiers");
-        _upgrades = Resources.Load<Upgrades>("Excel/Upgrades");
         
         foreach (var factory in _factories.Entities)
         {   
@@ -67,36 +63,31 @@ public class Shop : MonoBehaviour
                 }
             };
         }
-        StatsManager.FactoryStats.ObserveReplace().Subscribe(_=> GenerateUpgradeShop()).AddTo(this);
+        StatsManager.OnUpdateNextUpgrades.Subscribe(GenerateUpgradeShop).AddTo(this);
     }
 
-    void GenerateUpgradeShop()
+    void GenerateUpgradeShop(Dictionary<FactoriesEntity, (TiersEntity Tier, UpgradesEntity UpgradesInfo)> nextUpgrades)
     {
         _currentButtons?.ForEach(b=>Destroy(b.gameObject));
         _currentButtons?.Clear();
-        foreach (var pair in StatsManager.FactoryStats)
+        foreach (var nextUpgrade in nextUpgrades)
         {
-            var topTier = _tiers.Entities.FirstOrDefault(x => x.Tier == pair.Value.Tier + 1);
-            if(topTier == null) continue;
-            if (topTier.Condition <= pair.Value.Amount)
+            var button = Instantiate(_shopItemButtonPrefab, _upgradeButtonParent).GetComponent<ShopItemButton>();
+            _currentButtons.Add(button);
+            var price = nextUpgrade.Key.BasePrice * nextUpgrade.Value.Tier.Multiplier;
+            button.SetItemName(nextUpgrade.Value.UpgradesInfo.Name, false);
+            button.SetPriceText(price);
+            button.OnLeftClickEvent += () =>
             {
-                var button = Instantiate(_shopItemButtonPrefab, _upgradeButtonParent).GetComponent<ShopItemButton>();
-                _currentButtons.Add(button);
-                var price = _factories.Entities.Find(x => x.Key == pair.Key).BasePrice * topTier.Multiplier;
-                button.SetItemName(_upgrades.Entities.Find(x=>x.Key.Equals(pair.Key) && x.Tier.Equals(topTier.Tier)).Name, false);
-                button.SetPriceText(price);
-                button.OnLeftClickEvent += () =>
+                if (price <= PlayerManager.Instance.CookieCount)
                 {
-                    if (price <= PlayerManager.Instance.CookieCount)
-                    {
-                        var factoryStat = StatsManager.FactoryStats[pair.Key];
-                        factoryStat.Tier += 1;
-                        StatsManager.FactoryStats[pair.Key] = factoryStat;
-                        PlayerManager.Instance.SubtractCookie(price);
-                        Destroy(button.gameObject);
-                    }
-                };
-            }
+                    var factoryStat = StatsManager.FactoryStats[nextUpgrade.Key.Key];
+                    factoryStat.Tier += 1;
+                    StatsManager.FactoryStats[nextUpgrade.Key.Key] = factoryStat;
+                    PlayerManager.Instance.SubtractCookie(price);
+                    Destroy(button.gameObject);
+                }
+            };
         }
     }
 }
