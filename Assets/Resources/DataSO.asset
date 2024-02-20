@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00550a216cd59d94da4a8e3777948235, type: 3}
   m_Name: DataSO
   m_EditorClassIdentifier: 
-  itemDatas: []
+  itemDatas:
+  - name: "\u30B9\u30FC\u30D1\u30FC\u30AF\u30C3\u30AD\u30FC"
+    type: 0
+    count: 1
+    sprite: {fileID: 0}
+    text: "\u30B9\u30FC\u30D1\u30FC\u30AF\u30C3\u30AD\u30FC\u7372\u5F97\uFF01"
