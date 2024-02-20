@@ -20,7 +20,7 @@ public class ResourcesTextController : MonoBehaviour
     public static readonly string[] ScalesEn =
     {
         // 参考サイト : https://nanaon.tamura-shippo.com/entertainment/game/cookie-clicker/unit/
-        "", "", "", "million", "billion", "trillion", "quadrillion", "quintillion", "sextillion", "septillion",
+        "",  "", "million", "billion", "trillion", "quadrillion", "quintillion", "sextillion", "septillion",
         "octillion", "nonillion", "decillion", "undecillion", "duodecillion", "tredecillion", "quattuordecillion",
         "quindecillion", "sexdecillion", "septendecillion", "octodecillion", "novemdecillion", "vigintillion",
         "unvigintillion", "duovigintillion", "tresvigintillion", "quattuorvigintillion", "quinvigintillion",
@@ -37,7 +37,7 @@ public class ResourcesTextController : MonoBehaviour
     [SerializeField] private LanguageType _type;
     private static LanguageType _languageMode;
 
-    private void Start()
+    private void Awake()
     {
         _text = GetComponent<TextMeshProUGUI>();
         _languageMode = _type;
