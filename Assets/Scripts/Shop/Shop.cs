@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UniRx;
 using UnityEngine;
 
@@ -30,18 +29,18 @@ public class Shop : MonoBehaviour
             var button = Instantiate(_shopItemButtonPrefab, _factoryButtonParent).GetComponent<ShopItemButton>();
             button.SetItemName(factory.Name, true);
             //  施設のベース価格 × 1.15^施設数
-            button.SetPriceText(factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.FactoryStats[factory.Key].Amount));
+            button.SetPriceText(factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.CurrentFactories[factory.Key].Amount));
             //購入時の処理を登録する。
             button.OnLeftClickEvent += () =>
             {
                 //  施設のベース価格 × 1.15^施設数
-                var price = factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.FactoryStats[factory.Key].Amount);
+                var price = factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.CurrentFactories[factory.Key].Amount);
                 if (price <= PlayerManager.Instance.CookieCount)
                 {
                     PlayerManager.Instance.SubtractCookie(price);
-                    var stat = StatsManager.FactoryStats[factory.Key];
+                    var stat = StatsManager.CurrentFactories[factory.Key];
                     stat.Amount++;
-                    StatsManager.FactoryStats[factory.Key] = stat;
+                    StatsManager.CurrentFactories[factory.Key] = stat;
                     button.SetCurrentOwnNum(1); //  表示の数値を増やす
                     button.SetPriceText(price * _factoryMultiplier);    //  増えた分値段表示を更新
                 }
@@ -50,14 +49,15 @@ public class Shop : MonoBehaviour
             //売却時の処理を登録する
             button.OnRightClickEvent += () =>
             {
-                var price = factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.FactoryStats[factory.Key].Amount);
-                if (0 < StatsManager.FactoryStats[factory.Key].Amount)
+                var price = factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.CurrentFactories[factory.Key].Amount);
+                if (0 < StatsManager.CurrentFactories[factory.Key].Amount)
                 {
                     //  現在の施設価格 × 2 / 3のクッキーを追加する
                     PlayerManager.Instance.AddCookie(price * _sellFactoryRatio);
-                    var stat = StatsManager.FactoryStats[factory.Key];
+                    var stat = StatsManager.CurrentFactories[factory.Key];
                     stat.Amount--;
-                    StatsManager.FactoryStats[factory.Key] = stat;
+                    StatsManager.CurrentFactories[factory.Key] = stat;
+                    StatsManager.FactorySellCount[factory.Key] += 1;
                     button.SetCurrentOwnNum(-1);    //  表示の数値を減らす
                     button.SetPriceText(price / _factoryMultiplier); //  減った分値段表示を更新
                 }
@@ -81,9 +81,9 @@ public class Shop : MonoBehaviour
             {
                 if (price <= PlayerManager.Instance.CookieCount)
                 {
-                    var factoryStat = StatsManager.FactoryStats[nextUpgrade.Key.Key];
+                    var factoryStat = StatsManager.CurrentFactories[nextUpgrade.Key.Key];
                     factoryStat.Tier += 1;
-                    StatsManager.FactoryStats[nextUpgrade.Key.Key] = factoryStat;
+                    StatsManager.CurrentFactories[nextUpgrade.Key.Key] = factoryStat;
                     PlayerManager.Instance.SubtractCookie(price);
                     Destroy(button.gameObject);
                 }

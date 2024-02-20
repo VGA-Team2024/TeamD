@@ -13,14 +13,13 @@ MonoBehaviour:
   m_Name: StoryStartOver
   m_EditorClassIdentifier: 
   _conditions:
-  - _leftNumberKey: TimeMachineCount
-    _compareOptions: 0
-    _rightNumber: 1
-    _requiredAchievement: 0
+  - rid: 2284272157861085192
   _eventClip:
-    rid: 2284272056141611016
+    rid: 2284272147299565574
   references:
     version: 2
     RefIds:
-    - rid: 2284272056141611016
-      type: {class: Nothing, ns: , asm: Assembly-CSharp}
+    - rid: 2284272147299565574
+      type: {class: NothingEvent, ns: , asm: Assembly-CSharp}
+    - rid: 2284272157861085192
+      type: {class: NothingCondition, ns: , asm: Assembly-CSharp}
