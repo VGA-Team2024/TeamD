@@ -60,6 +60,6 @@ public class CookieGenerator : MonoBehaviour
     /// </summary>
     public void ManualGenerate()
     {
-        _playerManager.AddCookie(_playerManager.ManualGenerateCount * (1 << (int)StatsManager.FactoryStats[FactoryKey.Cursor].Tier));
+        _playerManager.AddCookie(_playerManager.ManualGenerateCount * (1 << (int)StatsManager.CurrentFactories[FactoryKey.Cursor].Tier));
     }
 }
