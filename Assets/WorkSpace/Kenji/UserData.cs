@@ -1,21 +1,48 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using TeamD.Enum;
-using UniRx;
+using UnityEngine;
 
 
 namespace Editor.EditorClicker.Data
 {
     /// <summary>
-    /// ユーザのデータ
+    /// 繝ｦ繝ｼ繧ｶ縺ｮ繝�繝ｼ繧ｿ
     /// </summary>
     [Serializable]
     public class UserData
     {
-        // 今持ってるクッキーの数
-        PlayerManager playerManager = PlayerManager.Instance;
-        // 解放している施設やアップグレードの数
-        ReactiveDictionary<FactoryKey, (UpgradeTier Tier, int Amount)> CurrentFactories { get; }
-            = new(Enum.GetValues(typeof(FactoryKey)).Cast<FactoryKey>().ToDictionary(e => e, _ => (UpgradeTier.NoUpgrade, 0)));
+        [field: SerializeField]
+        public double CookieCount { get; set; }
+        [field: SerializeField]
+        public List<FactoryData> FactoryData { get; set; }
+        [field: SerializeField]
+        public List<FactorySellData> FactorySellData { get; set; }
+        [field: SerializeField]
+        public Achievement Achievements { get; set; }
+        [field: SerializeField]
+        public int HeavenlyChips { get; set; }
+        [field: SerializeField]
+        public int GoldenCookieObtainCount { get; set; }
+        [field: SerializeField]
+        public int ReincarnationCount { get; set; }
+    }
+    [Serializable]
+    public struct FactoryData
+    {
+        [field: SerializeField]
+        public FactoryKey FactoryKey { get; set; }
+        [field: SerializeField]
+        public UpgradeTier UpgradeTier { get; set; }
+        [field: SerializeField]
+        public int Amount { get; set; }
+    }
+    [Serializable]
+    public struct FactorySellData
+    {
+        [field: SerializeField]
+        public FactoryKey FactoryKey { get; set; }
+        [field: SerializeField]
+        public int SellCount { get; set; }
     }
 }
