@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using TeamD.Enum;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/EventTrigger")]
+[CreateAssetMenu(menuName = "ScriptableObjects/EventTrigger")][Serializable]
 public class EventTrigger : ScriptableObject
 {
     [SerializeField, SerializeReference, SubclassSelector] List<ICondition> _conditions;
