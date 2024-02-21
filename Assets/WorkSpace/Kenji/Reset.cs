@@ -5,8 +5,10 @@ using System;
 using UnityEngine.UI;
 public class Reset : MonoBehaviour
 {
-    public TMPro.TextMeshProUGUI textMeshPro;
-    public Button resetButton;
+    public TMPro.TextMeshProUGUI _textMeshPro;
+    public Button _resetButton;
+    int _reincarnationCount = 1;
+    [SerializeField] int _heavenlyChips = 1;
 
     // Update is called once per frame
     void Update()
@@ -15,10 +17,10 @@ public class Reset : MonoBehaviour
         {
             bool isActive = true;
 
-            resetButton.onClick.AddListener(() =>
+            _resetButton.onClick.AddListener(() =>
             {
                 isActive = !isActive;
-                textMeshPro.gameObject.SetActive(isActive);
+                _textMeshPro.gameObject.SetActive(isActive);
             });
         }
         void OnButtonReset()
@@ -26,6 +28,23 @@ public class Reset : MonoBehaviour
             PlayerManager.Instance.SubtractCookie(PlayerManager.Instance.CookieCount);
             StatsManager.CurrentFactories.Clear();
         }//クッキーの数,施設,アップグレードの値を初期化
+
+        void GetButtonDown()
+        {
+            StatsManager.ReincarnationCount += _reincarnationCount; //転生回数をプラス
+
+            if (PlayerManager.Instance.CookieCount >= 1e+8 && PlayerManager.Instance.CookieCount < 1e+11)
+            {
+                StatsManager.HeavenlyChips += _heavenlyChips;
+            }else if (PlayerManager.Instance.CookieCount >= 1e+11 && PlayerManager.Instance.CookieCount < 1e+16)
+            {
+                StatsManager.HeavenlyChips += _heavenlyChips * 20;
+            }
+            else
+            {
+                StatsManager.HeavenlyChips += _heavenlyChips * 100;
+            }
+        }
     }
 
     private bool GetType(FactoryKey timeMachine)
