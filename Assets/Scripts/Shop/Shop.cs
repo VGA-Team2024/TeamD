@@ -28,6 +28,7 @@ public class Shop : MonoBehaviour
         {   
             var button = Instantiate(_shopItemButtonPrefab, _factoryButtonParent).GetComponent<ShopItemButton>();
             button.SetItemName(factory.Name, true);
+            button.CurrentOwnNumText.text = StatsManager.CurrentFactories[factory.Key].Amount.ToString();
             //  施設のベース価格 × 1.15^施設数
             button.SetPriceText(factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.CurrentFactories[factory.Key].Amount));
             //購入時の処理を登録する。
@@ -41,7 +42,7 @@ public class Shop : MonoBehaviour
                     var stat = StatsManager.CurrentFactories[factory.Key];
                     stat.Amount++;
                     StatsManager.CurrentFactories[factory.Key] = stat;
-                    button.SetCurrentOwnNum(1); //  表示の数値を増やす
+                    button.CurrentOwnNumText.text = StatsManager.CurrentFactories[factory.Key].Amount.ToString();
                     button.SetPriceText(price * _factoryMultiplier);    //  増えた分値段表示を更新
                 }
             };
@@ -58,12 +59,13 @@ public class Shop : MonoBehaviour
                     stat.Amount--;
                     StatsManager.CurrentFactories[factory.Key] = stat;
                     StatsManager.FactorySellCount[factory.Key] += 1;
-                    button.SetCurrentOwnNum(-1);    //  表示の数値を減らす
+                    button.CurrentOwnNumText.text = StatsManager.CurrentFactories[factory.Key].Amount.ToString();
                     button.SetPriceText(price / _factoryMultiplier); //  減った分値段表示を更新
                 }
             };
         }
         StatsManager.OnUpdateNextUpgrades.Subscribe(GenerateUpgradeShop).AddTo(this);
+        StatsManager.UpdateNextUpgrades();
     }
 
     void GenerateUpgradeShop(Dictionary<FactoriesEntity, (TiersEntity Tier, UpgradesEntity UpgradesInfo)> nextUpgrades)
