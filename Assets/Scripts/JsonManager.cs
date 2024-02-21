@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using Editor.EditorClicker.Data;
 using Editor.EditorClicker.Scripts;
@@ -7,6 +8,7 @@ using UnityEngine;
 public class JsonManager : MonoBehaviour
 {
     public static JsonManager Instance;
+    Coroutine _autoSave;
     void Awake()
     {
         if (Instance)
@@ -27,15 +29,20 @@ public class JsonManager : MonoBehaviour
         if (Instance == this)
         {
             JsonLoad();
+            _autoSave = StartCoroutine(AutoSave());
         }
+    }
+
+    void OnDestroy()
+    {
+        if(_autoSave != null)
+            StopCoroutine(_autoSave);
     }
 
     void OnApplicationQuit()
     {
         JsonSave();
     }
-
-    [ContextMenu("セーブする")]
     public void JsonSave()
     {
         UserData userData = new UserData
@@ -87,6 +94,17 @@ public class JsonManager : MonoBehaviour
                     eventTriggerDatum.IsTriggered = findData.IsTriggered;
                 }
             }
+        }
+    }
+
+    IEnumerator AutoSave()
+    {
+        var waitForSeconds = new WaitForSeconds(60);
+        while (true)
+        {
+            print("Auto save");
+            JsonSave();
+            yield return waitForSeconds;
         }
     }
 }
