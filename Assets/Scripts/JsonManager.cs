@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Editor.EditorClicker.Data;
 using Editor.EditorClicker.Scripts;
@@ -14,11 +15,18 @@ public class JsonManager : MonoBehaviour
         }
         else
         {
-            JsonLoad();
             Instance = this;
             //  何かの子オブジェクトになっている場合はDontDestroyOnLoadできないので実行時にはParentを解除する
             transform.SetParent(null);  
             DontDestroyOnLoad(gameObject);
+        }
+    }
+
+    void Start()
+    {
+        if (Instance == this)
+        {
+            JsonLoad();
         }
     }
 
@@ -46,7 +54,8 @@ public class JsonManager : MonoBehaviour
                 .Select(dic=> new FactoryData
                 {
                     FactoryKey = dic.Key, UpgradeTier = dic.Value.Tier, Amount = dic.Value.Amount
-                }).ToList()
+                }).ToList(),
+            EventTriggerData = EventManager.Instance.EventTriggerData
         };
         SaveService.Save(userData);
     }
@@ -68,6 +77,16 @@ public class JsonManager : MonoBehaviour
                     StatsManager.CurrentFactories
                     .Add(list.FactoryKey, (list.UpgradeTier, list.Amount)));
             StatsManager.UpdateCpS();
+            foreach (var eventTriggerDatum in EventManager.Instance.EventTriggerData)
+            {
+                //  保存されたトリガーの中に現在EventManagerで設定されているトリガーと同じものがあれば、
+                // 保存された方のbool値でEventManagerで設定されているトリガーのbool値を上書きする。
+                var findData = data.EventTriggerData.FirstOrDefault(e=> e.EventTrigger.Equals(eventTriggerDatum.EventTrigger));
+                if (findData != null)
+                {
+                    eventTriggerDatum.IsTriggered = findData.IsTriggered;
+                }
+            }
         }
     }
 }
