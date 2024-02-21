@@ -5,30 +5,19 @@ using Editor.EditorClicker.Data;
 using Editor.EditorClicker.Scripts;
 using UnityEngine;
 
-public class JsonManager : MonoBehaviour
+public class JsonManager : SingletonBase<JsonManager>
 {
-    public static JsonManager Instance;
     Coroutine _autoSave;
     void Awake()
     {
-        if (Instance)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-            //  何かの子オブジェクトになっている場合はDontDestroyOnLoadできないので実行時にはParentを解除する
-            transform.SetParent(null);  
-            DontDestroyOnLoad(gameObject);
-        }
+        SetInstance();
+        JsonLoad();
     }
 
     void Start()
     {
         if (Instance == this)
         {
-            JsonLoad();
             _autoSave = StartCoroutine(AutoSave());
         }
     }
@@ -84,6 +73,7 @@ public class JsonManager : MonoBehaviour
                     StatsManager.CurrentFactories
                     .Add(list.FactoryKey, (list.UpgradeTier, list.Amount)));
             StatsManager.UpdateCpS();
+            StatsManager.UpdateNextUpgrades();
             foreach (var eventTriggerDatum in EventManager.Instance.EventTriggerData)
             {
                 //  保存されたトリガーの中に現在EventManagerで設定されているトリガーと同じものがあれば、

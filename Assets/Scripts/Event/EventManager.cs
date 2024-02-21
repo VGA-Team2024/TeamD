@@ -2,27 +2,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventManager : MonoBehaviour
+public class EventManager : SingletonBase<EventManager>
 {
     [SerializeField, Tooltip("イベントトリガーのリスト")]
     List<EventTriggerDatum> _eventTriggerData;
 
     public List<EventTriggerDatum> EventTriggerData => _eventTriggerData;
-    public static EventManager Instance;
-    void Awake()
-    {
-        if (Instance)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-            //  何かの子オブジェクトになっている場合はDontDestroyOnLoadできないので実行時にはParentを解除する
-            transform.SetParent(null);  
-            DontDestroyOnLoad(gameObject);
-        }
-    }
+    void Awake() => SetInstance();
     void Update()
     {
         foreach (var info in _eventTriggerData)
