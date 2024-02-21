@@ -29,7 +29,7 @@ public class Reset : MonoBehaviour
             StatsManager.CurrentFactories.Clear();
         }//クッキーの数,施設,アップグレードの値を初期化
 
-        void GetButtonDpwm()
+        void GetButtonDown()
         {
             StatsManager.ReincarnationCount += _reincarnationCount; //転生回数をプラス
 
