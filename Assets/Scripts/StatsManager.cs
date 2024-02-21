@@ -34,7 +34,7 @@ public static class StatsManager
     /// <summary>保有実績</summary>
     public static Achievement Achievements { get; set; }
     /// <summary>施設売却数</summary>
-    public static Dictionary<FactoryKey, int> FactorySellCount { get; } 
+    public static Dictionary<FactoryKey, int> FactorySellCount { get; set; } 
         = new(Enum.GetValues(typeof(FactoryKey)).Cast<FactoryKey>().ToDictionary(e=>e, _=>0));
 
     /// <summary>施設のアップグレード状況と数</summary>
@@ -47,13 +47,13 @@ public static class StatsManager
     /// <summary>Cookie Per Seconds: 一秒間に生成するクッキー数</summary>
     public static double CpS { get; private set; }
 
-    static void UpdateCpS()
+    public static void UpdateCpS()
     {
         CpS = CurrentFactories.Select(x => _factories.Entities
             .Find(e => e.Key == x.Key).CpS * x.Value.Amount * (1 << (int)x.Value.Tier)).Sum();
     }
 
-    static void UpdateNextUpgrades()
+    public static void UpdateNextUpgrades()
     {
         _nextUpgrades.Clear();
         foreach (var pair in CurrentFactories)
