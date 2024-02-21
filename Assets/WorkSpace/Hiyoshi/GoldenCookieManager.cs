@@ -1,70 +1,87 @@
 using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GoldenCookieManager : MonoBehaviour
 {
-    [SerializeField] GameObject GoldenCookie = default;
-    PlayerManager playerManager = PlayerManager.Instance;
-    DateTime start; 
-    RectTransform rectTransform;
+    [SerializeField] Button _goldenCookie = default;
+    [SerializeField] Canvas _parentCanvas;
+    PlayerManager _playerManager = PlayerManager.Instance;
+    DateTime _start; 
+    Coroutine _deleteGoldenCookieCoroutine;
+    Button _instantiatedGoldenCookie;
 
-    static int XRange = 100, YRange = 100; //ƒS[ƒ‹ƒfƒ“ƒNƒbƒL[‚ªoŒ»‚·‚éXÀ•W‚Ì”ÍˆÍB0‚Í‰æ–Ê‚Ì’†‰›B
-    float x = new System.Random().Next(-XRange, XRange);
-    float y = new System.Random().Next(-YRange, YRange);
-    int NextInstanceTime = new System.Random().Next(5,16); //ƒS[ƒ‹ƒfƒ“ƒNƒbƒL[‚ªŸ‚ÉoŒ»‚·‚éŠÔ
+    int _nextInstanceTime = new System.Random().Next(5,16); //ï¿½Sï¿½[ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Nï¿½bï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Éoï¿½ï¿½ï¿½ï¿½ï¿½éï¿½ï¿½
+    bool _goldenCookieActivate;
 
     void Start()
     {
-        start = DateTime.Now;
-        GoldenCookie.SetActive(false);
-        rectTransform = GoldenCookie.GetComponent<RectTransform>();
-        Debug.Log(NextInstanceTime);
+        _start = DateTime.Now;
+        Debug.Log(_nextInstanceTime);
     }
-
     void Update()
     {
-        if (DateTime.Now - start >= TimeSpan.FromMinutes(NextInstanceTime) && GoldenCookie.activeSelf == false)
+        if (DateTime.Now - _start >= TimeSpan.FromMinutes(_nextInstanceTime) && _goldenCookieActivate == false)
         {
             InstantiateGoldenCookie();
+            _goldenCookieActivate = true;
+            _nextInstanceTime = new System.Random().Next(5,16);
         }
     }
     /// <summary>
-    /// ƒS[ƒ‹ƒfƒ“ƒNƒbƒL[‚ªƒNƒŠƒbƒN‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
+    /// ï¿½Sï¿½[ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Nï¿½bï¿½Lï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ê‚½ï¿½Æ‚ï¿½ï¿½ÉŒÄ‚Î‚ï¿½éƒï¿½\ï¿½bï¿½h
     /// </summary>
     public void ClickGoldenCookie()
     {
-        playerManager.ChangeGoldenCookieMode(true);
-        GoldenCookie.SetActive(false);
-        start = DateTime.Now;
+        if (_deleteGoldenCookieCoroutine != null)
+        {
+            StopCoroutine(_deleteGoldenCookieCoroutine);
+            _deleteGoldenCookieCoroutine = null;
+        }
+
+        StatsManager.GoldenCookieObtainCount += 1;
+        Destroy(_instantiatedGoldenCookie.gameObject);
+        StartCoroutine(GoldenCookieBuff());
     }
 
     /// <summary>
-    /// ƒS[ƒ‹ƒfƒ“ƒNƒbƒL[‚ğoŒ»‚³‚¹‚é‚Æ‚«‚ÉŒÄ‚Ôƒƒ\ƒbƒh
+    /// ï¿½Sï¿½[ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Nï¿½bï¿½Lï¿½[ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÉŒÄ‚Ôƒï¿½ï¿½\ï¿½bï¿½h
     /// </summary>
     void InstantiateGoldenCookie()
     {
-        GoldenCookie.SetActive(true);
-        rectTransform.anchoredPosition = RandomPosition();
-        Invoke(nameof(DeleteGoldenCookie), 13);
+        _instantiatedGoldenCookie = Instantiate(_goldenCookie, _parentCanvas.transform);
+        _instantiatedGoldenCookie.GetComponent<RectTransform>().anchoredPosition = RandomPosition();
+        _instantiatedGoldenCookie.onClick.AddListener(ClickGoldenCookie);
+        _deleteGoldenCookieCoroutine = StartCoroutine(DeleteGoldenCookie());
     }
 
     /// <summary>
-    /// ƒS[ƒ‹ƒfƒ“ƒNƒbƒL[‚ğDelete‚·‚éƒƒ\ƒbƒh
+    /// ï¿½Sï¿½[ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Nï¿½bï¿½Lï¿½[ï¿½ï¿½Deleteï¿½ï¿½ï¿½éƒï¿½\ï¿½bï¿½h
     /// </summary>
-    void DeleteGoldenCookie()
+    IEnumerator DeleteGoldenCookie()
     {
-        if (!playerManager.IsGoldenCookieMode)
-        {
-            GoldenCookie.SetActive(false);
-            start = DateTime.Now;
-        }
+        yield return new WaitForSeconds(13);
+        Destroy(_instantiatedGoldenCookie.gameObject);
+        _goldenCookieActivate = false;
+        _start = DateTime.Now;
+    }
+
+    IEnumerator GoldenCookieBuff()
+    {
+        _playerManager.ChangeGoldenCookieMode(true);
+        yield return new WaitForSeconds(77);
+        _playerManager.ChangeGoldenCookieMode(false);
+        _goldenCookieActivate = false;
+        _start = DateTime.Now;
     }
 
     static Vector2 RandomPosition()
     {
-        float x = new System.Random().Next(-XRange ,XRange);
-        float y = new System.Random().Next(-YRange, YRange);
-        Vector2 pos = new(x, y);
-        return pos;
+        var halfWidth = Screen.currentResolution.width / 2;
+        var halfHeight = Screen.currentResolution.height / 2;
+        var randomPosition = new Vector2(Random.Range(-halfWidth, halfWidth), Random.Range(-halfHeight, halfHeight));
+        return randomPosition;
     }
 }
