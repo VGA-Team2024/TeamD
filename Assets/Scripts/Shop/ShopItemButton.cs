@@ -1,30 +1,48 @@
 ﻿using System;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
 /// ショップのアイテムボタン
 /// </summary>
-public class ShopItemButton : MonoBehaviour, IPointerClickHandler
+[RequireComponent(typeof(Button))]
+public class ShopItemButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private TextMeshProUGUI _itemName;
     [SerializeField] private TextMeshProUGUI _currentOwnNumText;
     [SerializeField] private TextMeshProUGUI _priceText;
+    [SerializeField] Image _buttonImage;
+    [SerializeField] Image _highLight;
+    [SerializeField] Image _rimLight;
+    Button _button;
     private bool _isFactory;
-    public event Action OnLeftClickEvent;
-    public event Action OnRightClickEvent;
+    public event Action PurchaseEvent;
+    public event Action SellEvent;
     public TextMeshProUGUI CurrentOwnNumText => _currentOwnNumText;
+    public Image ButtonImage => _buttonImage;
+    public BoolReactiveProperty IsPurchase { get; set; } = new(true);
 
-    public void OnPointerClick(PointerEventData eventData)
+    void Awake()
     {
-        if (eventData.button == PointerEventData.InputButton.Left)
+        _highLight.gameObject.SetActive(false);
+        _rimLight.gameObject.SetActive(false);
+        _button = GetComponent<Button>();
+        _button.onClick.AddListener(OnButtonClick);
+        IsPurchase.Subscribe(b => _rimLight.gameObject.SetActive(!b)).AddTo(this);
+    }
+
+    public void OnButtonClick()
+    {
+        if (IsPurchase.Value)
         {
-            OnLeftClickEvent?.Invoke();
+            PurchaseEvent?.Invoke();
         }
-        else if (eventData.button == PointerEventData.InputButton.Right)
+        else
         {
-            OnRightClickEvent?.Invoke();
+            SellEvent?.Invoke();
         }
     }
 
@@ -44,5 +62,15 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
     public void SetPriceText(double price)
     {
         _priceText.text = ResourcesTextController.UseDigitRepresentation(price);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        _highLight.gameObject.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        _highLight.gameObject.SetActive(false);
     }
 }
