@@ -26,6 +26,9 @@ namespace Editor.EditorClicker.Data
         public int GoldenCookieObtainCount { get; set; }
         [field: SerializeField]
         public int ReincarnationCount { get; set; }
+        [field: SerializeField]
+
+        public List<EventTriggerDatum> EventTriggerData { get; set; }
     }
     [Serializable]
     public struct FactoryData
