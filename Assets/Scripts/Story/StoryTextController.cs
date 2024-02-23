@@ -21,23 +21,12 @@ namespace Story
             Debug.Log("TextAreaClick");
         }
 
-        public async UniTask UpdateText(int storyNum, string speakerName)
-        {
-            _nameTextField.text = speakerName;
-            foreach (var item in _stories[storyNum].Split())
-            {
-                _sentence.Enqueue(item);
-            }
-
-            for (var i = 0; i < _sentence.Count; i++)
-            {
-                await _storyTextField.DOText(_sentence.Dequeue(), _textShowSpeed)
-                    .SetEase(Ease.Linear)
-                    .AsyncWaitForCompletion();
-            }
-        }
-
-        public async UniTask TestUpdateText(string speakerName, List<string> texts)
+        /// <summary>
+        /// メインテキストを文字送りするメソッド
+        /// </summary>
+        /// <param name="speakerName">話者名</param>
+        /// <param name="texts">表示するテキスト一覧</param>
+        public async UniTask UpdateTextAsync(string speakerName, List<string> texts)
         {
             _nameTextField.text = speakerName;
             foreach (var item in texts)

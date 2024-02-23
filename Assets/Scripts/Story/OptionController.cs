@@ -17,6 +17,11 @@ namespace Story
             }
         }
 
+        /// <summary>
+        /// 登録されたボタンの表示とテキスト更新を行うメソッド
+        /// </summary>
+        /// <param name="showCount">表示するボタンの数</param>
+        /// <param name="texts">表示するテキスト</param>
         public void UpdateDialogue(int showCount, List<string> texts)
         {
             for (var i = 0; i < showCount; i++)
