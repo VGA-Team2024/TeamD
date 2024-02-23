@@ -4,22 +4,20 @@ using System.Linq;
 using Editor.EditorClicker.Data;
 using Editor.EditorClicker.Scripts;
 using UnityEngine;
+using VContainer;
 
-public class JsonManager : SingletonBase<JsonManager>
+public class JsonManager : MonoBehaviour
 {
+    [Inject] EventManager EventManager { get; set; }
     Coroutine _autoSave;
     void Awake()
     {
-        SetInstance();
         JsonLoad();
     }
 
     void Start()
     {
-        if (Instance == this)
-        {
-            _autoSave = StartCoroutine(AutoSave());
-        }
+        _autoSave = StartCoroutine(AutoSave());
     }
 
     void OnDestroy()
@@ -51,7 +49,7 @@ public class JsonManager : SingletonBase<JsonManager>
                 {
                     FactoryKey = dic.Key, UpgradeTier = dic.Value.Tier, Amount = dic.Value.Amount
                 }).ToList(),
-            EventTriggerData = EventManager.Instance.EventTriggerData
+            EventTriggerData = EventManager.EventTriggerData
         };
         SaveService.Save(userData);
     }
@@ -74,7 +72,7 @@ public class JsonManager : SingletonBase<JsonManager>
                     .Add(list.FactoryKey, (list.UpgradeTier, list.Amount)));
             StatsManager.UpdateCpS();
             StatsManager.UpdateNextUpgrades();
-            foreach (var eventTriggerDatum in EventManager.Instance.EventTriggerData)
+            foreach (var eventTriggerDatum in EventManager.EventTriggerData)
             {
                 //  保存されたトリガーの中に現在EventManagerで設定されているトリガーと同じものがあれば、
                 // 保存された方のbool値でEventManagerで設定されているトリガーのbool値を上書きする。

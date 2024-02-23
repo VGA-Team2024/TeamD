@@ -8,6 +8,8 @@ public class EventTrigger : ScriptableObject
 {
     [SerializeField, SerializeReference, SubclassSelector] List<ICondition> _conditions;
     [SerializeReference, SubclassSelector] IEventClip _eventClip;
+    public IEventClip EventClip => _eventClip;
+
     public bool CheckEvent()
     {
         foreach (var condition in _conditions)

@@ -6,7 +6,7 @@ public class PlayerManager
     private static PlayerManager _instance;
     /// <summary>所持リソース数管理変数</summary>
     public double CookieCount { get; set; }
-    public int ManualGenerateCount = 1000;
+    public int ManualGenerateCount = 1;
     
     private PlayerManager()
     {
