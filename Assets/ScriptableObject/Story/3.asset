@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e99f96a5bed42ba8de211899248ce85, type: 3}
+  m_Name: 3
+  m_EditorClassIdentifier: 
+  _nameFlag: 1
+  _storyTexts:
+  - "\u3070\u3070\u3042\u306F\u3082\u3046\u308F\u3089\u3063\u3066\u306F\u304F\u308C\u306A\u3044"
+  - "\u904E\u53BB\u306B\u3082\u3069\u3063\u3066\u3084\u308A\u76F4\u3059\u3079\u304D\u304B\u2026"
+  _storyConditions:
+  - rid: 6388978920114880542
+  _storyOptions:
+  - _storyFlagEnum: 64
+    _optionText: "\u3084\u308A\u306A\u304A\u305D\u3046"
+    _optionConditions: []
+    _eventClip:
+      rid: 6388978920114880527
+  - _storyFlagEnum: 128
+    _optionText: "\u307E\u305F\u3053\u306E\u7D50\u672B\u304B"
+    _optionConditions:
+    - rid: 6388978920114880529
+    _eventClip:
+      rid: 6388978920114880530
+  references:
+    version: 2
+    RefIds:
+    - rid: 6388978920114880527
+      type: {class: NothingEvent, ns: , asm: Assembly-CSharp}
+    - rid: 6388978920114880529
+      type: {class: StoryConditionOr, ns: Story, asm: Assembly-CSharp}
+      data:
+        _requiredStoryFlagEnums: 40000000
+    - rid: 6388978920114880530
+      type: {class: AddHeavenlyChips, ns: Story, asm: Assembly-CSharp}
+      data:
+        _value: 100
+    - rid: 6388978920114880542
+      type: {class: FactoryAmountCondition, ns: , asm: Assembly-CSharp}
+      data:
+        _factoryType: 11
+        _compareOptions: 1
+        _rightNumber: 0

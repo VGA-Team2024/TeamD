@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e99f96a5bed42ba8de211899248ce85, type: 3}
+  m_Name: 2
+  m_EditorClassIdentifier: 
+  _nameFlag: 0
+  _storyTexts:
+  - "\u3053\u3093\u306A\u30D6\u30E9\u30C3\u30AF\u74B0\u5883\u306F\u521D\u3081\u3066\u3060\u3088"
+  - "\u30AF\u30C3\u30AD\u30FC\u3082\u3046\u3084\u304D\u305F\u304F\u306A\u3044\u3088"
+  _storyConditions:
+  - rid: 6388978920114880539
+  - rid: 6388978920114880540
+  - rid: 6388978920114880541
+  _storyOptions:
+  - _storyFlagEnum: 8
+    _optionText: "\u3070\u3070\u3042\u304C\u3093\u3070\u308C"
+    _optionConditions: []
+    _eventClip:
+      rid: 6388978920114880521
+  - _storyFlagEnum: 16
+    _optionText: "\u3070\u3070\u3042\u306F\u305F\u3089\u3051"
+    _optionConditions: []
+    _eventClip:
+      rid: 6388978920114880522
+  - _storyFlagEnum: 32
+    _optionText: "\u307E\u305F\u3053\u306E\u7D50\u672B\u304B"
+    _optionConditions:
+    - rid: 6388978920114880523
+    - rid: 6388978920114880526
+    _eventClip:
+      rid: 6388978920114880524
+  references:
+    version: 2
+    RefIds:
+    - rid: 6388978920114880521
+      type: {class: NothingEvent, ns: , asm: Assembly-CSharp}
+    - rid: 6388978920114880522
+      type: {class: SubtractCookie, ns: Story, asm: Assembly-CSharp}
+      data:
+        _value: 100000000
+    - rid: 6388978920114880523
+      type: {class: AchievementCondition, ns: , asm: Assembly-CSharp}
+      data:
+        _requiredAchievement: 8
+    - rid: 6388978920114880524
+      type: {class: AddHeavenlyChips, ns: Story, asm: Assembly-CSharp}
+      data:
+        _value: 100
+    - rid: 6388978920114880526
+      type: {class: StoryConditionOr, ns: Story, asm: Assembly-CSharp}
+      data:
+        _requiredStoryFlagEnums: 0200000004000000
+    - rid: 6388978920114880539
+      type: {class: FactoryUpgradeTierCondition, ns: , asm: Assembly-CSharp}
+      data:
+        _factoryType: 1
+        _compareOptions: 0
+        _rightUpgradeTier: 10
+    - rid: 6388978920114880540
+      type: {class: AchievementCondition, ns: , asm: Assembly-CSharp}
+      data:
+        _requiredAchievement: 1
+    - rid: 6388978920114880541
+      type: {class: AchievementCondition, ns: , asm: Assembly-CSharp}
+      data:
+        _requiredAchievement: 2
