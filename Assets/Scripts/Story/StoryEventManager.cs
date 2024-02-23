@@ -8,11 +8,12 @@ namespace Story
     {
         [SerializeField, Tooltip("イベントトリガーのリスト")]
         List<EventTriggerInfo> _eventTriggerInfos;
-        void Update()
+
+        private void Update()
         {
             foreach (var info in _eventTriggerInfos)
             {
-                if(info.IsTriggered) continue;
+                if (info.IsTriggered) continue;
                 if (info.EventTrigger.CheckStoryEvent())
                 {
                     info.IsTriggered = true;
@@ -20,7 +21,7 @@ namespace Story
             }
         }
     }
-    
+
     [Serializable]
     public class EventTriggerInfo
     {
