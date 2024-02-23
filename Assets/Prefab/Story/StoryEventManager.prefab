@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5610985558744431848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5610985558744431850}
+  - component: {fileID: 5610985558744431851}
+  m_Layer: 0
+  m_Name: StoryEventManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5610985558744431850
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5610985558744431848}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 964.90546, y: 513.9487, z: 1.3301086}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5610985558744431851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5610985558744431848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48191dd4e5534452b7ed43ef38dd12b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _eventTriggerInfos:
+  - <EventTrigger>k__BackingField: {fileID: 11400000, guid: dda032945d2e98d4ca47391a6dd7c293, type: 2}
+  - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 39a0ae13e83787c408ef30b183649297, type: 2}
+  - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 84a003866a6672b42866f8d0e6dbb756, type: 2}
+  - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 582128c5fb3864348a9b15d96cf24c6a, type: 2}
