@@ -31,14 +31,38 @@ namespace Story
 
         public StoryFlagEnum StoryFlag { get; private set; }
         
+        /// <summary>
+        /// ボタンに登録して、どの選択肢が選ばれたかを判定し、処理を実行するメソッド
+        /// </summary>
+        /// <param name="num">ボタンの番号 == 選択肢の番号</param>
         public void AddFlag(int num)
         {
             if (_isButtonPush) return;
             _isButtonPush = true;
             StoryFlag |= _storyFlags[num];
             _optionEvents[num].StartEvent();
-        }
 
+            ResetStoryTexts();
+            return;
+
+            // ストーリー終了時処理
+            void ResetStoryTexts()
+            {
+                _isButtonPush = false;
+                _storyFlags.Clear();
+                _texts.Clear();
+                _optionEvents.Clear();
+                _optionCount = 0;
+            }
+        }
+        
+
+        /// <summary>
+        /// 登録された選択肢の"ストーリーフラグ","テキスト","選択時の処理"を一時的に格納するメソッド
+        /// </summary>
+        /// <param name="optionFlagEnum">ストーリーフラグ</param>
+        /// <param name="optionText">表示テキスト</param>
+        /// <param name="eventClip">選択時の処理</param>
         public void UpdateOption(StoryFlagEnum optionFlagEnum, string optionText, IEventClip eventClip)
         {
             _storyFlags.Add(optionFlagEnum);
@@ -47,9 +71,15 @@ namespace Story
             _optionCount++;
         }
 
+        /// <summary>
+        /// ストーリーを更新するメソッド
+        /// テキスト更新が完了すると、選択肢更新を実行する
+        /// </summary>
+        /// <param name="speakerName">話者名前</param>
+        /// <param name="texts">喋る内容</param>
         public async void UpdateText(string speakerName, List<string> texts)
         {
-            await _storyTextController.TestUpdateText(speakerName, texts);
+            await _storyTextController.UpdateTextAsync(speakerName, texts);
             _optionController.UpdateDialogue(_optionCount, _texts);
         }
     }

@@ -9,11 +9,11 @@ namespace Story
     public class StoryController : ScriptableObject
     {
         [Header("ストーリー再生判定")]
-        [SerializeField] private SpeakerNameFlag _nameFlag;
-        [SerializeField] private List<string> _storyTexts;
-        [SerializeField, SerializeReference, SubclassSelector] private List<ICondition> _storyConditions;
+        [SerializeField, Tooltip("話者の名前選択")] private SpeakerNameFlag _nameFlag;
+        [SerializeField, Tooltip("会話内容")] private List<string> _storyTexts;
+        [SerializeReference, SubclassSelector, Tooltip("ストーリー突入条件設定")] private List<ICondition> _storyConditions;
 
-        [Space, Header("選択肢再生判定")]
+        [Space, Header("選択肢を登録する")]
         [SerializeField] private List<StoryOption> _storyOptions;
         
         private enum SpeakerNameFlag
@@ -48,10 +48,10 @@ namespace Story
     [Serializable]
     public class StoryOption : IOptionEvent
     {
-        [SerializeField] private StoryTextManager.StoryFlagEnum _storyFlagEnum;
-        [SerializeField] private string _optionText;
-        [SerializeReference, SubclassSelector] private List<ICondition> _optionConditions;
-        [SerializeReference, SubclassSelector] private IEventClip _eventClip;
+        [SerializeField, Tooltip("選択肢のフラグ登録")] private StoryTextManager.StoryFlagEnum _storyFlagEnum;
+        [SerializeField, Tooltip("選択肢のテキスト登録")] private string _optionText;
+        [SerializeReference, SubclassSelector, Tooltip("選択肢の表示条件")] private List<ICondition> _optionConditions;
+        [SerializeReference, SubclassSelector, Tooltip("選択肢を選択した際の処理登録")] private IEventClip _eventClip;
         
         public bool CheckOptionEvent()
         {
@@ -60,14 +60,17 @@ namespace Story
                 if(condition == null) continue;
                 if (!condition.CheckCondition()) return false;
             }
+            // TODO 直でStoryTextManagerを参照するのをやめたい
             StoryTextManager.Instance.UpdateOption(_storyFlagEnum, _optionText, _eventClip);
             
             return true;
         }
     }
 
+    // TODO 実際にHC増やす処理かく
     public class AddHeavenlyChips : IEventClip
     {
+        [Header("HC加算")]
         [SerializeField] private int _value;
         public void StartEvent()
         {
@@ -75,8 +78,10 @@ namespace Story
         }
     }
 
+    // TODO 実際にクッキー減らす処理かく
     public class SubtractCookie : IEventClip
     {
+        [Header("クッキー減算")]
         [SerializeField] private double _value;
         public void StartEvent()
         {
