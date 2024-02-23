@@ -10,17 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a8d5c08c6f747c4484cd728985433f6, type: 3}
-  m_Name: StoryApocalypse
+  m_Name: Reincarnation
   m_EditorClassIdentifier: 
   _conditions:
-  - _leftNumberKey: GrandmaUpgradeTier
-    _compareOptions: 0
-    _rightNumber: 9
-    _requiredAchievement: 3
+  - rid: 2284272194023587843
   _eventClip:
-    rid: 2284272056141611014
+    rid: 2284272167388971010
   references:
     version: 2
     RefIds:
-    - rid: 2284272056141611014
-      type: {class: Nothing, ns: , asm: Assembly-CSharp}
+    - rid: 2284272167388971010
+      type: {class: ReincarnationEvent, ns: , asm: Assembly-CSharp}
+    - rid: 2284272194023587843
+      type: {class: FactoryAmountCondition, ns: , asm: Assembly-CSharp}
+      data:
+        _factoryType: 0
+        _compareOptions: 0
+        _rightNumber: 5

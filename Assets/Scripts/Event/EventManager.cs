@@ -5,10 +5,12 @@ using UnityEngine;
 public class EventManager : MonoBehaviour
 {
     [SerializeField, Tooltip("イベントトリガーのリスト")]
-    List<EventTriggerInfo> _eventTriggerInfos;
+    List<EventTriggerDatum> _eventTriggerData;
+
+    public List<EventTriggerDatum> EventTriggerData => _eventTriggerData;
     void Update()
     {
-        foreach (var info in _eventTriggerInfos)
+        foreach (var info in _eventTriggerData)
         {
             if(info.IsTriggered) continue;
             if (info.EventTrigger.CheckEvent())
@@ -19,8 +21,8 @@ public class EventManager : MonoBehaviour
     }
 }
 [Serializable]
-public class EventTriggerInfo
+public class EventTriggerDatum
 {
     [field: SerializeField] public EventTrigger EventTrigger { get; set; }
-    public bool IsTriggered { get; set; }
+    [field: SerializeField] public bool IsTriggered { get; set; }
 }

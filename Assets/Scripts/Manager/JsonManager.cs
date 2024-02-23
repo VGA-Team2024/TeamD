@@ -1,33 +1,35 @@
+using System;
+using System.Collections;
 using System.Linq;
 using Editor.EditorClicker.Data;
 using Editor.EditorClicker.Scripts;
 using UnityEngine;
+using VContainer;
 
 public class JsonManager : MonoBehaviour
 {
-    public static JsonManager Instance;
+    [Inject] EventManager EventManager { get; set; }
+    Coroutine _autoSave;
     void Awake()
     {
-        if (Instance)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            JsonLoad();
-            Instance = this;
-            //  何かの子オブジェクトになっている場合はDontDestroyOnLoadできないので実行時にはParentを解除する
-            transform.SetParent(null);  
-            DontDestroyOnLoad(gameObject);
-        }
+        JsonLoad();
+    }
+
+    void Start()
+    {
+        _autoSave = StartCoroutine(AutoSave());
+    }
+
+    void OnDestroy()
+    {
+        if(_autoSave != null)
+            StopCoroutine(_autoSave);
     }
 
     void OnApplicationQuit()
     {
         JsonSave();
     }
-
-    [ContextMenu("セーブする")]
     public void JsonSave()
     {
         UserData userData = new UserData
@@ -46,7 +48,8 @@ public class JsonManager : MonoBehaviour
                 .Select(dic=> new FactoryData
                 {
                     FactoryKey = dic.Key, UpgradeTier = dic.Value.Tier, Amount = dic.Value.Amount
-                }).ToList()
+                }).ToList(),
+            EventTriggerData = EventManager.EventTriggerData
         };
         SaveService.Save(userData);
     }
@@ -68,6 +71,28 @@ public class JsonManager : MonoBehaviour
                     StatsManager.CurrentFactories
                     .Add(list.FactoryKey, (list.UpgradeTier, list.Amount)));
             StatsManager.UpdateCpS();
+            StatsManager.UpdateNextUpgrades();
+            foreach (var eventTriggerDatum in EventManager.EventTriggerData)
+            {
+                //  保存されたトリガーの中に現在EventManagerで設定されているトリガーと同じものがあれば、
+                // 保存された方のbool値でEventManagerで設定されているトリガーのbool値を上書きする。
+                var findData = data.EventTriggerData.FirstOrDefault(e=> e.EventTrigger.Equals(eventTriggerDatum.EventTrigger));
+                if (findData != null)
+                {
+                    eventTriggerDatum.IsTriggered = findData.IsTriggered;
+                }
+            }
+        }
+    }
+
+    IEnumerator AutoSave()
+    {
+        var waitForSeconds = new WaitForSeconds(60);
+        while (true)
+        {
+            print("Auto save");
+            JsonSave();
+            yield return waitForSeconds;
         }
     }
 }
