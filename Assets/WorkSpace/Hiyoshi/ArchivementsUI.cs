@@ -1,54 +1,41 @@
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using TeamD.Enum;
 
 public class ArchivementsUI : MonoBehaviour
 {
     [SerializeField] Canvas _parentCanvas;
     [SerializeField] TextMeshProUGUI _textMeshPro;
-    [SerializeField] short _waitTime = 1; //ƒeƒLƒXƒg‚ğ‰æ–Ê“à‚É•\¦‚³‚¹‚éŠÔ
+    [SerializeField] short _waitTime = 1; //ãƒ†ã‚­ã‚¹ãƒˆã‚’ç”»é¢å†…ã«è¡¨ç¤ºã•ã›ã‚‹æ™‚é–“
     [SerializeField] DataSO _dataSO;
     private Coroutine _coroutine;
-    int ScreenHeight;
-    string _archiveName = "Archive";
+    int _screenHeight;
 
     private void Start()
     {
         float _textHieght = _textMeshPro.preferredHeight;
-        ScreenHeight = Screen.currentResolution.height;
-        _textMeshPro.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -ScreenHeight / 2 - _textHieght);
+        _screenHeight = Screen.currentResolution.height;
+        _textMeshPro.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -_screenHeight / 2 - _textHieght);
     }
     /// <summary>
-    /// ‰æ–Ê‰º‚ÉÀÑŠl“¾‚ÌUI‚ğo‚·B
+    /// ç”»é¢ä¸‹ã«å®Ÿç¸¾ç²å¾—ã®UIã‚’å‡ºã™ã€‚
     /// </summary>
-    public void GetArchivements(Achievement achievement)
+    public void GetAchievements(Achievement achievement)
     {
         if (_coroutine == null)
         {
-            _coroutine = StartCoroutine(InatantiateArchivements(achievement));
+            _coroutine = StartCoroutine(InstantiateAchievements(achievement));
         }
     }
 
-    IEnumerator InatantiateArchivements(Achievement achievement)
+    IEnumerator InstantiateAchievements(Achievement achievement)
     {
-        _archiveName = _dataSO.GetItem(achievement).name;
-        _textMeshPro.SetText(_archiveName + "‚ÌÀÑ‚ğ‰ğœ‚µ‚½I");
-
+        _textMeshPro.SetText(_dataSO.GetItem(achievement).name + "ã®å®Ÿç¸¾ã‚’è§£é™¤ã—ãŸï¼");
         float _textHieght = _textMeshPro.preferredHeight;
-        _textMeshPro.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -ScreenHeight / 2 + _textHieght);
+        _textMeshPro.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -_screenHeight / 2 + _textHieght);
         yield return new WaitForSeconds(_waitTime);
-        _textMeshPro.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -ScreenHeight / 2 - _textHieght);
+        _textMeshPro.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -_screenHeight / 2 - _textHieght);
         _coroutine = null;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space)) 
-        {
-            GetArchivements(Achievement.Lucky);
-        }
     }
 }
