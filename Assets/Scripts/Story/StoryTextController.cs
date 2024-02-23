@@ -13,7 +13,6 @@ namespace Story
         [SerializeField] private Text _storyTextField;
         [SerializeField] private Text _nameTextField;
         [SerializeField] private float _textShowSpeed;
-        [SerializeField, TextArea] private List<string> _stories;
         private Queue<string> _sentence = new();
 
         public void OnPointerClick(PointerEventData eventData)
