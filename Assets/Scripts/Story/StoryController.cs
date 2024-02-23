@@ -18,7 +18,7 @@ namespace Story
         
         private enum SpeakerNameFlag
         {
-            BBA,
+            Grandma,
             You
         }
         
@@ -29,6 +29,7 @@ namespace Story
                 if(condition == null) continue;
                 if (!condition.CheckCondition()) return false;
             }
+            Debug.Log("ストーリー再生可");
             StoryTextManager.Instance.UpdateText(_nameFlag.ToString(), _storyTexts);
             foreach (var condition in _storyOptions)
             {
