@@ -1,18 +1,24 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Story
 {
     public class StoryTextManager : SingletonBase<StoryTextManager>
     {
+        [SerializeField] private Button _startButton;
+        [SerializeField] private bool _isStartButtonPush;
         [SerializeField] private StoryTextController _storyTextController;
         [SerializeField] private OptionController _optionController;
+        [SerializeField] private GameObject _storyCanvas;
+        
         private List<string> _texts = new();
         private int _optionCount;
         private List<StoryFlagEnum> _storyFlags = new();
-        private bool _isButtonPush;
         private List<IEventClip> _optionEvents = new();
+        private bool _isOptionButtonPush;
         
         [Flags]
         public enum StoryFlagEnum
@@ -30,15 +36,21 @@ namespace Story
         }
 
         public StoryFlagEnum StoryFlag { get; private set; }
-        
+        public bool IsStartButtonPush => _isStartButtonPush;
+
+        private void Start()
+        {
+            _storyCanvas.SetActive(false);
+        }
+
         /// <summary>
         /// ボタンに登録して、どの選択肢が選ばれたかを判定し、処理を実行するメソッド
         /// </summary>
         /// <param name="num">ボタンの番号 == 選択肢の番号</param>
         public void AddFlag(int num)
         {
-            if (_isButtonPush) return;
-            _isButtonPush = true;
+            if (_isOptionButtonPush) return;
+            _isOptionButtonPush = true;
             StoryFlag |= _storyFlags[num];
             _optionEvents[num].StartEvent();
 
@@ -48,11 +60,14 @@ namespace Story
             // ストーリー終了時処理
             void ResetStoryTexts()
             {
-                _isButtonPush = false;
+                _isOptionButtonPush = false;
+                _isStartButtonPush = false;
                 _storyFlags.Clear();
                 _texts.Clear();
                 _optionEvents.Clear();
+                _startButton.interactable = false;
                 _optionCount = 0;
+                _storyCanvas.SetActive(false);
             }
         }
         
@@ -79,8 +94,20 @@ namespace Story
         /// <param name="texts">喋る内容</param>
         public async void UpdateText(string speakerName, List<string> texts)
         {
+            _startButton.interactable = true;
+            var ct = this.GetCancellationTokenOnDestroy();
+            await UniTask.WaitUntil(() => _isStartButtonPush, cancellationToken: ct);
             await _storyTextController.UpdateTextAsync(speakerName, texts);
             _optionController.UpdateDialogue(_optionCount, _texts);
+        }
+
+        /// <summary>
+        /// ストーリー開始ボタン
+        /// </summary>
+        public void StartStory()
+        {
+            _storyCanvas.SetActive(true);
+            _isStartButtonPush = true;
         }
     }
 }
