@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventManager : SingletonBase<EventManager>
+public class EventManager : MonoBehaviour
 {
     [SerializeField, Tooltip("イベントトリガーのリスト")]
     List<EventTriggerDatum> _eventTriggerData;
 
     public List<EventTriggerDatum> EventTriggerData => _eventTriggerData;
-    void Awake() => SetInstance();
     void Update()
     {
         foreach (var info in _eventTriggerData)
