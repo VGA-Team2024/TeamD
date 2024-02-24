@@ -10,11 +10,13 @@ public class ReincarnationEvent : IEventClip
 {
     CanvasManager _canvasManager;
     EventManager _eventManager;
+    Shop _shop;
     [Inject]
-    public void Construct(CanvasManager canvasManager, EventManager eventManager)
+    public void Construct(CanvasManager canvasManager, EventManager eventManager, Shop shop)
     {
         _canvasManager = canvasManager;
         _eventManager = eventManager;
+        _shop = shop;
     }
     public void StartEvent()
     {
@@ -55,5 +57,7 @@ public class ReincarnationEvent : IEventClip
         {
             _eventManager.EventTriggerData[index].IsTriggered = false;
         }
+        //  ショップ表示更新
+        _shop.UpdateFactoryShop();
     }
 }
