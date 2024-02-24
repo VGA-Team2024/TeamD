@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a8d5c08c6f747c4484cd728985433f6, type: 3}
   m_Name: AchievementApocalypse
   m_EditorClassIdentifier: 
+  <UniqueID>k__BackingField: 3c4b277248cca0843bd26893ea4581b8
   _conditions: []
   _eventClip:
     rid: 2284272056141611017
