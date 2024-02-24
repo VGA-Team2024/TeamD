@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TeamD.Enum;
 using UnityEngine;
+using VContainer;
+using Object = UnityEngine.Object;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/EventTrigger")][Serializable]
 public class EventTrigger : ScriptableObject
@@ -34,8 +37,17 @@ public class NothingEvent : IEventClip { public void StartEvent() { } }
 public class UnlockAchievement : IEventClip
 {
     [SerializeField] Achievement _unlockAchievement;
+    CanvasManager _canvasManager;
+    [Inject]
+    public void Construct(CanvasManager canvasManager)
+    {
+        _canvasManager = canvasManager;
+    }
     public void StartEvent()
     {
         StatsManager.Achievements |= _unlockAchievement;
+        var popup = Object.Instantiate(_canvasManager.AchievementPopup, _canvasManager.AchievementPopupParent);
+        var achievements = Resources.Load<Achievements>("Excel/Achievements");
+        popup.Title.text = achievements.Entities.FirstOrDefault(e=>e.Key.HasFlag(_unlockAchievement))?.Name;
     }
 }

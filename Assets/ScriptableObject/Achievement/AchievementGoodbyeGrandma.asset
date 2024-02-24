@@ -13,10 +13,7 @@ MonoBehaviour:
   m_Name: AchievementGoodbyeGrandma
   m_EditorClassIdentifier: 
   _conditions:
-  - _leftNumberKey: GrandmaSellCount
-    _compareOptions: 0
-    _rightNumber: 1
-    _requiredAchievement: 0
+  - rid: 2284272224840712192
   _eventClip:
     rid: 2284272056141611018
   references:
@@ -26,3 +23,9 @@ MonoBehaviour:
       type: {class: UnlockAchievement, ns: , asm: Assembly-CSharp}
       data:
         _unlockAchievement: 2
+    - rid: 2284272224840712192
+      type: {class: FactorySellCountCondition, ns: , asm: Assembly-CSharp}
+      data:
+        _factoryType: 1
+        _compareOptions: 0
+        _rightNumber: 1
