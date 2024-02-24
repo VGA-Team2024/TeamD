@@ -67,26 +67,25 @@ namespace Story
             return true;
         }
     }
-
-    // TODO 実際にHC増やす処理かく
+    
     public class AddHeavenlyChips : IEventClip
     {
         [Header("HC加算")]
         [SerializeField] private int _value;
         public void StartEvent()
         {
-            Debug.Log($"HC増える {_value}");
+            StatsManager.HeavenlyChips += _value;
         }
     }
-
-    // TODO 実際にクッキー減らす処理かく
+    
     public class SubtractCookie : IEventClip
     {
         [Header("クッキー減算")]
         [SerializeField] private double _value;
+        
         public void StartEvent()
         {
-            Debug.Log($"Cookie減る {_value}");
+            PlayerManager.Instance.SubtractCookie(_value);
         }
     }
     
