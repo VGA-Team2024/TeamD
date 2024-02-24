@@ -7,18 +7,18 @@ using VContainer;
 /// </summary>
 public class ReincarnationEvent : IEventClip
 {
-    [Inject] Menu Menu { get; set; }
+    [Inject] CanvasManager CanvasManager { get; set; }
     [Inject] EventManager EventManager { get; set; }
     public void StartEvent()
     {
-        Menu.ReincarnationButton.onClick.RemoveListener(Reincarnation);
-        Menu.ReincarnationButton.onClick.AddListener(Reincarnation);
-        Menu.ReincarnationButton.interactable = true;
+        CanvasManager.ReincarnationButton.onClick.RemoveListener(Reincarnation);
+        CanvasManager.ReincarnationButton.onClick.AddListener(Reincarnation);
+        CanvasManager.ReincarnationButton.interactable = true;
     }
 
     void Reincarnation()
     {
-        Menu.ReincarnationButton.interactable = false;
+        CanvasManager.ReincarnationButton.interactable = false;
         StatsManager.ReincarnationCount += 1;
         var cookieCount = PlayerManager.Instance.CookieCount;
         if (cookieCount >= 1E+16)   //  1京(10^16)
