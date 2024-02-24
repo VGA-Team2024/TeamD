@@ -37,11 +37,16 @@ public class NothingEvent : IEventClip { public void StartEvent() { } }
 public class UnlockAchievement : IEventClip
 {
     [SerializeField] Achievement _unlockAchievement;
-    [Inject] CanvasManager CanvasManager { get; set; }
+    CanvasManager _canvasManager;
+    [Inject]
+    public void Construct(CanvasManager canvasManager)
+    {
+        _canvasManager = canvasManager;
+    }
     public void StartEvent()
     {
         StatsManager.Achievements |= _unlockAchievement;
-        var popup = Object.Instantiate(CanvasManager.AchievementPopup, CanvasManager.AchievementPopupParent);
+        var popup = Object.Instantiate(_canvasManager.AchievementPopup, _canvasManager.AchievementPopupParent);
         var achievements = Resources.Load<Achievements>("Excel/Achievements");
         popup.Title.text = achievements.Entities.FirstOrDefault(e=>e.Key.HasFlag(_unlockAchievement))?.Name;
     }

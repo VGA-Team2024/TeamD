@@ -1,5 +1,6 @@
 using System.Linq;
 using TeamD.Enum;
+using UnityEngine;
 using VContainer;
 
 /// <summary>
@@ -7,18 +8,24 @@ using VContainer;
 /// </summary>
 public class ReincarnationEvent : IEventClip
 {
-    [Inject] CanvasManager CanvasManager { get; set; }
-    [Inject] EventManager EventManager { get; set; }
+    CanvasManager _canvasManager;
+    EventManager _eventManager;
+    [Inject]
+    public void Construct(CanvasManager canvasManager, EventManager eventManager)
+    {
+        _canvasManager = canvasManager;
+        _eventManager = eventManager;
+    }
     public void StartEvent()
     {
-        CanvasManager.ReincarnationButton.onClick.RemoveListener(Reincarnation);
-        CanvasManager.ReincarnationButton.onClick.AddListener(Reincarnation);
-        CanvasManager.ReincarnationButton.interactable = true;
+        _canvasManager.ReincarnationButton.onClick.RemoveListener(Reincarnation);
+        _canvasManager.ReincarnationButton.onClick.AddListener(Reincarnation);
+        _canvasManager.ReincarnationButton.interactable = true;
     }
 
     void Reincarnation()
     {
-        CanvasManager.ReincarnationButton.interactable = false;
+        _canvasManager.ReincarnationButton.interactable = false;
         StatsManager.ReincarnationCount += 1;
         var cookieCount = PlayerManager.Instance.CookieCount;
         if (cookieCount >= 1E+16)   //  1京(10^16)
@@ -42,11 +49,11 @@ public class ReincarnationEvent : IEventClip
         }
         
         //  このクラスのEventClipを持っているEventTriggerのbool値を初期化する
-        foreach (var index in EventManager.EventTriggerData
+        foreach (var index in _eventManager.EventTriggerData
                      .Where(datum => datum.EventTrigger.EventClip.Equals(this))
                      .Select((_, index) => index))
         {
-            EventManager.EventTriggerData[index].IsTriggered = false;
+            _eventManager.EventTriggerData[index].IsTriggered = false;
         }
     }
 }
