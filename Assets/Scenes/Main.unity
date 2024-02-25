@@ -1776,7 +1776,21 @@ MonoBehaviour:
   _eventTriggerData:
   - <EventTrigger>k__BackingField: {fileID: 11400000, guid: cd4438053193deb40aa758d51df32d38, type: 2}
     <IsTriggered>k__BackingField: 0
+  - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 0b838b6eec19ce3498590528ca2a7bbd, type: 2}
+    <IsTriggered>k__BackingField: 0
+  - <EventTrigger>k__BackingField: {fileID: 11400000, guid: d376193d668f88c41b385e9fd9418af4, type: 2}
+    <IsTriggered>k__BackingField: 0
+  - <EventTrigger>k__BackingField: {fileID: 11400000, guid: ffd07b68b5164274fa62d6b3ee8deccb, type: 2}
+    <IsTriggered>k__BackingField: 0
+  - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 16bf402ae3e62b14e90b4ec9205deb5c, type: 2}
+    <IsTriggered>k__BackingField: 0
   - <EventTrigger>k__BackingField: {fileID: 11400000, guid: ac68b20900ac79f42a1b22ea33f80f1d, type: 2}
+    <IsTriggered>k__BackingField: 0
+  - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 35b1b6ef1aca5a541a9c5ab14eadcce1, type: 2}
+    <IsTriggered>k__BackingField: 0
+  - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 73130d4d81fc0564c86aa30ca13faa2d, type: 2}
+    <IsTriggered>k__BackingField: 0
+  - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 3397018d9007aa6429ae580df181f038, type: 2}
     <IsTriggered>k__BackingField: 0
 --- !u!114 &1293046725 stripped
 MonoBehaviour:
