@@ -10,19 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a8d5c08c6f747c4484cd728985433f6, type: 3}
-  m_Name: AchievementLucky
+  m_Name: CollapseOfTheWorldAchievement
   m_EditorClassIdentifier: 
-  <UniqueID>k__BackingField: 845ff7b6c20dbe94d9e2996c9283fa2f
-  _conditions:
-  - rid: -2
+  <UniqueID>k__BackingField: 
+  _conditions: []
   _eventClip:
-    rid: 2284272056141611018
+    rid: -2
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 2284272056141611018
-      type: {class: UnlockAchievement, ns: , asm: Assembly-CSharp}
-      data:
-        _unlockAchievement: 4

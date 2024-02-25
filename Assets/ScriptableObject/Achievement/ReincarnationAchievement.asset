@@ -10,21 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a8d5c08c6f747c4484cd728985433f6, type: 3}
-  m_Name: AchievementAllClear
+  m_Name: ReincarnationAchievement
   m_EditorClassIdentifier: 
-  <UniqueID>k__BackingField: 9e20b93ba8cf50f49b0db6fdcf1862d0
+  <UniqueID>k__BackingField: c97823e5eac9bce42b67dd45b7e04b4d
   _conditions:
-  - rid: 6388978920114880537
+  - rid: -2
   _eventClip:
-    rid: 6388978920114880536
+    rid: 2284272056141611018
   references:
     version: 2
     RefIds:
-    - rid: 6388978920114880536
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 2284272056141611018
       type: {class: UnlockAchievement, ns: , asm: Assembly-CSharp}
       data:
-        _unlockAchievement: 128
-    - rid: 6388978920114880537
-      type: {class: StoryConditionAnd, ns: Story, asm: Assembly-CSharp}
-      data:
-        _requiredStoryFlagEnums: 02000000040000000800000010000000200000004000000080000000000100000002000000040000
+        _unlockAchievement: 8
