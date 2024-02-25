@@ -17,6 +17,8 @@ namespace Story
 
         [Space, Header("選択肢を登録する")]
         [SerializeField] private List<StoryOption> _storyOptions;
+
+        public List<StoryOption> StoryOptions => _storyOptions;
         
         private enum SpeakerNameFlag
         {
@@ -65,6 +67,7 @@ namespace Story
         [SerializeField, Tooltip("選択肢のテキスト登録")] private string _optionText;
         [SerializeReference, SubclassSelector, Tooltip("選択肢の表示条件")] private List<ICondition> _optionConditions;
         [SerializeReference, SubclassSelector, Tooltip("選択肢を選択した際の処理登録")] private IEventClip _eventClip;
+        public IEventClip EventClip => _eventClip;
         
         public bool CheckOptionEvent()
         {

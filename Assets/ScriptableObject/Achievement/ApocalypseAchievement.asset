@@ -10,21 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a8d5c08c6f747c4484cd728985433f6, type: 3}
-  m_Name: Reincarnation
+  m_Name: ApocalypseAchievement
   m_EditorClassIdentifier: 
-  <UniqueID>k__BackingField: bfa8f62af46d5c44db503cab6b558154
+  <UniqueID>k__BackingField: 3c4b277248cca0843bd26893ea4581b8
   _conditions:
-  - rid: 2284272194023587843
+  - rid: 2284272259407282176
+  - rid: 2284272259407282177
   _eventClip:
-    rid: 2284272167388971010
+    rid: 2284272056141611017
   references:
     version: 2
     RefIds:
-    - rid: 2284272167388971010
-      type: {class: ReincarnationEvent, ns: , asm: Assembly-CSharp}
-    - rid: 2284272194023587843
+    - rid: 2284272056141611017
+      type: {class: UnlockAchievement, ns: , asm: Assembly-CSharp}
+      data:
+        _unlockAchievement: 1
+    - rid: 2284272259407282176
       type: {class: FactoryAmountCondition, ns: , asm: Assembly-CSharp}
       data:
-        _factoryType: 11
+        _factoryType: 1
+        _compareOptions: 0
+        _rightNumber: 1000
+    - rid: 2284272259407282177
+      type: {class: FactoryAmountCondition, ns: , asm: Assembly-CSharp}
+      data:
+        _factoryType: 10
         _compareOptions: 0
         _rightNumber: 1

@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a8d5c08c6f747c4484cd728985433f6, type: 3}
-  m_Name: Reincarnation
+  m_Name: InfiniteLoopAchievement
   m_EditorClassIdentifier: 
-  <UniqueID>k__BackingField: bfa8f62af46d5c44db503cab6b558154
+  <UniqueID>k__BackingField: 7b18768b6a5082f4f801b09be8bb3941
   _conditions:
-  - rid: 2284272194023587843
+  - rid: 2284272259407282184
   _eventClip:
-    rid: 2284272167388971010
+    rid: 2284272259407282185
   references:
     version: 2
     RefIds:
-    - rid: 2284272167388971010
-      type: {class: ReincarnationEvent, ns: , asm: Assembly-CSharp}
-    - rid: 2284272194023587843
-      type: {class: FactoryAmountCondition, ns: , asm: Assembly-CSharp}
+    - rid: 2284272259407282184
+      type: {class: StoryConditionOr, ns: Story, asm: Assembly-CSharp}
       data:
-        _factoryType: 11
-        _compareOptions: 0
-        _rightNumber: 1
+        _requiredStoryFlagEnums: 00020000
+    - rid: 2284272259407282185
+      type: {class: UnlockAchievement, ns: , asm: Assembly-CSharp}
+      data:
+        _unlockAchievement: 32
