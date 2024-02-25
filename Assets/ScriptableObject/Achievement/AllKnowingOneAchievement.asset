@@ -12,12 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a8d5c08c6f747c4484cd728985433f6, type: 3}
   m_Name: AllKnowingOneAchievement
   m_EditorClassIdentifier: 
-  <UniqueID>k__BackingField: 
-  _conditions: []
+  <UniqueID>k__BackingField: 620a4fbf829a6c741822005b2015732c
+  _conditions:
+  - rid: 2284272259407282186
   _eventClip:
-    rid: -2
+    rid: 2284272259407282187
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 2284272259407282186
+      type: {class: StoryConditionOr, ns: Story, asm: Assembly-CSharp}
+      data:
+        _requiredStoryFlagEnums: 00040000
+    - rid: 2284272259407282187
+      type: {class: UnlockAchievement, ns: , asm: Assembly-CSharp}
+      data:
+        _unlockAchievement: 64

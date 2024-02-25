@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: ApocalypseAchievement
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: 3c4b277248cca0843bd26893ea4581b8
-  _conditions: []
+  _conditions:
+  - rid: 2284272259407282176
+  - rid: 2284272259407282177
   _eventClip:
     rid: 2284272056141611017
   references:
@@ -23,3 +25,15 @@ MonoBehaviour:
       type: {class: UnlockAchievement, ns: , asm: Assembly-CSharp}
       data:
         _unlockAchievement: 1
+    - rid: 2284272259407282176
+      type: {class: FactoryAmountCondition, ns: , asm: Assembly-CSharp}
+      data:
+        _factoryType: 1
+        _compareOptions: 0
+        _rightNumber: 1000
+    - rid: 2284272259407282177
+      type: {class: FactoryAmountCondition, ns: , asm: Assembly-CSharp}
+      data:
+        _factoryType: 10
+        _compareOptions: 0
+        _rightNumber: 1

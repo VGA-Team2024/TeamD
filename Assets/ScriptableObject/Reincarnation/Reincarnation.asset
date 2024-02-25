@@ -25,6 +25,6 @@ MonoBehaviour:
     - rid: 2284272194023587843
       type: {class: FactoryAmountCondition, ns: , asm: Assembly-CSharp}
       data:
-        _factoryType: 0
+        _factoryType: 11
         _compareOptions: 0
-        _rightNumber: 5
+        _rightNumber: 1

@@ -14,15 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: 845ff7b6c20dbe94d9e2996c9283fa2f
   _conditions:
-  - rid: -2
+  - rid: 2284272259407282178
   _eventClip:
     rid: 2284272056141611018
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 2284272056141611018
       type: {class: UnlockAchievement, ns: , asm: Assembly-CSharp}
       data:
         _unlockAchievement: 4
+    - rid: 2284272259407282178
+      type: {class: GoldenCookieObtainCountCondition, ns: , asm: Assembly-CSharp}
+      data:
+        _compareOptions: 0
+        _rightNumber: 1
