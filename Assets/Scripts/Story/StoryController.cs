@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace Story
@@ -8,6 +9,7 @@ namespace Story
     [CreateAssetMenu(menuName = "ScriptableObjects/StoryData")]
     public class StoryController : ScriptableObject
     {
+        [field: SerializeField, ReadOnly] public string UniqueID { get; private set; }
         [Header("ストーリー再生判定")]
         [SerializeField, Tooltip("話者の名前選択")] private SpeakerNameFlag _nameFlag;
         [SerializeField, Tooltip("会話内容")] private List<string> _storyTexts;
@@ -38,6 +40,16 @@ namespace Story
             }
 
             return true;
+        }
+        void OnValidate()
+        {
+#if UNITY_EDITOR
+            if (UniqueID == "")
+            {
+                UniqueID = GUID.Generate().ToString();
+                EditorUtility.SetDirty(this);
+            }
+#endif
         }
     }
 

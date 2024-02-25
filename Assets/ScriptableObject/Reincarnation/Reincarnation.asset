@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a8d5c08c6f747c4484cd728985433f6, type: 3}
   m_Name: Reincarnation
   m_EditorClassIdentifier: 
+  <UniqueID>k__BackingField: bfa8f62af46d5c44db503cab6b558154
   _conditions:
   - rid: 2284272194023587843
   _eventClip:

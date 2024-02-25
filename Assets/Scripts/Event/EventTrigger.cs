@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TeamD.Enum;
+using UnityEditor;
 using UnityEngine;
 using VContainer;
 using Object = UnityEngine.Object;
@@ -9,6 +10,7 @@ using Object = UnityEngine.Object;
 [CreateAssetMenu(menuName = "ScriptableObjects/EventTrigger")][Serializable]
 public class EventTrigger : ScriptableObject
 {
+    [field: SerializeField, ReadOnly] public string UniqueID { get; private set; }
     [SerializeField, SerializeReference, SubclassSelector] List<ICondition> _conditions;
     [SerializeReference, SubclassSelector] IEventClip _eventClip;
     public IEventClip EventClip => _eventClip;
@@ -22,6 +24,16 @@ public class EventTrigger : ScriptableObject
         }
         _eventClip?.StartEvent();
         return true;
+    }
+    void OnValidate()
+    {
+#if UNITY_EDITOR
+        if (UniqueID == "")
+        {
+            UniqueID = GUID.Generate().ToString();
+            EditorUtility.SetDirty(this);
+        }
+#endif
     }
 }
 

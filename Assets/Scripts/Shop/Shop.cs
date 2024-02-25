@@ -32,6 +32,12 @@ public class Shop : MonoBehaviour
             button.CurrentOwnNumText.text = StatsManager.CurrentFactories[factory.Key].Amount.ToString();
             //  施設のベース価格 × 1.15^施設数
             button.SetPriceText(factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.CurrentFactories[factory.Key].Amount));
+            //  表示更新の処理を登録
+            button.UpdateEvent += () =>
+            {
+                button.CurrentOwnNumText.text = StatsManager.CurrentFactories[factory.Key].Amount.ToString();
+                button.SetPriceText(factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.CurrentFactories[factory.Key].Amount));
+            };
             //購入時の処理を登録する。
             button.PurchaseEvent += () =>
             {
@@ -43,8 +49,7 @@ public class Shop : MonoBehaviour
                     var stat = StatsManager.CurrentFactories[factory.Key];
                     stat.Amount++;
                     StatsManager.CurrentFactories[factory.Key] = stat;
-                    button.CurrentOwnNumText.text = StatsManager.CurrentFactories[factory.Key].Amount.ToString();
-                    button.SetPriceText(price * _factoryMultiplier);    //  増えた分値段表示を更新
+                    button.UpdateEvent?.Invoke();
                 }
             };
 
@@ -60,13 +65,14 @@ public class Shop : MonoBehaviour
                     stat.Amount--;
                     StatsManager.CurrentFactories[factory.Key] = stat;
                     StatsManager.FactorySellCount[factory.Key] += 1;
-                    button.CurrentOwnNumText.text = StatsManager.CurrentFactories[factory.Key].Amount.ToString();
-                    button.SetPriceText(price / _factoryMultiplier); //  減った分値段表示を更新
+                    button.UpdateEvent?.Invoke();
                 }
             };
         }
         StatsManager.OnUpdateNextUpgrades.Subscribe(GenerateUpgradeShop).AddTo(this);
         StatsManager.UpdateNextUpgrades();
+        
+        //  購入モード、売却モード切り替えボタン処理登録
         _switchPurchaseButton.RimLight.gameObject.SetActive(true);
         _switchPurchaseButton.Button.onClick.AddListener(() =>
         {
@@ -80,6 +86,16 @@ public class Shop : MonoBehaviour
             _switchSellButton.RimLight.gameObject.SetActive(true);
             _switchPurchaseButton.RimLight.gameObject.SetActive(false);
         });
+    }
+    /// <summary>
+    /// 施設ショップの表示を更新
+    /// </summary>
+    public void UpdateFactoryShop()
+    {
+        foreach (var currentFactoryButton in _currentFactoryButtons)
+        {
+            currentFactoryButton.UpdateEvent?.Invoke();
+        }
     }
 
     void GenerateUpgradeShop(Dictionary<FactoriesEntity, (TiersEntity Tier, UpgradesEntity UpgradesInfo)> nextUpgrades)

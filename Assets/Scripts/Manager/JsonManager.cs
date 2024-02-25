@@ -1,14 +1,15 @@
-using System;
 using System.Collections;
 using System.Linq;
 using Editor.EditorClicker.Data;
 using Editor.EditorClicker.Scripts;
+using Story;
 using UnityEngine;
 using VContainer;
 
 public class JsonManager : MonoBehaviour
 {
     [Inject] EventManager EventManager { get; set; }
+    [Inject] StoryEventManager StoryEventManager { get; set; }
     Coroutine _autoSave;
     void Awake()
     {
@@ -50,6 +51,16 @@ public class JsonManager : MonoBehaviour
                     FactoryKey = dic.Key, UpgradeTier = dic.Value.Tier, Amount = dic.Value.Amount
                 }).ToList(),
             EventTriggerData = EventManager.EventTriggerData
+                .Select(datum=> new EventTriggerSaveDatum
+                {
+                    UniqueID = datum.EventTrigger.UniqueID, IsTriggered = datum.IsTriggered
+                }).ToList(),
+            StoryControllerData = StoryEventManager.EventTriggerInfos
+                .Select(datum=> new EventTriggerSaveDatum
+            {
+                UniqueID = datum.EventTrigger.UniqueID, IsTriggered = datum.IsTriggered
+            }).ToList(),
+            StoryFlag = StoryTextManager.Instance.StoryFlag
         };
         SaveService.Save(userData);
     }
@@ -76,12 +87,21 @@ public class JsonManager : MonoBehaviour
             {
                 //  保存されたトリガーの中に現在EventManagerで設定されているトリガーと同じものがあれば、
                 // 保存された方のbool値でEventManagerで設定されているトリガーのbool値を上書きする。
-                var findData = data.EventTriggerData.FirstOrDefault(e=> e.EventTrigger.Equals(eventTriggerDatum.EventTrigger));
+                var findData = data.EventTriggerData.FirstOrDefault(datum=> datum.UniqueID.Equals(eventTriggerDatum.EventTrigger.UniqueID));
                 if (findData != null)
                 {
                     eventTriggerDatum.IsTriggered = findData.IsTriggered;
                 }
             }
+            foreach (var eventTriggerDatum in StoryEventManager.EventTriggerInfos)
+            {
+                var findData = data.StoryControllerData.FirstOrDefault(datum=> datum.UniqueID.Equals(eventTriggerDatum.EventTrigger.UniqueID));
+                if (findData != null)
+                {
+                    eventTriggerDatum.IsTriggered = findData.IsTriggered;
+                }
+            }
+            StoryTextManager.Instance.StoryFlag = data.StoryFlag;
         }
     }
 
