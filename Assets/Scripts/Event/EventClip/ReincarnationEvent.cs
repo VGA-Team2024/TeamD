@@ -1,7 +1,6 @@
 using System.Linq;
 using Story;
 using TeamD.Enum;
-using UnityEngine;
 using VContainer;
 
 /// <summary>
@@ -32,21 +31,8 @@ public class ReincarnationEvent : IEventClip
     {
         _canvasManager.ReincarnationButton.interactable = false;
         StatsManager.ReincarnationCount += 1;
-        var cookieCount = PlayerManager.Instance.CookieCount;
-        //  TODO: 条件付ける
-        if (cookieCount >= 1E+16)   //  1京(10^16)
-        {
-            StatsManager.HeavenlyChips += 1000;
-        }
-        else if (cookieCount >= 1E+12)  //  1兆(10^12)
-        {
-            StatsManager.HeavenlyChips += 10;
-        }   
-        else if (cookieCount >= 1E+8)   //  1億(10^8)  
-        {
-            StatsManager.HeavenlyChips++;
-        }
-
+        AddHeavenlyChips();
+        
         //  クッキーの数、施設、アップグレードを初期化する。
         PlayerManager.Instance.CookieCount = 0;
         foreach (var keyValue in StatsManager.CurrentFactories.ToList())
@@ -68,5 +54,21 @@ public class ReincarnationEvent : IEventClip
         }
         //  ショップ表示更新
         _shop.UpdateFactoryShop();
+    }
+
+    void AddHeavenlyChips()
+    {
+        var cookieCount = PlayerManager.Instance.CookieCount;
+        foreach (var entities in StatsManager.ReincarnationData.Entities
+                     .OrderByDescending(e=>e.CookieCount))
+        {
+            if (cookieCount >= entities.CookieCount 
+                && (entities.Limit > StatsManager.ReincarnationRewardCount[entities.CookieCount] || entities.Limit == 0))
+            {
+                StatsManager.HeavenlyChips += entities.HeavenlyChips;
+                StatsManager.ReincarnationRewardCount[entities.CookieCount]++;
+                return;
+            }
+        }
     }
 }

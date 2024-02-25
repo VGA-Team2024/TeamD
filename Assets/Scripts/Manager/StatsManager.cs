@@ -16,12 +16,16 @@ public static class StatsManager
     static readonly Factories _factories;
     static readonly Tiers _tiers;
     static readonly Upgrades _upgrades;
+    public static readonly ReincarnationData ReincarnationData;
 
     static StatsManager()
     {
         _factories = Resources.Load<Factories>("Excel/Factories");
         _tiers = Resources.Load<Tiers>("Excel/Tiers");
         _upgrades = Resources.Load<Upgrades>("Excel/Upgrades");
+        ReincarnationData = Resources.Load<ReincarnationData>("Excel/ReincarnationData");
+        //  転生用データを読み取ってDictionaryを作成
+        ReincarnationRewardCount = ReincarnationData.Entities.ToDictionary(e => e.CookieCount, _ => 0);
         CurrentFactories.ObserveReplace().Subscribe(_ => UpdateCpS());
         CurrentFactories.ObserveReplace().Subscribe(_ => UpdateNextUpgrades());
     }
@@ -46,6 +50,8 @@ public static class StatsManager
 
     /// <summary>Cookie Per Seconds: 一秒間に生成するクッキー数</summary>
     public static double CpS { get; private set; }
+    /// <summary>転生時に受け取った報酬のカウント</summary>
+    public static Dictionary<double, int> ReincarnationRewardCount { get; set; }
 
     public static void UpdateCpS()
     {

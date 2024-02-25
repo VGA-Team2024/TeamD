@@ -60,7 +60,12 @@ public class JsonManager : MonoBehaviour
             {
                 UniqueID = datum.EventTrigger.UniqueID, IsTriggered = datum.IsTriggered
             }).ToList(),
-            StoryFlag = StoryTextManager.Instance.StoryFlag
+            StoryFlag = StoryTextManager.Instance.StoryFlag,
+            ReincarnationRewardCounts = StatsManager.ReincarnationRewardCount
+                .Select(c=>new ReincarnationRewardCount
+            {
+                Key = c.Key, Count = c.Value
+            }).ToList()
         };
         SaveService.Save(userData);
     }
@@ -102,6 +107,10 @@ public class JsonManager : MonoBehaviour
                 }
             }
             StoryTextManager.Instance.StoryFlag = data.StoryFlag;
+            foreach (var count in data.ReincarnationRewardCounts)
+            {
+                StatsManager.ReincarnationRewardCount[count.Key] = count.Count;
+            }
         }
     }
 

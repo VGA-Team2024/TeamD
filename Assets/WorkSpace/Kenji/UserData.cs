@@ -33,6 +33,8 @@ namespace Editor.EditorClicker.Data
         public List<EventTriggerSaveDatum> StoryControllerData { get; set; }
         [field: SerializeField]
         public StoryTextManager.StoryFlagEnum StoryFlag { get; set; }
+        [field: SerializeField] 
+        public List<ReincarnationRewardCount> ReincarnationRewardCounts { get; set; }
     }
     [Serializable]
     public class EventTriggerSaveDatum
@@ -57,5 +59,12 @@ namespace Editor.EditorClicker.Data
         public FactoryKey FactoryKey { get; set; }
         [field: SerializeField]
         public int SellCount { get; set; }
+    }
+
+    [Serializable]
+    public struct ReincarnationRewardCount
+    {
+        [field: SerializeField] public double Key { get; set; }
+        [field: SerializeField] public int Count { get; set; }
     }
 }
