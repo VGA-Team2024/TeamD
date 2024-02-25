@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,12 +14,14 @@ namespace Story
         [SerializeField] private StoryTextController _storyTextController;
         [SerializeField] private OptionController _optionController;
         [SerializeField] private GameObject _storyCanvas;
-        
+
         private List<string> _texts = new();
         private int _optionCount;
         private List<StoryFlagEnum> _storyFlags = new();
         private List<IEventClip> _optionEvents = new();
+        private CancellationToken _ct;
         private bool _isOptionButtonPush;
+
         // TODO: 保存機能追加
         [Flags]
         public enum StoryFlagEnum
@@ -41,8 +44,9 @@ namespace Story
         private void Start()
         {
             _storyCanvas.SetActive(false);
+            _ct = this.GetCancellationTokenOnDestroy();
         }
-
+        
         /// <summary>
         /// ボタンに登録して、どの選択肢が選ばれたかを判定し、処理を実行するメソッド
         /// </summary>
@@ -70,7 +74,7 @@ namespace Story
                 _storyCanvas.SetActive(false);
             }
         }
-        
+
 
         /// <summary>
         /// 登録された選択肢の"ストーリーフラグ","テキスト","選択時の処理"を一時的に格納するメソッド
@@ -95,10 +99,15 @@ namespace Story
         public async void UpdateText(string speakerName, List<string> texts)
         {
             _startButton.interactable = true;
-            var ct = this.GetCancellationTokenOnDestroy();
-            await UniTask.WaitUntil(() => _isStartButtonPush, cancellationToken: ct);
-            await _storyTextController.UpdateTextAsync(speakerName, texts);
-            _optionController.UpdateDialogue(_optionCount, _texts);
+            try
+            {
+                await UniTask.WaitUntil(() => _isStartButtonPush, cancellationToken: _ct);
+                await _storyTextController.UpdateTextAsync(speakerName, texts);
+                _optionController.UpdateDialogue(_optionCount, _texts);
+            }
+            catch (OperationCanceledException)
+            {
+            }
         }
 
         /// <summary>
