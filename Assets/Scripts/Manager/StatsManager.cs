@@ -49,8 +49,9 @@ public static class StatsManager
 
     public static void UpdateCpS()
     {
-        CpS = CurrentFactories.Select(x => _factories.Entities
+        var sum = CurrentFactories.Select(x => _factories.Entities
             .Find(e => e.Key == x.Key).CpS * x.Value.Amount * (1 << (int)x.Value.Tier)).Sum();
+        CpS = sum + sum * HeavenlyChips / 100;
     }
 
     public static void UpdateNextUpgrades()
