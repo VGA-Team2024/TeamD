@@ -18,15 +18,30 @@ public class ManagerLifetimeScope : LifetimeScope
         builder.RegisterComponent(_eventManager);
         builder.RegisterComponent(_storyEventManager);
         builder.RegisterInstance(_shop);
-        foreach (var datum in _eventManager.EventTriggerData
-                     .Where(datum=>datum.EventTrigger.EventClip is ReincarnationEvent))
+        //  コンテナビルド後、オブジェクトに注入を行う
+        builder.RegisterBuildCallback(container =>
         {
-            builder.RegisterComponent((ReincarnationEvent)datum.EventTrigger.EventClip);
-        }
-        foreach (var datum in _eventManager.EventTriggerData
-                     .Where(datum=>datum.EventTrigger.EventClip is UnlockAchievement))
-        {
-            builder.RegisterComponent((UnlockAchievement)datum.EventTrigger.EventClip);
-        }
+            //  EventManager内にReincarnationEventがあれば注入する
+            foreach (var datum in _eventManager.EventTriggerData
+                         .Where(datum=>datum.EventTrigger.EventClip is ReincarnationEvent))
+            {
+                container.Inject((ReincarnationEvent)datum.EventTrigger.EventClip);
+            }
+            //  EventManager内にUnlockAchievementがあれば注入する
+            foreach (var datum in _eventManager.EventTriggerData
+                         .Where(datum=>datum.EventTrigger.EventClip is UnlockAchievement))
+            {
+                container.Inject((UnlockAchievement)datum.EventTrigger.EventClip);
+            }
+            //  StoryEventManager内にUnlockAchievementがあれば注入する
+            foreach (var datum in _storyEventManager.EventTriggerInfos)
+            {
+                foreach (var storyOption in datum.EventTrigger.StoryOptions
+                             .Where(storyOption=>storyOption.EventClip is UnlockAchievement))
+                {
+                    container.Inject((UnlockAchievement)storyOption.EventClip);
+                }
+            }
+        });
     }
 }
