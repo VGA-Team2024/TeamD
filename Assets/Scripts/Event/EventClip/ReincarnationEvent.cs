@@ -1,4 +1,5 @@
 using System.Linq;
+using Story;
 using TeamD.Enum;
 using UnityEngine;
 using VContainer;
@@ -10,12 +11,14 @@ public class ReincarnationEvent : IEventClip
 {
     CanvasManager _canvasManager;
     EventManager _eventManager;
+    StoryEventManager _storyEventManager;
     Shop _shop;
     [Inject]
-    public void Construct(CanvasManager canvasManager, EventManager eventManager, Shop shop)
+    public void Construct(CanvasManager canvasManager, EventManager eventManager, Shop shop, StoryEventManager storyEventManager)
     {
         _canvasManager = canvasManager;
         _eventManager = eventManager;
+        _storyEventManager = storyEventManager;
         _shop = shop;
     }
     public void StartEvent()
@@ -30,6 +33,7 @@ public class ReincarnationEvent : IEventClip
         _canvasManager.ReincarnationButton.interactable = false;
         StatsManager.ReincarnationCount += 1;
         var cookieCount = PlayerManager.Instance.CookieCount;
+        //  TODO: 条件付ける
         if (cookieCount >= 1E+16)   //  1京(10^16)
         {
             StatsManager.HeavenlyChips += 1000;
@@ -56,6 +60,11 @@ public class ReincarnationEvent : IEventClip
                      .Select((_, index) => index))
         {
             _eventManager.EventTriggerData[index].IsTriggered = false;
+        }
+        //  ストーリー進行のフラグをリセットする
+        for (int i = 0; i < _storyEventManager.EventTriggerInfos.Count; i++)
+        {
+            _storyEventManager.EventTriggerInfos[i].IsTriggered = false;
         }
         //  ショップ表示更新
         _shop.UpdateFactoryShop();

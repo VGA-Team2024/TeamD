@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Story;
 using TeamD.Enum;
 using UnityEngine;
 
@@ -28,6 +29,10 @@ namespace Editor.EditorClicker.Data
         public int ReincarnationCount { get; set; }
         [field: SerializeField]
         public List<EventTriggerSaveDatum> EventTriggerData { get; set; }
+        [field: SerializeField]
+        public List<EventTriggerSaveDatum> StoryControllerData { get; set; }
+        [field: SerializeField]
+        public StoryTextManager.StoryFlagEnum StoryFlag { get; set; }
     }
     [Serializable]
     public class EventTriggerSaveDatum

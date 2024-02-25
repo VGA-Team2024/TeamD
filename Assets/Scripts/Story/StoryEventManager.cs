@@ -6,8 +6,11 @@ namespace Story
 {
     public class StoryEventManager : MonoBehaviour
     {
+        // TODO: 保存機能追加
         [SerializeField, Tooltip("イベントトリガーのリスト")]
         List<EventTriggerInfo> _eventTriggerInfos;
+
+        public List<EventTriggerInfo> EventTriggerInfos => _eventTriggerInfos;
 
         private void Update()
         {

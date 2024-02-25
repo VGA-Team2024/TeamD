@@ -19,7 +19,7 @@ namespace Story
         private List<StoryFlagEnum> _storyFlags = new();
         private List<IEventClip> _optionEvents = new();
         private bool _isOptionButtonPush;
-        
+        // TODO: 保存機能追加
         [Flags]
         public enum StoryFlagEnum
         {
@@ -35,7 +35,7 @@ namespace Story
             S43 = 1 << 10
         }
 
-        public StoryFlagEnum StoryFlag { get; private set; }
+        public StoryFlagEnum StoryFlag { get; set; }
         public bool IsStartButtonPush => _isStartButtonPush;
 
         private void Start()
