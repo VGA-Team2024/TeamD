@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e99f96a5bed42ba8de211899248ce85, type: 3}
   m_Name: 1
   m_EditorClassIdentifier: 
+  <UniqueID>k__BackingField: fba09743e95bb3c4c9a7ae2e889d6030
   _nameFlag: 0
   _storyTexts:
   - "\u306F\u3058\u3081\u307E\u3057\u3066"
