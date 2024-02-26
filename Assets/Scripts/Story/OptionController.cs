@@ -19,7 +19,7 @@ namespace Story
         /// </summary>
         /// <param name="showCount">表示するボタンの数</param>
         /// <param name="texts">表示するテキスト</param>
-        public void UpdateDialogue(int showCount, List<string> texts)
+        public void UpdateOption(int showCount, List<string> texts)
         {
             Debug.Log(showCount);
             for (var i = 0; i < showCount; i++)

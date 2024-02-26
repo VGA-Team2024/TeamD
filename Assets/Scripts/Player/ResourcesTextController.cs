@@ -46,7 +46,14 @@ public class ResourcesTextController : MonoBehaviour
     private void Update()
     {
         var str = UseDigitRepresentation(_playerManager.CookieCount).Split();
-        _text.text = $"{str[0]}\n{str[1]}クッキー";
+        if (0 < _playerManager.CookieCount)
+        {
+            _text.text = $"{str[0]}\n{str[1]}クッキー";
+        }
+        else
+        {
+            _text.text = $"- {str[0]}\n{str[1]}クッキー";
+        }
     }
 
     /// <summary>
@@ -54,6 +61,7 @@ public class ResourcesTextController : MonoBehaviour
     /// </summary>
     public static string UseDigitRepresentation(double value)
     {
+        value = Math.Abs(value);
         var count = Math.Log10(Math.Truncate(value));
         switch (_languageMode)
         {
