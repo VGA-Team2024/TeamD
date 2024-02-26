@@ -22,7 +22,7 @@ public class ShopItemButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public event Action PurchaseEvent;
     public event Action SellEvent;
     /// <summary>表示更新イベント</summary>
-    public Action UpdateEvent;
+    public Action<bool> UpdateEvent;
     public TextMeshProUGUI CurrentOwnNumText => _currentOwnNumText;
     public Image ButtonImage => _buttonImage;
     public BoolReactiveProperty IsPurchase { get; set; } = new(true);

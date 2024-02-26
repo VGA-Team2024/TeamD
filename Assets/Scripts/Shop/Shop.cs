@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,10 +34,16 @@ public class Shop : MonoBehaviour
             //  施設のベース価格 × 1.15^施設数
             button.SetPriceText(factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.CurrentFactories[factory.Key].Amount));
             //  表示更新の処理を登録
-            button.UpdateEvent += () =>
+            button.UpdateEvent += flag =>
             {
                 button.CurrentOwnNumText.text = StatsManager.CurrentFactories[factory.Key].Amount.ToString();
-                button.SetPriceText(factory.BasePrice * Mathf.Pow(_factoryMultiplier, StatsManager.CurrentFactories[factory.Key].Amount));
+                double price = factory.BasePrice * Mathf.Pow(_factoryMultiplier, 
+                    StatsManager.CurrentFactories[factory.Key].Amount);;
+                if (!flag)
+                {
+                    price *= _sellFactoryRatio;
+                }
+                button.SetPriceText(price);
             };
             //購入時の処理を登録する。
             button.PurchaseEvent += () =>
@@ -49,7 +56,7 @@ public class Shop : MonoBehaviour
                     var stat = StatsManager.CurrentFactories[factory.Key];
                     stat.Amount++;
                     StatsManager.CurrentFactories[factory.Key] = stat;
-                    button.UpdateEvent?.Invoke();
+                    button.UpdateEvent?.Invoke(true);
                 }
             };
 
@@ -65,7 +72,7 @@ public class Shop : MonoBehaviour
                     stat.Amount--;
                     StatsManager.CurrentFactories[factory.Key] = stat;
                     StatsManager.FactorySellCount[factory.Key] += 1;
-                    button.UpdateEvent?.Invoke();
+                    button.UpdateEvent?.Invoke(false);
                 }
             };
         }
@@ -77,12 +84,14 @@ public class Shop : MonoBehaviour
         _switchPurchaseButton.Button.onClick.AddListener(() =>
         {
             _currentFactoryButtons.ForEach(b => b.IsPurchase.Value = true);
+            UpdateFactoryShop();   //  値段の表示を買値に切り替え
             _switchPurchaseButton.RimLight.gameObject.SetActive(true);
             _switchSellButton.RimLight.gameObject.SetActive(false);
         });
         _switchSellButton.Button.onClick.AddListener(() =>
         {
             _currentFactoryButtons.ForEach(b => b.IsPurchase.Value = false);
+            UpdateFactoryShop();    //  値段の表示を売値に切り替え
             _switchSellButton.RimLight.gameObject.SetActive(true);
             _switchPurchaseButton.RimLight.gameObject.SetActive(false);
         });
@@ -92,9 +101,10 @@ public class Shop : MonoBehaviour
     /// </summary>
     public void UpdateFactoryShop()
     {
+        var flag = _currentFactoryButtons[0].IsPurchase.Value;
         foreach (var currentFactoryButton in _currentFactoryButtons)
         {
-            currentFactoryButton.UpdateEvent?.Invoke();
+            currentFactoryButton.UpdateEvent?.Invoke(flag);
         }
     }
 
