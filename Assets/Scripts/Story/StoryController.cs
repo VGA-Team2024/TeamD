@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Story
 {
@@ -25,6 +28,17 @@ namespace Story
             Grandma,
             You
         }
+
+        [ContextMenu("Exe"), Conditional("UNITY_EDITOR")]
+        private void DebugExecute()
+        {
+            StoryTextManager.Instance.UpdateText(_nameFlag.ToString(), _storyTexts);
+            foreach (var option in _storyOptions)
+            {
+                if(option == null) continue;
+                option.CheckOptionEvent();
+            }
+        }
         
         public bool CheckStoryEvent()
         {
@@ -33,12 +47,11 @@ namespace Story
                 if(condition == null) continue;
                 if (!condition.CheckCondition()) return false;
             }
-            Debug.Log("ストーリー再生可");
             StoryTextManager.Instance.UpdateText(_nameFlag.ToString(), _storyTexts);
-            foreach (var condition in _storyOptions)
+            foreach (var option in _storyOptions)
             {
-                if(condition == null) continue;
-                if (!condition.CheckOptionEvent()) return false;
+                if(option == null) continue;
+                option.CheckOptionEvent();
             }
 
             return true;

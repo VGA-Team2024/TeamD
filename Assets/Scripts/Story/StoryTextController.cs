@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
@@ -13,7 +14,6 @@ namespace Story
         [SerializeField] private Text _storyTextField;
         [SerializeField] private Text _nameTextField;
         [SerializeField] private float _textShowSpeed;
-        private Queue<string> _sentence = new();
 
         public void OnPointerClick(PointerEventData eventData)
         {
@@ -25,17 +25,15 @@ namespace Story
         /// </summary>
         /// <param name="speakerName">話者名</param>
         /// <param name="texts">表示するテキスト一覧</param>
-        public async UniTask UpdateTextAsync(string speakerName, List<string> texts)
+        /// <param name="cts">キャンセルトークン</param>
+        public async UniTask UpdateTextAsync(string speakerName, List<string> texts , CancellationTokenSource cts)
         {
+            cts.Cancel();
             _nameTextField.text = speakerName;
+
             foreach (var item in texts)
             {
-                _sentence.Enqueue(item);
-            }
-
-            for (var i = 0; i < texts.Count; i++)
-            {
-                await _storyTextField.DOText(_sentence.Dequeue(), _textShowSpeed)
+                await _storyTextField.DOText(item, _textShowSpeed)
                     .SetEase(Ease.Linear)
                     .AsyncWaitForCompletion();
                 await UniTask.Delay(TimeSpan.FromSeconds(2));

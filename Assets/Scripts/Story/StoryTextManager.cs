@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +18,7 @@ namespace Story
         private int _optionCount;
         private List<StoryFlagEnum> _storyFlags = new();
         private List<IEventClip> _optionEvents = new();
+        private CancellationTokenSource _cts;
         private CancellationToken _ct;
         private bool _isOptionButtonPush;
 
@@ -44,9 +44,10 @@ namespace Story
         private void Start()
         {
             _storyCanvas.SetActive(false);
-            _ct = this.GetCancellationTokenOnDestroy();
+            _cts = new CancellationTokenSource();
+            _ct = _cts.Token;
         }
-        
+
         /// <summary>
         /// ボタンに登録して、どの選択肢が選ばれたかを判定し、処理を実行するメソッド
         /// </summary>
@@ -58,21 +59,16 @@ namespace Story
             StoryFlag |= _storyFlags[num];
             _optionEvents[num].StartEvent();
 
-            ResetStoryTexts();
-            return;
-
             // ストーリー終了時処理
-            void ResetStoryTexts()
-            {
-                _isOptionButtonPush = false;
-                _isStartButtonPush = false;
-                _storyFlags.Clear();
-                _texts.Clear();
-                _optionEvents.Clear();
-                _startButton.interactable = false;
-                _optionCount = 0;
-                _storyCanvas.SetActive(false);
-            }
+            _optionController.ResetOption();
+            _isOptionButtonPush = false;
+            _isStartButtonPush = false;
+            _storyFlags.Clear();
+            _texts.Clear();
+            _optionEvents.Clear();
+            _startButton.interactable = false;
+            _optionCount = 0;
+            _storyCanvas.SetActive(false);
         }
 
 
@@ -101,8 +97,7 @@ namespace Story
             _startButton.interactable = true;
             try
             {
-                await UniTask.WaitUntil(() => _isStartButtonPush, cancellationToken: _ct);
-                await _storyTextController.UpdateTextAsync(speakerName, texts);
+                await _storyTextController.UpdateTextAsync(speakerName, texts, _cts);
                 _optionController.UpdateDialogue(_optionCount, _texts);
             }
             catch (OperationCanceledException)
