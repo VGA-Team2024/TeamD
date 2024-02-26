@@ -29,6 +29,6 @@ namespace Story
     public class EventTriggerInfo
     {
         [field: SerializeField] public StoryController EventTrigger { get; set; }
-        public bool IsTriggered { get; set; }
+        [field: SerializeField] public bool IsTriggered { get; set; }
     }
 }

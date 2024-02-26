@@ -11,10 +11,7 @@ namespace Story
 
         private void Start()
         {
-            foreach (var obj in _dialogueGameObjects)
-            {
-                obj.SetActive(false);
-            }
+            ResetOption();
         }
 
         /// <summary>
@@ -24,12 +21,21 @@ namespace Story
         /// <param name="texts">表示するテキスト</param>
         public void UpdateDialogue(int showCount, List<string> texts)
         {
+            Debug.Log(showCount);
             for (var i = 0; i < showCount; i++)
             {
                 _dialogueGameObjects[i].SetActive(true);
                 _texts[i].text = texts[i];
             }
             
+        }
+
+        public void ResetOption()
+        {
+            foreach (var obj in _dialogueGameObjects)
+            {
+                obj.SetActive(false);
+            }
         }
     }
 }
