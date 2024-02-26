@@ -722,6 +722,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5610985558744431851, guid: 0795cdc1334d7024fb15a4d8b5ea8c82, type: 3}
+      propertyPath: _eventTriggerInfos.Array.data[0].<IsStoryRead>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0795cdc1334d7024fb15a4d8b5ea8c82, type: 3}
 --- !u!4 &542991060 stripped
@@ -1776,22 +1780,31 @@ MonoBehaviour:
   _eventTriggerData:
   - <EventTrigger>k__BackingField: {fileID: 11400000, guid: cd4438053193deb40aa758d51df32d38, type: 2}
     <IsTriggered>k__BackingField: 0
+    <Savable>k__BackingField: 0
   - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 0b838b6eec19ce3498590528ca2a7bbd, type: 2}
     <IsTriggered>k__BackingField: 0
+    <Savable>k__BackingField: 1
   - <EventTrigger>k__BackingField: {fileID: 11400000, guid: d376193d668f88c41b385e9fd9418af4, type: 2}
     <IsTriggered>k__BackingField: 0
+    <Savable>k__BackingField: 1
   - <EventTrigger>k__BackingField: {fileID: 11400000, guid: ffd07b68b5164274fa62d6b3ee8deccb, type: 2}
     <IsTriggered>k__BackingField: 0
+    <Savable>k__BackingField: 1
   - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 16bf402ae3e62b14e90b4ec9205deb5c, type: 2}
     <IsTriggered>k__BackingField: 0
+    <Savable>k__BackingField: 1
   - <EventTrigger>k__BackingField: {fileID: 11400000, guid: ac68b20900ac79f42a1b22ea33f80f1d, type: 2}
     <IsTriggered>k__BackingField: 0
+    <Savable>k__BackingField: 1
   - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 35b1b6ef1aca5a541a9c5ab14eadcce1, type: 2}
     <IsTriggered>k__BackingField: 0
+    <Savable>k__BackingField: 1
   - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 73130d4d81fc0564c86aa30ca13faa2d, type: 2}
     <IsTriggered>k__BackingField: 0
+    <Savable>k__BackingField: 1
   - <EventTrigger>k__BackingField: {fileID: 11400000, guid: 3397018d9007aa6429ae580df181f038, type: 2}
     <IsTriggered>k__BackingField: 0
+    <Savable>k__BackingField: 1
 --- !u!114 &1293046725 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5610985558744431851, guid: 0795cdc1334d7024fb15a4d8b5ea8c82, type: 3}
@@ -1848,6 +1861,17 @@ Transform:
   m_Father: {fileID: 201734357}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1482560241 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2272840001718335815, guid: a5b9e7e65719645469679375913f4be8, type: 3}
+  m_PrefabInstance: {fileID: 1537670837}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1511322361
 GameObject:
   m_ObjectHideFlags: 0
@@ -1924,6 +1948,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1511322361}
   m_CullTransparentMesh: 1
+--- !u!114 &1523585309 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2272840003617232339, guid: a5b9e7e65719645469679375913f4be8, type: 3}
+  m_PrefabInstance: {fileID: 1537670837}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1537670837
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1931,6 +1966,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 174982778}
     m_Modifications:
+    - target: {fileID: 2272840001718335815, guid: a5b9e7e65719645469679375913f4be8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2272840001718335815, guid: a5b9e7e65719645469679375913f4be8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1940,12 +1979,32 @@ PrefabInstance:
       value: AddFlag
       objectReference: {fileID: 0}
     - target: {fileID: 2272840002286132977, guid: a5b9e7e65719645469679375913f4be8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2272840002286132977, guid: a5b9e7e65719645469679375913f4be8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 88769151}
     - target: {fileID: 2272840002286132977, guid: a5b9e7e65719645469679375913f4be8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: AddFlag
+      objectReference: {fileID: 0}
+    - target: {fileID: 2272840002897411836, guid: a5b9e7e65719645469679375913f4be8, type: 3}
+      propertyPath: _dialogueGameObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 1482560241}
+    - target: {fileID: 2272840002897411836, guid: a5b9e7e65719645469679375913f4be8, type: 3}
+      propertyPath: _dialogueGameObjects.Array.data[1]
+      value: 
+      objectReference: {fileID: 1523585309}
+    - target: {fileID: 2272840002897411836, guid: a5b9e7e65719645469679375913f4be8, type: 3}
+      propertyPath: _dialogueGameObjects.Array.data[2]
+      value: 
+      objectReference: {fileID: 1781339188}
+    - target: {fileID: 2272840003617232339, guid: a5b9e7e65719645469679375913f4be8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2272840003617232339, guid: a5b9e7e65719645469679375913f4be8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -2233,6 +2292,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1695352879}
   m_CullTransparentMesh: 1
+--- !u!114 &1781339188 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2272840002286132977, guid: a5b9e7e65719645469679375913f4be8, type: 3}
+  m_PrefabInstance: {fileID: 1537670837}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1805675562
 GameObject:
   m_ObjectHideFlags: 0
