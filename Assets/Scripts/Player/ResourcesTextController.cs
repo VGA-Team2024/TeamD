@@ -60,7 +60,7 @@ public class ResourcesTextController : MonoBehaviour
             case LanguageType.En:
                 if (MaxDigitEn <= count)
                 {
-                    return $"{value / Math.Pow(10, MaxDigitEn):F2} {ScalesEn[ScalesEn.Length]}";
+                    return $"{value / Math.Pow(10, MaxDigitEn):F2} {ScalesEn[^1]}";
                 }
 
                 if (count < 6)
@@ -77,7 +77,7 @@ public class ResourcesTextController : MonoBehaviour
             case LanguageType.Jp:
                 if (MaxDigitJp <= count)
                 {
-                    return $"{value / Math.Pow(10, MaxDigitJp):F2} {ScalesJp[ScalesJp.Length]}";
+                    return $"{value / Math.Pow(10, MaxDigitJp):F2} {ScalesJp[^1]}";
                 }
 
                 if (count < 4)
