@@ -22,6 +22,8 @@ namespace Story
         [SerializeField] private List<StoryOption> _storyOptions;
 
         public List<StoryOption> StoryOptions => _storyOptions;
+        public List<string> StoryTexts => _storyTexts;
+        public string SpeakerName => _nameFlag.ToString();
         
         private enum SpeakerNameFlag
         {
@@ -32,7 +34,7 @@ namespace Story
         [ContextMenu("Exe"), Conditional("UNITY_EDITOR")]
         private void DebugExecute()
         {
-            StoryTextManager.Instance.RegisterText(_nameFlag.ToString(), _storyTexts);
+            StoryTextManager.Instance.RegisterStoryController(this);
             foreach (var option in _storyOptions)
             {
                 if(option == null) continue;
@@ -47,13 +49,7 @@ namespace Story
                 if(condition == null) continue;
                 if (!condition.CheckCondition()) return false;
             }
-            StoryTextManager.Instance.RegisterText(_nameFlag.ToString(), _storyTexts);
-            foreach (var option in _storyOptions)
-            {
-                if(option == null) continue;
-                option.CheckOptionEvent();
-            }
-
+            StoryTextManager.Instance.RegisterStoryController(this);
             return true;
         }
         void OnValidate()
@@ -81,6 +77,8 @@ namespace Story
         [SerializeReference, SubclassSelector, Tooltip("選択肢の表示条件")] private List<ICondition> _optionConditions;
         [SerializeReference, SubclassSelector, Tooltip("選択肢を選択した際の処理登録")] private IEventClip _eventClip;
         public IEventClip EventClip => _eventClip;
+        public string OptionText => _optionText;
+        public StoryTextManager.StoryFlagEnum StoryFlagEnum => _storyFlagEnum;
         
         public bool CheckOptionEvent()
         {
@@ -89,9 +87,6 @@ namespace Story
                 if(condition == null) continue;
                 if (!condition.CheckCondition()) return false;
             }
-            // TODO 直でStoryTextManagerを参照するのをやめたい
-            StoryTextManager.Instance.RegisterOption(_storyFlagEnum, _optionText, _eventClip);
-            
             return true;
         }
     }
