@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,13 +15,16 @@ namespace Story
         [SerializeField] private OptionController _optionController;
         [SerializeField] private GameObject _storyCanvas;
 
-        private List<string> _texts = new();
+        private List<string> _optionTexts = new();
+        private List<string> _storyTexts = new();
         private int _optionCount;
         private List<StoryFlagEnum> _storyFlags = new();
         private List<IEventClip> _optionEvents = new();
         private CancellationTokenSource _cts;
         private CancellationToken _ct;
         private bool _isOptionButtonPush;
+        private bool _isOptionClearFlag;
+        private string _speakerName;
 
         // TODO: 保存機能追加
         [Flags]
@@ -64,7 +68,7 @@ namespace Story
             _isOptionButtonPush = false;
             _isStartButtonPush = false;
             _storyFlags.Clear();
-            _texts.Clear();
+            _optionTexts.Clear();
             _optionEvents.Clear();
             _startButton.interactable = false;
             _optionCount = 0;
@@ -78,10 +82,18 @@ namespace Story
         /// <param name="optionFlagEnum">ストーリーフラグ</param>
         /// <param name="optionText">表示テキスト</param>
         /// <param name="eventClip">選択時の処理</param>
-        public void UpdateOption(StoryFlagEnum optionFlagEnum, string optionText, IEventClip eventClip)
+        public void RegisterOption(StoryFlagEnum optionFlagEnum, string optionText, IEventClip eventClip)
         {
+            if (_isOptionClearFlag)
+            {
+                _storyFlags.Clear();
+                _optionTexts.Clear();
+                _optionEvents.Clear();
+                _optionCount = 0;
+                _isOptionClearFlag = false;
+            }
             _storyFlags.Add(optionFlagEnum);
-            _texts.Add(optionText);
+            _optionTexts.Add(optionText);
             _optionEvents.Add(eventClip);
             _optionCount++;
         }
@@ -92,26 +104,29 @@ namespace Story
         /// </summary>
         /// <param name="speakerName">話者名前</param>
         /// <param name="texts">喋る内容</param>
-        public async void UpdateText(string speakerName, List<string> texts)
+        public void RegisterText(string speakerName, List<string> texts)
         {
+            _isOptionClearFlag = true;
             _startButton.interactable = true;
-            try
-            {
-                await _storyTextController.UpdateTextAsync(speakerName, texts, _cts);
-                _optionController.UpdateDialogue(_optionCount, _texts);
-            }
-            catch (OperationCanceledException)
-            {
-            }
+            _speakerName = speakerName;
+            _storyTexts = texts;
         }
 
         /// <summary>
         /// ストーリー開始ボタン
         /// </summary>
-        public void StartStory()
+        public async void StartStory()
         {
             _storyCanvas.SetActive(true);
             _isStartButtonPush = true;
+            try
+            {
+                await _storyTextController.UpdateTextAsync(_speakerName, _storyTexts, _cts);
+                _optionController.UpdateOption(_optionCount, _optionTexts);
+            }
+            catch (OperationCanceledException)
+            {
+            }
         }
     }
 }

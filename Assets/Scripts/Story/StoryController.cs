@@ -32,7 +32,7 @@ namespace Story
         [ContextMenu("Exe"), Conditional("UNITY_EDITOR")]
         private void DebugExecute()
         {
-            StoryTextManager.Instance.UpdateText(_nameFlag.ToString(), _storyTexts);
+            StoryTextManager.Instance.RegisterText(_nameFlag.ToString(), _storyTexts);
             foreach (var option in _storyOptions)
             {
                 if(option == null) continue;
@@ -47,7 +47,7 @@ namespace Story
                 if(condition == null) continue;
                 if (!condition.CheckCondition()) return false;
             }
-            StoryTextManager.Instance.UpdateText(_nameFlag.ToString(), _storyTexts);
+            StoryTextManager.Instance.RegisterText(_nameFlag.ToString(), _storyTexts);
             foreach (var option in _storyOptions)
             {
                 if(option == null) continue;
@@ -90,7 +90,7 @@ namespace Story
                 if (!condition.CheckCondition()) return false;
             }
             // TODO 直でStoryTextManagerを参照するのをやめたい
-            StoryTextManager.Instance.UpdateOption(_storyFlagEnum, _optionText, _eventClip);
+            StoryTextManager.Instance.RegisterOption(_storyFlagEnum, _optionText, _eventClip);
             
             return true;
         }

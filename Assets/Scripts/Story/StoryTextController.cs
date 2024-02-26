@@ -26,13 +26,13 @@ namespace Story
         /// <param name="speakerName">話者名</param>
         /// <param name="texts">表示するテキスト一覧</param>
         /// <param name="cts">キャンセルトークン</param>
-        public async UniTask UpdateTextAsync(string speakerName, List<string> texts , CancellationTokenSource cts)
+        public async UniTask UpdateTextAsync(string speakerName, List<string> texts, CancellationTokenSource cts)
         {
-            cts.Cancel();
             _nameTextField.text = speakerName;
-
+            await UniTask.WaitUntil(() => StoryTextManager.Instance.IsStartButtonPush, cancellationToken: cts.Token);
             foreach (var item in texts)
             {
+                Debug.Log(item);
                 await _storyTextField.DOText(item, _textShowSpeed)
                     .SetEase(Ease.Linear)
                     .AsyncWaitForCompletion();
