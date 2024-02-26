@@ -420,49 +420,49 @@ MonoBehaviour:
     Name: "30\u5206\u4EE5\u5185\u306B\u304A\u5C4A\u3051\u3067\u304D\u306A\u3051\u308C\u3070\u5168\u984D\u8FD4\u91D1\u3044\u305F\u3057\u307E\u3059"
   - Key: 9
     Tier: 1
-    Name: "\u53E4\u4EE3\u306E\u77F3\u7248"
+    Name: "\u30A2\u30F3\u30C1\u30E2\u30F3"
   - Key: 9
     Tier: 2
-    Name: "\u30A4\u30AB\u308C\u305F\u9EA6\u767E\u59D3"
+    Name: "\u751F\u5730\u306E\u30A8\u30C3\u30BB\u30F3\u30B9"
   - Key: 9
     Tier: 3
-    Name: "\u9B42\u3068\u58F2\u308B\u5951\u7D04"
+    Name: "\u6B63\u771F\u6B63\u9298\u306E\u30C1\u30E7\u30B3\u30EC\u30FC\u30C8"
   - Key: 9
     Tier: 4
-    Name: "\u300C\u5065\u5168\u306A\u300D\u8E0A\u308A"
+    Name: "\u795E\u3005\u306E\u98DF\u3079\u7269"
   - Key: 9
     Tier: 5
-    Name: "\u6B63\u6C17\u306E\u30C0\u30F3\u30B9"
+    Name: "\u30AF\u30E9\u30B9\u30C8\u786C\u5316\u6DB2"
   - Key: 9
     Tier: 6
-    Name: "\u30D6\u30EC\u30FC\u30F3\u79FB\u690D"
+    Name: "\u8D77\u6E90\u306E\u308B\u3064\u307C"
   - Key: 9
     Tier: 7
-    Name: "\u7D42\u672B\u306B\u5411\u3051\u305F\u4EE3\u66FF\u6848"
+    Name: "\u539F\u5B50\u6D41\u52D5\u6027\u8AD6"
   - Key: 9
     Tier: 8
-    Name: "\u30A4\u30E9\u30A4\u30E9\u3059\u308B\u546A\u6587"
+    Name: "\u30D9\u30FC\u30B8\u30E5\u30FB\u30B0\u30FC"
   - Key: 9
     Tier: 9
-    Name: "\u73FE\u5B9F\u4E16\u754C"
+    Name: "\u5316\u5B66\u306E\u51FA\u73FE"
   - Key: 9
     Tier: 10
-    Name: "\u7570\u6B21\u5143\u30B4\u30DF\u6295\u68C4\u5834"
+    Name: "\u518D\u8003\u3057\u305F\u7D50\u679C"
   - Key: 9
     Tier: 11
-    Name: "\u57CB\u3081\u8FBC\u307F\u5F0F\u6975\u5C0F\u30DD\u30FC\u30BF\u30EB"
+    Name: "\u516C\u8846\u306E\u5411\u4E0A"
   - Key: 9
     Tier: 12
-    Name: "\u5F7C\u306E\u964D\u81E8"
+    Name: "\u932C\u91D1\u8853\u306E\u548C\u89E3"
   - Key: 9
     Tier: 13
-    Name: "\u5BB6\u5EAD\u5185\u5206\u88C2"
+    Name: "\u8272\u5F69\u5FAA\u74B0"
   - Key: 9
     Tier: 14
-    Name: "\u30DD\u30FC\u30BF\u30EB\u30AC\u30F3"
+    Name: "\u795E\u79D8\u306E\u30AC\u30E9\u30B9\u88FD\u54C1"
   - Key: 9
     Tier: 15
-    Name: "\u5E30\u308A\u9053"
+    Name: "\u6BD2\u306E\u4E00\u670D"
   - Key: 11
     Tier: 1
     Name: "\u6B21\u5143\u8EE2\u79FB\u88C5\u7F6E"
@@ -868,3 +868,48 @@ MonoBehaviour:
   - Key: 19
     Tier: 15
     Name: "\u5BDD\u308B\u524D\u306B\u30AF\u30ED\u30FC\u30F3\u305F\u3061\u306B\u7269\u8A9E\u3092\u8AAD\u307F\u805E\u304B\u305B\u306A\u304D\u3083"
+  - Key: 10
+    Tier: 1
+    Name: "\u53E4\u4EE3\u306E\u77F3\u7248"
+  - Key: 10
+    Tier: 2
+    Name: "\u30A4\u30AB\u308C\u305F\u9EA6\u767E\u59D3"
+  - Key: 10
+    Tier: 3
+    Name: "\u9B42\u3068\u58F2\u308B\u5951\u7D04"
+  - Key: 10
+    Tier: 4
+    Name: "\u6B63\u6C17\u306E\u30C0\u30F3\u30B9"
+  - Key: 10
+    Tier: 5
+    Name: "\u30D6\u30EC\u30FC\u30F3\u79FB\u690D"
+  - Key: 10
+    Tier: 6
+    Name: "\u795E\u30B5\u30A4\u30BA\u306E\u30DD\u30FC\u30BF\u30EB"
+  - Key: 10
+    Tier: 7
+    Name: "\u7D42\u672B\u306B\u5411\u3051\u305F\u4EE3\u66FF\u6848"
+  - Key: 10
+    Tier: 8
+    Name: "\u30A4\u30E9\u30A4\u30E9\u3059\u308B\u546A\u6587"
+  - Key: 10
+    Tier: 9
+    Name: "\u73FE\u5B9F\u4E16\u754C"
+  - Key: 10
+    Tier: 10
+    Name: "\u6B21\u5143\u30B4\u30DF\u56DE\u53CE\u6A5F"
+  - Key: 10
+    Tier: 11
+    Name: "\u57CB\u3081\u8FBC\u307E\u308C\u305F\u30DE\u30A4\u30AF\u30ED\u30DD\u30FC\u30BF\u30EB"
+  - Key: 10
+    Tier: 12
+    Name: "\u5F7C\u306E\u964D\u81E8"
+  - Key: 10
+    Tier: 13
+    Name: "\u5BB6\u5EAD\u5185\u5206\u88C2"
+  - Key: 10
+    Tier: 14
+    Name: "\u30DD\u30FC\u30BF\u30EB\u30AC\u30F3"
+  - Key: 10
+    Tier: 15
+    Name: "\u5E30\u308A\u9053"
