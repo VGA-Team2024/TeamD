@@ -51,6 +51,7 @@ public class ReincarnationEvent : IEventClip
         for (int i = 0; i < _storyEventManager.EventTriggerInfos.Count; i++)
         {
             _storyEventManager.EventTriggerInfos[i].IsTriggered = false;
+            _storyEventManager.EventTriggerInfos[i].IsStoryEnded = false;
         }
         //  ショップ表示更新
         _shop.UpdateFactoryShop();

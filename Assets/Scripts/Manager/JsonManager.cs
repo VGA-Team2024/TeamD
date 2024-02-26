@@ -50,21 +50,15 @@ public class JsonManager : MonoBehaviour
                 {
                     FactoryKey = dic.Key, UpgradeTier = dic.Value.Tier, Amount = dic.Value.Amount
                 }).ToList(),
-            EventTriggerData = EventManager.EventTriggerData
-                .Select(datum=> new EventTriggerSaveDatum
-                {
-                    UniqueID = datum.EventTrigger.UniqueID, IsTriggered = datum.IsTriggered
-                }).ToList(),
-            StoryControllerData = StoryEventManager.EventTriggerInfos
-                .Select(datum=> new EventTriggerSaveDatum
-            {
-                UniqueID = datum.EventTrigger.UniqueID, IsTriggered = datum.IsTriggered
-            }).ToList(),
             StoryFlag = StoryTextManager.Instance.StoryFlag,
             ReincarnationRewardCounts = StatsManager.ReincarnationRewardCount
                 .Select(c=>new ReincarnationRewardCount
             {
                 Key = c.Key, Count = c.Value
+            }).ToList(),
+            StoryData = StoryEventManager.EventTriggerInfos.Select(info=>new StoryDatum
+            {
+                UniqueID = info.EventTrigger.UniqueID, IsStoryEnded = info.IsStoryEnded
             }).ToList()
         };
         SaveService.Save(userData);
@@ -88,22 +82,14 @@ public class JsonManager : MonoBehaviour
                     .Add(list.FactoryKey, (list.UpgradeTier, list.Amount)));
             StatsManager.UpdateCpS();
             StatsManager.UpdateNextUpgrades();
-            foreach (var eventTriggerDatum in EventManager.EventTriggerData)
+            foreach (var info in StoryEventManager.EventTriggerInfos)
             {
                 //  保存されたトリガーの中に現在EventManagerで設定されているトリガーと同じものがあれば、
                 // 保存された方のbool値でEventManagerで設定されているトリガーのbool値を上書きする。
-                var findData = data.EventTriggerData.FirstOrDefault(datum=> datum.UniqueID.Equals(eventTriggerDatum.EventTrigger.UniqueID));
+                var findData = data.StoryData.FirstOrDefault(datum=> datum.UniqueID.Equals(info.EventTrigger.UniqueID));
                 if (findData != null)
                 {
-                    eventTriggerDatum.IsTriggered = findData.IsTriggered;
-                }
-            }
-            foreach (var eventTriggerDatum in StoryEventManager.EventTriggerInfos)
-            {
-                var findData = data.StoryControllerData.FirstOrDefault(datum=> datum.UniqueID.Equals(eventTriggerDatum.EventTrigger.UniqueID));
-                if (findData != null)
-                {
-                    eventTriggerDatum.IsTriggered = findData.IsTriggered;
+                    info.IsStoryEnded = findData.IsStoryEnded;
                 }
             }
             StoryTextManager.Instance.StoryFlag = data.StoryFlag;

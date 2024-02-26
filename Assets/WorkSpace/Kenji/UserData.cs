@@ -28,19 +28,17 @@ namespace Editor.EditorClicker.Data
         [field: SerializeField]
         public int ReincarnationCount { get; set; }
         [field: SerializeField]
-        public List<EventTriggerSaveDatum> EventTriggerData { get; set; }
-        [field: SerializeField]
-        public List<EventTriggerSaveDatum> StoryControllerData { get; set; }
-        [field: SerializeField]
         public StoryTextManager.StoryFlagEnum StoryFlag { get; set; }
         [field: SerializeField] 
         public List<ReincarnationRewardCount> ReincarnationRewardCounts { get; set; }
+        [field: SerializeField]
+        public List<StoryDatum> StoryData { get; set; }
     }
     [Serializable]
-    public class EventTriggerSaveDatum
+    public class StoryDatum
     {
         [field: SerializeField] public string UniqueID { get; set; }
-        [field: SerializeField] public bool IsTriggered { get; set; }
+        [field: SerializeField] public bool IsStoryEnded { get; set; }
     }
     [Serializable]
     public struct FactoryData

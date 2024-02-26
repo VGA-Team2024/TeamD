@@ -48,7 +48,7 @@ public class NothingEvent : IEventClip { public void StartEvent() { } }
 /// </summary>
 public class UnlockAchievement : IEventClip
 {
-    [SerializeField] Achievement _unlockAchievement;
+    [SerializeField, Tooltip("解放する実績、1つだけ選ばないとバグる")] Achievement _unlockAchievement;
     CanvasManager _canvasManager;
     [Inject]
     public void Construct(CanvasManager canvasManager)
@@ -57,6 +57,7 @@ public class UnlockAchievement : IEventClip
     }
     public void StartEvent()
     {
+        if (StatsManager.Achievements.HasFlag(_unlockAchievement)) return;
         StatsManager.Achievements |= _unlockAchievement;
         var popup = Object.Instantiate(_canvasManager.AchievementPopup, _canvasManager.AchievementPopupParent);
         var achievements = Resources.Load<Achievements>("Excel/Achievements");

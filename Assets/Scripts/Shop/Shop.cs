@@ -37,10 +37,18 @@ public class Shop : MonoBehaviour
             {
                 button.CurrentOwnNumText.text = StatsManager.CurrentFactories[factory.Key].Amount.ToString();
                 double price = factory.BasePrice * Math.Pow(_factoryMultiplier, 
-                    StatsManager.CurrentFactories[factory.Key].Amount);;
+                    StatsManager.CurrentFactories[factory.Key].Amount);
                 if (!flag)
                 {
-                    price *= _sellFactoryRatio;
+                    if (0 < StatsManager.CurrentFactories[factory.Key].Amount)
+                    {
+                        price = factory.BasePrice * Math.Pow(_factoryMultiplier, 
+                            StatsManager.CurrentFactories[factory.Key].Amount - 1) * _sellFactoryRatio;
+                    }
+                    else
+                    {
+                        price = 0;
+                    }
                 }
                 button.SetPriceText(price);
             };
@@ -62,9 +70,9 @@ public class Shop : MonoBehaviour
             //売却時の処理を登録する
             button.SellEvent += () =>
             {
-                var price = factory.BasePrice * Math.Pow(_factoryMultiplier, StatsManager.CurrentFactories[factory.Key].Amount);
                 if (0 < StatsManager.CurrentFactories[factory.Key].Amount)
                 {
+                    var price = factory.BasePrice * Math.Pow(_factoryMultiplier, StatsManager.CurrentFactories[factory.Key].Amount - 1);
                     //  現在の施設価格 × 2 / 3のクッキーを追加する
                     PlayerManager.Instance.AddCookie(price * _sellFactoryRatio);
                     var stat = StatsManager.CurrentFactories[factory.Key];

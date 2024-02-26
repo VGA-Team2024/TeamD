@@ -14,6 +14,7 @@ namespace Story
         [SerializeField] private StoryTextController _storyTextController;
         [SerializeField] private OptionController _optionController;
         [SerializeField] private GameObject _storyCanvas;
+        [SerializeField] StoryEventManager _storyEventManager;
 
         private CancellationTokenSource _cts;
         private CancellationToken _ct;
@@ -51,7 +52,7 @@ namespace Story
         /// ボタンに登録して、どの選択肢が選ばれたかを判定し、処理を実行するメソッド
         /// </summary>
         /// <param name="num">ボタンの番号 == 選択肢の番号</param>
-        public void StoryClose()
+        public void StoryEnd()
         {
             if (_isOptionButtonPush) return;
             _isOptionButtonPush = true;
@@ -85,7 +86,13 @@ namespace Story
                 {
                     await _storyTextController.UpdateTextAsync(story.SpeakerName, story.StoryTexts, _cts);
                     _optionController.RegisterOption(story.StoryOptions
-                        .Where(option=>option.CheckOptionEvent()).ToList(), StoryClose);
+                        .Where(option=>option.CheckOptionEvent()).ToList(), ()=>
+                    {
+                        var index = _storyEventManager.EventTriggerInfos
+                            .FindIndex(info => info.EventTrigger.Equals(story));
+                        _storyEventManager.EventTriggerInfos[index].IsStoryEnded = true;
+                        StoryEnd();
+                    });
                 }
                 catch (OperationCanceledException)
                 {
