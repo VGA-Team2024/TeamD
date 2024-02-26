@@ -46,14 +46,7 @@ public class ResourcesTextController : MonoBehaviour
     private void Update()
     {
         var str = UseDigitRepresentation(_playerManager.CookieCount).Split();
-        if (0 < _playerManager.CookieCount)
-        {
-            _text.text = $"{str[0]}\n{str[1]}クッキー";
-        }
-        else
-        {
-            _text.text = $"- {str[0]}\n{str[1]}クッキー";
-        }
+        _text.text = 0 > _playerManager.CookieCount ? $"- {str[0]}\n{str[1]}クッキー" : $"{str[0]}\n{str[1]}クッキー";
     }
 
     /// <summary>
