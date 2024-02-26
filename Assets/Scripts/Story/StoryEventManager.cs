@@ -6,7 +6,6 @@ namespace Story
 {
     public class StoryEventManager : MonoBehaviour
     {
-        // TODO: 保存機能追加
         [SerializeField, Tooltip("イベントトリガーのリスト")]
         List<EventTriggerInfo> _eventTriggerInfos;
 
@@ -16,7 +15,7 @@ namespace Story
         {
             foreach (var info in _eventTriggerInfos)
             {
-                if (info.IsTriggered) continue;
+                if (info.IsTriggered || info.IsStoryEnded) continue;
                 if (info.EventTrigger.CheckStoryEvent())
                 {
                     info.IsTriggered = true;
@@ -30,5 +29,6 @@ namespace Story
     {
         [field: SerializeField] public StoryController EventTrigger { get; set; }
         [field: SerializeField] public bool IsTriggered { get; set; }
+        [field: SerializeField] public bool IsStoryEnded { get; set; }
     }
 }
