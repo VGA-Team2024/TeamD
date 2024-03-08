@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1233347a859e03c419bc47d9bc04d660, type: 3}
+  m_Name: Achievements
+  m_EditorClassIdentifier: 
+  Entities:
+  - Key: 1
+    Name: "\u30A2\u30DD\u30AB\u30EA\u30D7\u30B9"
+  - Key: 2
+    Name: "\u30D0\u30D0\u30A2\u30B0\u30C3\u30D0\u30A4"
+  - Key: 4
+    Name: "\u30E9\u30C3\u30AD\u30FC\uFF01"
+  - Key: 8
+    Name: "\u8EE2\u751F\u8005"
+  - Key: 16
+    Name: "\u4E16\u754C\u5D29\u58CA"
+  - Key: 32
+    Name: "\u7121\u9650\u30EB\u30FC\u30D7"
+  - Key: 64
+    Name: "\u3059\u3079\u3066\u3092\u77E5\u308B\u3082\u306E"
+  - Key: 128
+    Name: "\u5168\u30AF\u30EA"
