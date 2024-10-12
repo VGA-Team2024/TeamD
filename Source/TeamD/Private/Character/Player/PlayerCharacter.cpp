@@ -3,7 +3,11 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "GameFramework/CharacterMovementComponent.h"
+
+APlayerCharacter::APlayerCharacter()
+{
+	AttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("AttributeSet"));
+}
 
 void APlayerCharacter::BeginPlay()
 {

@@ -29,6 +29,8 @@ protected:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 
+	TObjectPtr<UAttributeSet> AttributeSet;
+
 	// このCharacterに初期セットするAbility
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	TArray<TSubclassOf<UGameplayAbility>> InitialAbilities;

@@ -5,6 +5,7 @@
 #include "InputMappingContext.h"
 #include "InputAction.h"
 #include "InputActionValue.h"
+#include "GAS/PlayerAttributeSet.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -13,6 +14,8 @@ class TEAMD_API APlayerCharacter : public ACharacterBase
 	GENERATED_BODY()
 
 protected:
+	APlayerCharacter();
+	
 	virtual void BeginPlay() override;
 	
 //------------------------input------------------------
