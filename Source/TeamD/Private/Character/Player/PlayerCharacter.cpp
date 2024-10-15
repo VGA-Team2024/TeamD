@@ -3,13 +3,21 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
+
+APlayerCharacter::APlayerCharacter()
+{
+	// コンポーネントの初期化
+	AttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("AttributeSet"));
+}
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	PlayerMesh = FindComponentByClass<USkeletalMeshComponent>();
 	SetupInput();
+	ApplyWeapon();
 }
 
 void APlayerCharacter::SetupInput()
@@ -27,6 +35,7 @@ void APlayerCharacter::SetupInput()
 			// Bind Action
 			EnhancedInputComponent->BindAction(MoveInput, ETriggerEvent::Triggered, this, &APlayerCharacter::MovePlayer);
 			EnhancedInputComponent->BindAction(LookInput, ETriggerEvent::Triggered, this, &APlayerCharacter::RotateControllerInput);
+			EnhancedInputComponent->BindAction(NormalAttackInput, ETriggerEvent::Triggered, this, &APlayerCharacter::NormalAttack);
 			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Triggered, this, &APlayerCharacter::PressedDodge);
 			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Completed, this, &APlayerCharacter::ReleasedDodge);
 		}
@@ -74,6 +83,11 @@ void APlayerCharacter::RotateControllerInput(const FInputActionValue& Value)
 	}
 }
 
+void APlayerCharacter::NormalAttack()
+{
+	AbilitySystemComponent->TryActivateAbilitiesByTag(NormalAttackTag, true);
+}
+
 void APlayerCharacter::PressedDodge()
 {
 	Jump();
@@ -82,4 +96,23 @@ void APlayerCharacter::PressedDodge()
 void APlayerCharacter::ReleasedDodge()
 {
 	StopJumping();
+}
+
+void APlayerCharacter::ApplyWeapon()
+{
+	// スポーンのパラメーター
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;  // スポーンしたアクターのオーナーを設定
+	SpawnParams.Instigator = GetInstigator();  // スポーンしたアクターのインスティゲーターを設定
+
+	// アクターを生成
+	WeaponActor = GetWorld()->SpawnActor<AWeaponBase>(PlayerEquipment.Weapon, GetActorLocation(), GetActorRotation(), SpawnParams);
+
+	// Meshにアタッチ　あってるか分からん
+	WeaponActor->AttachToComponent(PlayerMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponActor->AttachSocketName);
+
+	for (auto Ability : WeaponActor->AttackAbilities)
+	{
+		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1));
+	}
 }
