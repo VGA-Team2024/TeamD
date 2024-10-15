@@ -1,4 +1,4 @@
-#include "GAS/PlayerAttributeSet.h"
+#include "GAS/Player/PlayerAttributeSet.h"
 #include "GameplayEffect.h"
 #include "GameplayEffectExtension.h"
 

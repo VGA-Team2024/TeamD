@@ -3,9 +3,11 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 APlayerCharacter::APlayerCharacter()
 {
+	// コンポーネントの初期化
 	AttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("AttributeSet"));
 }
 
@@ -13,7 +15,9 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	PlayerMesh = FindComponentByClass<USkeletalMeshComponent>();
 	SetupInput();
+	ApplyWeapon();
 }
 
 void APlayerCharacter::SetupInput()
@@ -86,4 +90,23 @@ void APlayerCharacter::PressedDodge()
 void APlayerCharacter::ReleasedDodge()
 {
 	StopJumping();
+}
+
+void APlayerCharacter::ApplyWeapon()
+{
+	// スポーンのパラメーター
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;  // スポーンしたアクターのオーナーを設定
+	SpawnParams.Instigator = GetInstigator();  // スポーンしたアクターのインスティゲーターを設定
+
+	// アクターを生成
+	WeaponActor = GetWorld()->SpawnActor<AWeaponBase>(PlayerEquipment.Weapon, GetActorLocation(), GetActorRotation(), SpawnParams);
+
+	// Meshにアタッチ　あってるか分からん
+	WeaponActor->AttachToComponent(PlayerMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponActor->AttachSocketName);
+
+	for (auto Ability : WeaponActor->AttackAbilities)
+	{
+		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1));
+	}
 }
