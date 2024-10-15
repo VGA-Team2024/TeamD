@@ -85,6 +85,7 @@ protected:
 	FPlayerEquipmentStruct PlayerEquipment;
 
 	// 現在装備している武器のActor
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Equipment)
 	TObjectPtr<AWeaponBase> WeaponActor;
 
 	// Playerの装備から武器を適用させる

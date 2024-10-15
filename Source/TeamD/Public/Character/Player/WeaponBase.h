@@ -32,9 +32,11 @@ protected:
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	// 攻撃判定開始
+	UFUNCTION(BlueprintCallable)
 	void BeginWeaponAttack();
 
 	// 攻撃判定終了
+	UFUNCTION(BlueprintCallable)
 	void EndWeaponAttack();
 
 public:

@@ -24,12 +24,15 @@ void AWeaponBase::BeginPlay()
 	{
 		WeaponAttackCollision->IgnoreActorWhenMoving(this, true);
 		WeaponAttackCollision->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnBeginOverlap);
-		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		WeaponAttackCollision->IgnoreActorWhenMoving(GetOwner(), true);
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("null WeaponAttackCollision"));
 	}
+
+	
 }
 
 void AWeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
