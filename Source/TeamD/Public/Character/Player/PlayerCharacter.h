@@ -51,9 +51,17 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
 	TObjectPtr<UInputAction> LookInput;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	TObjectPtr<UInputAction> NormalAttackInput;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
 	TObjectPtr<UInputAction> DodgeInput;
+
+	// input tag
+	// 通常攻撃
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
+	FGameplayTagContainer NormalAttackTag;
 
 private:
 	// input設定
@@ -64,6 +72,8 @@ private:
 	void MovePlayer(const FInputActionValue& Value);
 	// Look
 	void RotateControllerInput(const FInputActionValue& Value);
+	// Attack
+	void NormalAttack();
 	// Dodge
 	void PressedDodge();
 	void ReleasedDodge();

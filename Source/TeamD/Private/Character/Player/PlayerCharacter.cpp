@@ -35,6 +35,7 @@ void APlayerCharacter::SetupInput()
 			// Bind Action
 			EnhancedInputComponent->BindAction(MoveInput, ETriggerEvent::Triggered, this, &APlayerCharacter::MovePlayer);
 			EnhancedInputComponent->BindAction(LookInput, ETriggerEvent::Triggered, this, &APlayerCharacter::RotateControllerInput);
+			EnhancedInputComponent->BindAction(NormalAttackInput, ETriggerEvent::Triggered, this, &APlayerCharacter::NormalAttack);
 			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Triggered, this, &APlayerCharacter::PressedDodge);
 			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Completed, this, &APlayerCharacter::ReleasedDodge);
 		}
@@ -80,6 +81,11 @@ void APlayerCharacter::RotateControllerInput(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void APlayerCharacter::NormalAttack()
+{
+	AbilitySystemComponent->TryActivateAbilitiesByTag(NormalAttackTag, true);
 }
 
 void APlayerCharacter::PressedDodge()
