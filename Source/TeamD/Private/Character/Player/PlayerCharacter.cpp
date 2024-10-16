@@ -111,8 +111,32 @@ void APlayerCharacter::ApplyWeapon()
 	// Meshにアタッチ　あってるか分からん
 	WeaponActor->AttachToComponent(PlayerMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponActor->AttachSocketName);
 
+	// 武器のAbilityをPlayerに持たせる
 	for (auto Ability : WeaponActor->AttackAbilities)
 	{
 		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1));
+	}
+
+	// OnHit
+	WeaponActor->OnHitAttack.AddDynamic(this, &APlayerCharacter::DealDamage);
+}
+
+void APlayerCharacter::DealDamage(AActor* Target)
+{
+	// todo CalcClassで他でダメージ計算したほうがよさそう
+	
+	if (!(AbilitySystemComponent && DealDamageEffectClass)) return;
+
+	// GameplayEffectSpecを作成
+	const FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, EffectContext);
+
+	if (SpecHandle.IsValid())
+	{
+		// ダメージ量の設定
+		SpecHandle.Data->SetSetByCallerMagnitude(DealDamageTagContainer, 10.f);
+
+		// GameplayEffectを適用
+		AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 	}
 }

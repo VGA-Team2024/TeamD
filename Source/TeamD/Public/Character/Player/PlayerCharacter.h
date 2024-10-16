@@ -39,6 +39,16 @@ protected:
 	// 自身のSkeletalMesh
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component)
 	TObjectPtr<USkeletalMeshComponent> PlayerMesh;
+
+//------------------------GAS------------------------
+
+	// 攻撃のEffect
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GAS)
+	TSubclassOf<UGameplayEffect> DealDamageEffectClass;
+
+	// DealDamageのTag
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GAS)
+	FGameplayTag DealDamageTagContainer;
 	
 //------------------------input------------------------
 	
@@ -90,4 +100,10 @@ protected:
 
 	// Playerの装備から武器を適用させる
 	void ApplyWeapon();
+
+//------------------------攻撃------------------------
+
+	// ダメージを与える
+	UFUNCTION()
+	void DealDamage(AActor* Target);
 };

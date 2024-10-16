@@ -20,6 +20,8 @@ class TEAMD_API UMonsterAttributeSet : public UAttributeSet
 	GENERATED_BODY()
 
 public:
+	UMonsterAttributeSet();
+	
 	// 動的に変わるパラメータのClampとイベント発火をする
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 

@@ -6,6 +6,8 @@
 #include "AbilitySystemComponent.h"
 #include "WeaponBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitDelegate, AActor*, Target);
+
 // プレイヤーの武器の基底
 UCLASS()
 class TEAMD_API AWeaponBase : public AActor
@@ -40,6 +42,8 @@ protected:
 	void EndWeaponAttack();
 
 public:
+	FOnHitDelegate OnHitAttack;
+	
 	// 武器の攻撃Ability
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<TSubclassOf<UGameplayAbility>> AttackAbilities;
