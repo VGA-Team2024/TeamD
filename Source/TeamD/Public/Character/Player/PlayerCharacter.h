@@ -42,13 +42,12 @@ protected:
 
 //------------------------GAS------------------------
 
+	UPROPERTY(BlueprintReadOnly, Category = GAS)
+	TObjectPtr<UPlayerAttributeSet> PlayerAttributeSet;
+	
 	// 攻撃のEffect
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GAS)
 	TSubclassOf<UGameplayEffect> DealDamageEffectClass;
-
-	// DealDamageのTag
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GAS)
-	FGameplayTag DealDamageTagContainer;
 	
 //------------------------input------------------------
 	

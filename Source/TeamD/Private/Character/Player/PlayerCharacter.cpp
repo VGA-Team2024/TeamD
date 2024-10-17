@@ -3,12 +3,11 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Kismet/KismetSystemLibrary.h"
 
 APlayerCharacter::APlayerCharacter()
 {
 	// コンポーネントの初期化
-	AttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("AttributeSet"));
+	PlayerAttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("PlayerAttributeSet"));
 }
 
 void APlayerCharacter::BeginPlay()
@@ -123,20 +122,15 @@ void APlayerCharacter::ApplyWeapon()
 
 void APlayerCharacter::DealDamage(AActor* Target)
 {
-	// todo CalcClassで他でダメージ計算したほうがよさそう
-	
-	if (!(AbilitySystemComponent && DealDamageEffectClass)) return;
-
-	// GameplayEffectSpecを作成
-	const FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
-	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, EffectContext);
-
-	if (SpecHandle.IsValid())
+	if (const ACharacterBase* TargetCharacter = Cast<ACharacterBase>(Target))
 	{
-		// ダメージ量の設定
-		SpecHandle.Data->SetSetByCallerMagnitude(DealDamageTagContainer, 10.f);
+		// Spec作成
+		const FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, EffectContext);
 
-		// GameplayEffectを適用
-		AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+		if (SpecHandle.IsValid())
+		{
+			AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetCharacter->GetAbilitySystemComponent());
+		}
 	}
 }

@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/CharacterBase.h"
+#include "GAS/Monster/MonsterAttributeSet.h"
 #include "MonsterCharacter.generated.h"
 
 /**
@@ -12,6 +13,9 @@ class TEAMD_API AMonsterCharacter : public ACharacterBase
 {
 	GENERATED_BODY()
 
-protected:
+public:
 	AMonsterCharacter();
+
+	UPROPERTY(BlueprintReadOnly, Category = GAS)
+	TObjectPtr<UMonsterAttributeSet> MonsterAttributeSet;
 };

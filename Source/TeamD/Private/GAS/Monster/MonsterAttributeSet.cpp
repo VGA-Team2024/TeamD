@@ -9,4 +9,6 @@ UMonsterAttributeSet::UMonsterAttributeSet()
 void UMonsterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
+
+	UE_LOG(LogTemp, Log, TEXT("hp : %f"), GetHealth());
 }
