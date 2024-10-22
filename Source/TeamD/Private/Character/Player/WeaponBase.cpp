@@ -24,17 +24,22 @@ void AWeaponBase::BeginPlay()
 	{
 		WeaponAttackCollision->IgnoreActorWhenMoving(this, true);
 		WeaponAttackCollision->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnBeginOverlap);
-		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		WeaponAttackCollision->IgnoreActorWhenMoving(GetOwner(), true);
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("null WeaponAttackCollision"));
 	}
+
+	
 }
 
 void AWeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	OnHitAttack.Broadcast(OtherActor);
+	
 	UE_LOG(LogTemp, Log, TEXT("Hit Actor Name : %s"), *OtherActor->GetName());
 }
 

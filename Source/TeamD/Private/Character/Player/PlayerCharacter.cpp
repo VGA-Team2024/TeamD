@@ -3,19 +3,18 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Kismet/KismetSystemLibrary.h"
 
 APlayerCharacter::APlayerCharacter()
 {
 	// コンポーネントの初期化
-	AttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("AttributeSet"));
+	PlayerAttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("PlayerAttributeSet"));
 }
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayerMesh = FindComponentByClass<USkeletalMeshComponent>();
+	PlayerMesh = GetMesh();
 	SetupInput();
 	ApplyWeapon();
 }
@@ -109,10 +108,36 @@ void APlayerCharacter::ApplyWeapon()
 	WeaponActor = GetWorld()->SpawnActor<AWeaponBase>(PlayerEquipment.Weapon, GetActorLocation(), GetActorRotation(), SpawnParams);
 
 	// Meshにアタッチ　あってるか分からん
-	WeaponActor->AttachToComponent(PlayerMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponActor->AttachSocketName);
+	if (PlayerMesh->DoesSocketExist(WeaponActor->AttachSocketName))
+	{
+		WeaponActor->AttachToComponent(PlayerMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponActor->AttachSocketName);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("武器指定の名前のソケットがない"));
+	}
 
+	// 武器のAbilityをPlayerに持たせる
 	for (auto Ability : WeaponActor->AttackAbilities)
 	{
 		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1));
+	}
+
+	// OnHit
+	WeaponActor->OnHitAttack.AddDynamic(this, &APlayerCharacter::DealDamage);
+}
+
+void APlayerCharacter::DealDamage(AActor* Target)
+{
+	if (const ACharacterBase* TargetCharacter = Cast<ACharacterBase>(Target))
+	{
+		// Spec作成
+		const FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, EffectContext);
+
+		if (SpecHandle.IsValid())
+		{
+			AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetCharacter->GetAbilitySystemComponent());
+		}
 	}
 }
