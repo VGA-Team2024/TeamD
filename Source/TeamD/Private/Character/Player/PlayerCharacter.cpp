@@ -14,7 +14,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayerMesh = FindComponentByClass<USkeletalMeshComponent>();
+	PlayerMesh = GetMesh();
 	SetupInput();
 	ApplyWeapon();
 }
@@ -108,7 +108,14 @@ void APlayerCharacter::ApplyWeapon()
 	WeaponActor = GetWorld()->SpawnActor<AWeaponBase>(PlayerEquipment.Weapon, GetActorLocation(), GetActorRotation(), SpawnParams);
 
 	// Meshにアタッチ　あってるか分からん
-	WeaponActor->AttachToComponent(PlayerMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponActor->AttachSocketName);
+	if (PlayerMesh->DoesSocketExist(WeaponActor->AttachSocketName))
+	{
+		WeaponActor->AttachToComponent(PlayerMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponActor->AttachSocketName);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("武器指定の名前のソケットがない"));
+	}
 
 	// 武器のAbilityをPlayerに持たせる
 	for (auto Ability : WeaponActor->AttackAbilities)
