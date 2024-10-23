@@ -34,8 +34,8 @@ void APlayerCharacter::SetupInput()
 			// Bind Action
 			EnhancedInputComponent->BindAction(MoveInput, ETriggerEvent::Triggered, this, &APlayerCharacter::MovePlayer);
 			EnhancedInputComponent->BindAction(LookInput, ETriggerEvent::Triggered, this, &APlayerCharacter::RotateControllerInput);
-			EnhancedInputComponent->BindAction(NormalAttackInput, ETriggerEvent::Triggered, this, &APlayerCharacter::NormalAttack);
-			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Triggered, this, &APlayerCharacter::PressedDodge);
+			EnhancedInputComponent->BindAction(NormalAttackInput, ETriggerEvent::Started, this, &APlayerCharacter::NormalAttack);
+			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Started, this, &APlayerCharacter::PressedDodge);
 			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Completed, this, &APlayerCharacter::ReleasedDodge);
 		}
 
@@ -84,7 +84,18 @@ void APlayerCharacter::RotateControllerInput(const FInputActionValue& Value)
 
 void APlayerCharacter::NormalAttack()
 {
-	AbilitySystemComponent->TryActivateAbilitiesByTag(NormalAttackTag, true);
+	// 抜刀状態かの確認
+	if (IsDrawing)
+	{
+		// 攻撃アビリティの再生
+		AbilitySystemComponent->TryActivateAbilitiesByTag(NormalAttackTag, true);
+	}
+	else
+	{
+		// 抜刀アビリティの再生
+		AbilitySystemComponent->TryActivateAbilitiesByTag(DrawingSwordTag, true);
+		IsDrawing = true;
+	}
 }
 
 void APlayerCharacter::PressedDodge()
