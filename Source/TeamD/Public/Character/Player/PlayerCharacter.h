@@ -71,6 +71,10 @@ protected:
 	// 通常攻撃
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
 	FGameplayTagContainer NormalAttackTag;
+	
+	// 抜刀
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
+	FGameplayTagContainer DrawingSwordTag;
 
 private:
 	// input設定
@@ -87,9 +91,15 @@ private:
 	void PressedDodge();
 	void ReleasedDodge();
 
-//------------------------装備------------------------
+//------------------------状態------------------------
 
 protected:
+	// 抜刀状態か todo EnumとかTagでやってもいい
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = State)
+	bool IsDrawing = false;
+
+//------------------------装備------------------------
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	FPlayerEquipmentStruct PlayerEquipment;
 
