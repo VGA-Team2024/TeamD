@@ -67,6 +67,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
 	TObjectPtr<UInputAction> DodgeInput;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	TObjectPtr<UInputAction> DashInput;
+
 	// input tag
 	// 通常攻撃
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
@@ -75,6 +78,10 @@ protected:
 	// 抜刀
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
 	FGameplayTagContainer DrawingSwordTag;
+	
+	// 納刀
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
+	FGameplayTagContainer SheathingOfSwordTag;
 
 private:
 	// input設定
@@ -90,6 +97,9 @@ private:
 	// Dodge
 	void PressedDodge();
 	void ReleasedDodge();
+	// Dash
+	void PressedDash();
+	void ReleasedDash(){};
 
 //------------------------状態------------------------
 
@@ -103,10 +113,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	FPlayerEquipmentStruct PlayerEquipment;
 
+public:
 	// 現在装備している武器のActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Equipment)
 	TObjectPtr<AWeaponBase> WeaponActor;
 
+protected:
 	// Playerの装備から武器を適用させる
 	void ApplyWeapon();
 

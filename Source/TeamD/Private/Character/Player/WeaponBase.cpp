@@ -8,12 +8,17 @@ AWeaponBase::AWeaponBase()
 	USceneComponent* DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultSceneRoot"));
 	RootComponent = DefaultSceneRoot;
 
-	// 武器の当たり判定
-	WeaponAttackCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
-	WeaponAttackCollision->SetupAttachment(RootComponent);
 	// 武器のメッシュ
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-	WeaponMesh->SetupAttachment(WeaponAttackCollision);
+	WeaponMesh->SetupAttachment(RootComponent);
+	// 武器の当たり判定
+	WeaponAttackCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
+	WeaponAttackCollision->SetupAttachment(WeaponMesh);
+	// SceneComponent
+	SheathingAttachPivot = CreateDefaultSubobject<USceneComponent>(TEXT("SheathingPivotSceneComponent"));
+	SheathingAttachPivot->SetupAttachment(WeaponMesh);
+	DrawingAttachPivot = CreateDefaultSubobject<USceneComponent>(TEXT("DrawingPivotSceneComponent"));
+	DrawingAttachPivot->SetupAttachment(WeaponMesh);
 }
 
 void AWeaponBase::BeginPlay()
@@ -51,5 +56,39 @@ void AWeaponBase::BeginWeaponAttack()
 void AWeaponBase::EndWeaponAttack()
 {
 	WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void AWeaponBase::AttachSheathingSocket(USkeletalMeshComponent* AttachMesh)
+{
+	// ソケットの切替
+	if (AttachMesh->DoesSocketExist(SheathingAttachSocketName))
+	{
+		AttachToComponent(AttachMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, SheathingAttachSocketName);
+		// 位置、回転の補正
+		const FRotator RelativeRotate = SheathingAttachPivot->GetRelativeRotation().GetInverse();
+		SetActorRelativeRotation(RelativeRotate);
+		SetActorRelativeLocation(RelativeRotate.RotateVector(-SheathingAttachPivot->GetRelativeLocation()));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("ソケットないよ"));
+	}
+}
+
+void AWeaponBase::AttachDrawingSocket(USkeletalMeshComponent* AttachMesh)
+{
+	// ソケットの切替
+	if (AttachMesh->DoesSocketExist(DrawingAttachSocketName))
+	{
+		AttachToComponent(AttachMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, DrawingAttachSocketName);
+		// 位置、回転の補正
+		const FRotator RelativeRotate = DrawingAttachPivot->GetRelativeRotation().GetInverse();
+		SetActorRelativeRotation(RelativeRotate);
+		SetActorRelativeLocation(RelativeRotate.RotateVector(-DrawingAttachPivot->GetRelativeLocation()));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("ソケットないよ"));
+	}
 }
 

@@ -37,6 +37,7 @@ void APlayerCharacter::SetupInput()
 			EnhancedInputComponent->BindAction(NormalAttackInput, ETriggerEvent::Started, this, &APlayerCharacter::NormalAttack);
 			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Started, this, &APlayerCharacter::PressedDodge);
 			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Completed, this, &APlayerCharacter::ReleasedDodge);
+			EnhancedInputComponent->BindAction(DashInput, ETriggerEvent::Started, this, &APlayerCharacter::PressedDash);
 		}
 
 		// Input Mapping Contextを登録する
@@ -94,6 +95,7 @@ void APlayerCharacter::NormalAttack()
 	{
 		// 抜刀アビリティの再生
 		AbilitySystemComponent->TryActivateAbilitiesByTag(DrawingSwordTag, true);
+		
 		IsDrawing = true;
 	}
 }
@@ -108,6 +110,23 @@ void APlayerCharacter::ReleasedDodge()
 	StopJumping();
 }
 
+void APlayerCharacter::PressedDash()
+{
+	UE_LOG(LogTemp, Log, TEXT("PressedDash"));
+	
+	if (IsDrawing)
+	{
+		// 武器をアタッチするソケットの切替
+		WeaponActor->AttachSheathingSocket(PlayerMesh);
+
+		// 納刀アビリティの再生
+		AbilitySystemComponent->TryActivateAbilitiesByTag(SheathingOfSwordTag, true);
+		IsDrawing = false;
+		
+		return;
+	}
+}
+
 void APlayerCharacter::ApplyWeapon()
 {
 	// スポーンのパラメーター
@@ -119,14 +138,7 @@ void APlayerCharacter::ApplyWeapon()
 	WeaponActor = GetWorld()->SpawnActor<AWeaponBase>(PlayerEquipment.Weapon, GetActorLocation(), GetActorRotation(), SpawnParams);
 
 	// Meshにアタッチ　あってるか分からん
-	if (PlayerMesh->DoesSocketExist(WeaponActor->AttachSocketName))
-	{
-		WeaponActor->AttachToComponent(PlayerMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponActor->AttachSocketName);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("武器指定の名前のソケットがない"));
-	}
+	WeaponActor->AttachSheathingSocket(PlayerMesh);
 
 	// 武器のAbilityをPlayerに持たせる
 	for (auto Ability : WeaponActor->AttackAbilities)
