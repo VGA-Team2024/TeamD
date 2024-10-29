@@ -33,21 +33,42 @@ protected:
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+public:
 	// 攻撃判定開始
-	UFUNCTION(BlueprintCallable)
 	void BeginWeaponAttack();
 
 	// 攻撃判定終了
-	UFUNCTION(BlueprintCallable)
 	void EndWeaponAttack();
 
-public:
 	FOnHitDelegate OnHitAttack;
 	
 	// 武器の攻撃Ability
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<TSubclassOf<UGameplayAbility>> AttackAbilities;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FName AttachSocketName;
+//------------------------アタッチ------------------------
+
+	// 納刀のソケットにアタッチする
+	UFUNCTION(BlueprintCallable, Category = Attach)
+	void AttachSheathingSocket(USkeletalMeshComponent* AttachMesh);
+	
+	// 抜刀のソケットにアタッチする
+	UFUNCTION(BlueprintCallable, Category = Attach)
+	void AttachDrawingSocket(USkeletalMeshComponent* AttachMesh);
+	
+	// 納刀状態にアタッチするソケット名
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach)
+	FName SheathingAttachSocketName;
+
+	// 納刀状態ソケットと重なるやつ
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach)
+	TObjectPtr<USceneComponent> SheathingAttachPivot;
+
+	// 抜刀状態にアタッチするソケット名
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach)
+	FName DrawingAttachSocketName;
+
+	// 抜刀状態ソケットと重なるやつ
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach)
+	TObjectPtr<USceneComponent> DrawingAttachPivot;
 };

@@ -37,6 +37,7 @@ void APlayerCharacter::SetupInput()
 			EnhancedInputComponent->BindAction(NormalAttackInput, ETriggerEvent::Started, this, &APlayerCharacter::NormalAttack);
 			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Started, this, &APlayerCharacter::PressedDodge);
 			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Completed, this, &APlayerCharacter::ReleasedDodge);
+			EnhancedInputComponent->BindAction(DashInput, ETriggerEvent::Started, this, &APlayerCharacter::PressedDash);
 		}
 
 		// Input Mapping Contextを登録する
@@ -85,15 +86,25 @@ void APlayerCharacter::RotateControllerInput(const FInputActionValue& Value)
 void APlayerCharacter::NormalAttack()
 {
 	// 抜刀状態かの確認
-	if (IsDrawing)
+	if (IsDrawing) // 抜刀中
 	{
-		// 攻撃アビリティの再生
-		AbilitySystemComponent->TryActivateAbilitiesByTag(NormalAttackTag, true);
+		// SaveInput状態化の判定
+		if (AbilitySystemComponent->HasMatchingGameplayTag(SaveInputStateTag))
+		{
+			// SaveInputを有効にする
+			SaveInputTag = NormalAttackTag;
+		}
+		else
+		{
+			// 攻撃アビリティの再生
+			AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(NormalAttackTag), true);
+		}
 	}
 	else
 	{
 		// 抜刀アビリティの再生
-		AbilitySystemComponent->TryActivateAbilitiesByTag(DrawingSwordTag, true);
+		AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(DrawingSwordTag), true);
+		
 		IsDrawing = true;
 	}
 }
@@ -108,6 +119,20 @@ void APlayerCharacter::ReleasedDodge()
 	StopJumping();
 }
 
+void APlayerCharacter::PressedDash()
+{
+	if (IsDrawing)
+	{
+		// 納刀アビリティの再生
+		AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(SheathingOfSwordTag), true);
+		IsDrawing = false;
+		
+		return;
+	}
+
+	// todo ダッシュってあるのか？
+}
+
 void APlayerCharacter::ApplyWeapon()
 {
 	// スポーンのパラメーター
@@ -119,14 +144,7 @@ void APlayerCharacter::ApplyWeapon()
 	WeaponActor = GetWorld()->SpawnActor<AWeaponBase>(PlayerEquipment.Weapon, GetActorLocation(), GetActorRotation(), SpawnParams);
 
 	// Meshにアタッチ　あってるか分からん
-	if (PlayerMesh->DoesSocketExist(WeaponActor->AttachSocketName))
-	{
-		WeaponActor->AttachToComponent(PlayerMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponActor->AttachSocketName);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("武器指定の名前のソケットがない"));
-	}
+	WeaponActor->AttachSheathingSocket(PlayerMesh);
 
 	// 武器のAbilityをPlayerに持たせる
 	for (auto Ability : WeaponActor->AttackAbilities)
