@@ -92,7 +92,7 @@ void APlayerCharacter::NormalAttack()
 		if (AbilitySystemComponent->HasMatchingGameplayTag(SaveInputStateTag))
 		{
 			// SaveInputを有効にする
-			SaveInputTag = NormalAttackTag;
+			AbilitySystemComponent->AddLooseGameplayTag(NormalAttackTag);
 		}
 		else
 		{

@@ -86,10 +86,6 @@ protected:
 	// 入力保存状態のTag
 	inline static const FGameplayTag SaveInputStateTag = FGameplayTag::RequestGameplayTag(FName("Input.SaveInput"));
 
-public:
-	// 保存した入力タグ
-	FGameplayTag SaveInputTag = FGameplayTag::EmptyTag;
-
 private:
 	// input設定
 	void SetupInput();
