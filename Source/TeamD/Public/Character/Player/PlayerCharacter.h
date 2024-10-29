@@ -73,15 +73,22 @@ protected:
 	// input tag
 	// 通常攻撃
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
-	FGameplayTagContainer NormalAttackTag;
+	FGameplayTag NormalAttackTag;
 	
 	// 抜刀
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
-	FGameplayTagContainer DrawingSwordTag;
+	FGameplayTag DrawingSwordTag;
 	
 	// 納刀
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
-	FGameplayTagContainer SheathingOfSwordTag;
+	FGameplayTag SheathingOfSwordTag;
+
+	// 入力保存状態のTag
+	inline static const FGameplayTag SaveInputStateTag = FGameplayTag::RequestGameplayTag(FName("Input.SaveInput"));
+
+public:
+	// 保存した入力タグ
+	FGameplayTag SaveInputTag = FGameplayTag::EmptyTag;
 
 private:
 	// input設定
@@ -104,7 +111,7 @@ private:
 //------------------------状態------------------------
 
 protected:
-	// 抜刀状態か todo EnumとかTagでやってもいい
+	// 抜刀状態か todo EnumとかTagでやってもいい 納刀状態かはプレイヤーが持つか武器が持つか
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = State)
 	bool IsDrawing = false;
 

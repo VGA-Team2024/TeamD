@@ -86,15 +86,24 @@ void APlayerCharacter::RotateControllerInput(const FInputActionValue& Value)
 void APlayerCharacter::NormalAttack()
 {
 	// 抜刀状態かの確認
-	if (IsDrawing)
+	if (IsDrawing) // 抜刀中
 	{
-		// 攻撃アビリティの再生
-		AbilitySystemComponent->TryActivateAbilitiesByTag(NormalAttackTag, true);
+		// SaveInput状態化の判定
+		if (AbilitySystemComponent->HasMatchingGameplayTag(SaveInputStateTag))
+		{
+			// SaveInputを有効にする
+			SaveInputTag = NormalAttackTag;
+		}
+		else
+		{
+			// 攻撃アビリティの再生
+			AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(NormalAttackTag), true);
+		}
 	}
 	else
 	{
 		// 抜刀アビリティの再生
-		AbilitySystemComponent->TryActivateAbilitiesByTag(DrawingSwordTag, true);
+		AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(DrawingSwordTag), true);
 		
 		IsDrawing = true;
 	}
@@ -112,19 +121,16 @@ void APlayerCharacter::ReleasedDodge()
 
 void APlayerCharacter::PressedDash()
 {
-	UE_LOG(LogTemp, Log, TEXT("PressedDash"));
-	
 	if (IsDrawing)
 	{
-		// 武器をアタッチするソケットの切替
-		WeaponActor->AttachSheathingSocket(PlayerMesh);
-
 		// 納刀アビリティの再生
-		AbilitySystemComponent->TryActivateAbilitiesByTag(SheathingOfSwordTag, true);
+		AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(SheathingOfSwordTag), true);
 		IsDrawing = false;
 		
 		return;
 	}
+
+	// todo ダッシュってあるのか？
 }
 
 void APlayerCharacter::ApplyWeapon()

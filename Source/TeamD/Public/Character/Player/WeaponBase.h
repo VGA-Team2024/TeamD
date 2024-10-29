@@ -49,9 +49,11 @@ public:
 //------------------------アタッチ------------------------
 
 	// 納刀のソケットにアタッチする
+	UFUNCTION(BlueprintCallable, Category = Attach)
 	void AttachSheathingSocket(USkeletalMeshComponent* AttachMesh);
 	
 	// 抜刀のソケットにアタッチする
+	UFUNCTION(BlueprintCallable, Category = Attach)
 	void AttachDrawingSocket(USkeletalMeshComponent* AttachMesh);
 	
 	// 納刀状態にアタッチするソケット名
