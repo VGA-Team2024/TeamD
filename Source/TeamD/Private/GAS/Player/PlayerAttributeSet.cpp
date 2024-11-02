@@ -3,12 +3,12 @@
 #include "GameplayEffectExtension.h"
 
 UPlayerAttributeSet::UPlayerAttributeSet()
-	: Health(1.f)
-	, MaxHealth(1.f)
-	, Stamina(1.f)
-	, MaxStamina(1.f)
-	, AttackPower(1.f)
-	, Defense(0.f)
+	: Health(100.f)
+	, MaxHealth(100.f)
+	, Stamina(100.f)
+	, MaxStamina(100.f)
+	, AttackPower(0.f)
+	, Defense(1.f)
 {
 }
 

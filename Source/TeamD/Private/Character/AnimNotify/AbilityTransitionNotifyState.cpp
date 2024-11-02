@@ -23,13 +23,22 @@ void UAbilityTransitionNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp,
 		OwnerPlayer->GetAbilitySystemComponent()->TryActivateAbilityByClass(Ability);
 	}
 
+	// ループ中に削除するとバグるので削除予定のTagを一時保存しておく
+	TArray<FGameplayTag> TagsToRemove;
+	
 	// 持ってるTagをループする
 	for (FGameplayTag Tag : PlayerAbilitySystemComponent->GetOwnedGameplayTags().GetGameplayTagArray())
 	{
 		// SaveInputだったら消す
 		if (Tag.MatchesTag(SaveInputTagRoot) || Tag == SaveInputTagRoot)
 		{
-			PlayerAbilitySystemComponent->RemoveLooseGameplayTag(Tag);
+			TagsToRemove.Add(Tag);
 		}
+	}
+
+	// 後で削除
+	for (const FGameplayTag Tag : TagsToRemove)
+	{
+		PlayerAbilitySystemComponent->RemoveLooseGameplayTag(Tag);
 	}
 }

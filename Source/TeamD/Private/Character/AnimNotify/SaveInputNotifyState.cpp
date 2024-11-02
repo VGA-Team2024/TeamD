@@ -16,7 +16,7 @@ void USaveInputNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimS
 
 void USaveInputNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-	if (OwnerPlayerAbilitySystem)
+	if (OwnerPlayerAbilitySystem && SaveInputStateTag.IsValid())
 	{
 		OwnerPlayerAbilitySystem->RemoveLooseGameplayTag(SaveInputStateTag);
 	}

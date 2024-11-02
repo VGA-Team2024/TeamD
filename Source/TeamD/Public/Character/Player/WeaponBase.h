@@ -8,6 +8,22 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitDelegate, AActor*, Target);
 
+// 武器の性能パラメータ
+USTRUCT(BlueprintType)
+struct FWeaponStatus
+{
+	GENERATED_BODY()
+
+	// 攻撃力
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int AttackPower;
+
+	FWeaponStatus()
+		: AttackPower(10)
+	{
+	}
+};
+
 // プレイヤーの武器の基底
 UCLASS()
 class TEAMD_API AWeaponBase : public AActor
@@ -28,12 +44,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* WeaponMesh;
 
+public:
+	// 武器の性能パラメータ
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FWeaponStatus WeaponStatus;
+
+	//------------------------攻撃------------------------
+
 	// 攻撃当たり判定の開始コールバック
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-public:
 	// 攻撃判定開始
 	void BeginWeaponAttack();
 
@@ -46,7 +68,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<TSubclassOf<UGameplayAbility>> AttackAbilities;
 
-//------------------------アタッチ------------------------
+	//------------------------アタッチ------------------------
 
 	// 納刀のソケットにアタッチする
 	UFUNCTION(BlueprintCallable, Category = Attach)
@@ -69,6 +91,6 @@ public:
 	FName DrawingAttachSocketName;
 
 	// 抜刀状態ソケットと重なるやつ
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach, meta = (DisplayPriority = -1))
 	TObjectPtr<USceneComponent> DrawingAttachPivot;
 };

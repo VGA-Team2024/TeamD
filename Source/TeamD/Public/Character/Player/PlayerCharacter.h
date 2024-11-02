@@ -113,10 +113,10 @@ protected:
 
 //------------------------装備------------------------
 
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	FPlayerEquipmentStruct PlayerEquipment;
 
-public:
 	// 現在装備している武器のActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Equipment)
 	TObjectPtr<AWeaponBase> WeaponActor;
