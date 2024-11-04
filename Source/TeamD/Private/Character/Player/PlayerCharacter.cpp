@@ -7,7 +7,7 @@
 APlayerCharacter::APlayerCharacter()
 {
 	// コンポーネントの初期化
-	PlayerAttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("PlayerAttributeSet"));
+	CharacterAttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("PlayerAttributeSet"));
 }
 
 void APlayerCharacter::BeginPlay()
@@ -161,7 +161,11 @@ void APlayerCharacter::DealDamage(AActor* Target)
 	if (const ACharacterBase* TargetCharacter = Cast<ACharacterBase>(Target))
 	{
 		// Spec作成
-		const FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+		FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+		// HitResultにダメージを与えたActorを登録する
+		FHitResult HitResult;
+		HitResult.HitObjectHandle = FActorInstanceHandle(Target);
+		EffectContext.AddHitResult(HitResult);
 		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, EffectContext);
 
 		if (SpecHandle.IsValid())

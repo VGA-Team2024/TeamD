@@ -24,14 +24,17 @@ public:
 
 //------------------GAS------------------
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = GAS, meta = (AllowPrivateAccess = "true"))
 	UAbilitySystemComponent* AbilitySystemComponent = nullptr;
 
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = GAS)
+	TObjectPtr<UAttributeSet> CharacterAttributeSet;
+
 protected:
 	// このCharacterに初期セットするAbility
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GAS)
 	TArray<TSubclassOf<UGameplayAbility>> InitialAbilities;
 };

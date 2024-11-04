@@ -42,8 +42,8 @@ protected:
 
 //------------------------GAS------------------------
 
-	UPROPERTY(BlueprintReadOnly, Category = GAS)
-	TObjectPtr<UPlayerAttributeSet> PlayerAttributeSet;
+	// UPROPERTY(BlueprintReadOnly, Category = GAS)
+	// TObjectPtr<UPlayerAttributeSet> PlayerAttributeSet;
 	
 	// 攻撃のEffect
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GAS)

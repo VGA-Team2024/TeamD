@@ -16,6 +16,6 @@ class TEAMD_API AMonsterCharacter : public ACharacterBase
 public:
 	AMonsterCharacter();
 
-	UPROPERTY(BlueprintReadOnly, Category = GAS)
-	TObjectPtr<UMonsterAttributeSet> MonsterAttributeSet;
+	// UPROPERTY(BlueprintReadOnly, Category = GAS)
+	// TObjectPtr<UMonsterAttributeSet> MonsterAttributeSet;
 };
