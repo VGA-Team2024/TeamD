@@ -38,7 +38,7 @@ protected:
 
 	// 武器の攻撃当たり判定
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"), Category = "Components")
-	TObjectPtr<UCapsuleComponent> WeaponAttackCollision;
+	TWeakObjectPtr<UCapsuleComponent> WeaponAttackCollision;
 
 	// 武器のStaticMesh
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")

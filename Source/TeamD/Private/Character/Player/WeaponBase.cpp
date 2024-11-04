@@ -1,5 +1,7 @@
 #include "Character/Player/WeaponBase.h"
 
+#include "Character/Monster/MonsterCharacter.h"
+
 AWeaponBase::AWeaponBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -25,7 +27,7 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (WeaponAttackCollision)
+	if (WeaponAttackCollision.IsValid())
 	{
 		WeaponAttackCollision->IgnoreActorWhenMoving(this, true);
 		WeaponAttackCollision->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnBeginOverlap);
@@ -43,6 +45,9 @@ void AWeaponBase::BeginPlay()
 void AWeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	// todo コリジョンプリセットで当たらないようにしたい
+	if (!Cast<AMonsterCharacter>(OtherActor)) return;
+	
 	OnHitAttack.Broadcast(OtherActor);
 	
 	UE_LOG(LogTemp, Log, TEXT("Hit Actor Name : %s"), *OtherActor->GetName());
@@ -50,12 +55,18 @@ void AWeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 
 void AWeaponBase::BeginWeaponAttack()
 {
-	WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	if (WeaponAttackCollision.IsValid())
+	{
+		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	}
 }
 
 void AWeaponBase::EndWeaponAttack()
 {
-	WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (WeaponAttackCollision.IsValid())
+	{
+		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }
 
 void AWeaponBase::AttachSheathingSocket(USkeletalMeshComponent* AttachMesh)

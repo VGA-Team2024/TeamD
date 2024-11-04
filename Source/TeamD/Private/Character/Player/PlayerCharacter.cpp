@@ -154,6 +154,7 @@ void APlayerCharacter::ApplyWeapon()
 
 	// OnHit
 	WeaponActor->OnHitAttack.AddDynamic(this, &APlayerCharacter::DealDamage);
+	WeaponActor->OnHitAttack.AddDynamic(this, &APlayerCharacter::AnimHitStop);
 }
 
 void APlayerCharacter::DealDamage(AActor* Target)
@@ -173,4 +174,27 @@ void APlayerCharacter::DealDamage(AActor* Target)
 			AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetCharacter->GetAbilitySystemComponent());
 		}
 	}
+}
+
+void APlayerCharacter::AnimHitStop(AActor* Target)
+{
+	TObjectPtr<UAnimInstance> AnimInstance;
+	TObjectPtr<UAnimMontage> CurrentMontage;
+
+	// nullチェックと代入
+	if (!PlayerMesh || !((AnimInstance = PlayerMesh->GetAnimInstance())) || !((CurrentMontage = AnimInstance->GetCurrentActiveMontage()))) return;
+
+	// 再生を一時停止
+	AnimInstance->Montage_SetPlayRate(CurrentMontage, .01f);
+
+	// タイマーセット ヒットストップの時間はワールド時間
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this, AnimInstance, CurrentMontage]()
+	{
+		if (AnimInstance)
+		{
+			// 元の再生速度に戻す
+			AnimInstance->Montage_SetPlayRate(CurrentMontage, 1.f);
+		}
+	}, HitStopDuration, false); // todo ストップ時間の参照
 }

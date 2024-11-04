@@ -32,7 +32,7 @@ float UDealDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const 
 	TObjectPtr<UPlayerAttackAbilityBase> AttackAbility;
 
 	// 攻撃アビリティからモーション値を掛ける
-	if (ActiveAbility && ((AttackAbility = Cast<UPlayerAttackAbilityBase>(ActiveAbility))))
+	if (ActiveAbility && ActiveAbility->IsActive() && ((AttackAbility = Cast<UPlayerAttackAbilityBase>(ActiveAbility))))
 	{
 		CalculatedDamage *= AttackAbility->MotionValue;
 	}
