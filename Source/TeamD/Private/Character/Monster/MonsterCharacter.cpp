@@ -3,5 +3,5 @@
 
 AMonsterCharacter::AMonsterCharacter()
 {
-	MonsterAttributeSet = CreateDefaultSubobject<UMonsterAttributeSet>(TEXT("MonsterAttributeSet"));
+	CharacterAttributeSet = CreateDefaultSubobject<UMonsterAttributeSet>(TEXT("MonsterAttributeSet"));
 }

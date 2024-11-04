@@ -42,8 +42,8 @@ protected:
 
 //------------------------GAS------------------------
 
-	UPROPERTY(BlueprintReadOnly, Category = GAS)
-	TObjectPtr<UPlayerAttributeSet> PlayerAttributeSet;
+	// UPROPERTY(BlueprintReadOnly, Category = GAS)
+	// TObjectPtr<UPlayerAttributeSet> PlayerAttributeSet;
 	
 	// 攻撃のEffect
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GAS)
@@ -86,10 +86,6 @@ protected:
 	// 入力保存状態のTag
 	inline static const FGameplayTag SaveInputStateTag = FGameplayTag::RequestGameplayTag(FName("Input.SaveInput"));
 
-public:
-	// 保存した入力タグ
-	FGameplayTag SaveInputTag = FGameplayTag::EmptyTag;
-
 private:
 	// input設定
 	void SetupInput();
@@ -117,10 +113,10 @@ protected:
 
 //------------------------装備------------------------
 
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	FPlayerEquipmentStruct PlayerEquipment;
 
-public:
 	// 現在装備している武器のActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Equipment)
 	TObjectPtr<AWeaponBase> WeaponActor;

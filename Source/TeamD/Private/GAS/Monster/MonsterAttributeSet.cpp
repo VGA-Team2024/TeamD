@@ -1,8 +1,8 @@
 #include "GAS/Monster/MonsterAttributeSet.h"
 
 UMonsterAttributeSet::UMonsterAttributeSet()
-	: Health(1.f)
-	, MaxHealth(1.f)
+	: Health(100.f)
+	, MaxHealth(100.f)
 {
 }
 

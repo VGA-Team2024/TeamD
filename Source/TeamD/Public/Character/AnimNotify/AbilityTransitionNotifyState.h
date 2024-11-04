@@ -18,7 +18,13 @@ public:
 
 	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime) override;
 
+protected:
 	TObjectPtr<APlayerCharacter> OwnerPlayer;
+
+	TObjectPtr<UAbilitySystemComponent> PlayerAbilitySystemComponent;
+
+	// 保存したInputTagのRoot
+	inline static const FGameplayTag SaveInputTagRoot = FGameplayTag::RequestGameplayTag(FName("Input"));
 
 	// 遷移できるAbility
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
