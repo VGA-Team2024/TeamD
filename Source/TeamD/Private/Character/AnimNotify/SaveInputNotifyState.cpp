@@ -1,13 +1,15 @@
 #include "Character/AnimNotify/SaveInputNotifyState.h"
 
+#include "AnimationUtils.h"
+
 void USaveInputNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
-	float TotalDuration)
+                                        float TotalDuration)
 {
 	if (!MeshComp || !MeshComp->GetOwner()) return;
 	
 	if (const TObjectPtr<APlayerCharacter> Player = Cast<APlayerCharacter>(MeshComp->GetOwner()))
 	{
-		if ((OwnerPlayerAbilitySystem = Player->GetAbilitySystemComponent()))
+		if (const TObjectPtr<UAbilitySystemComponent> OwnerPlayerAbilitySystem = Player->GetAbilitySystemComponent())
 		{
 			OwnerPlayerAbilitySystem->AddLooseGameplayTag(SaveInputStateTag);
 		}
@@ -16,8 +18,14 @@ void USaveInputNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimS
 
 void USaveInputNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-	if (OwnerPlayerAbilitySystem != nullptr || !SaveInputStateTag.IsValid())
+	if (MeshComp && Animation)
 	{
-		OwnerPlayerAbilitySystem->RemoveLooseGameplayTag(SaveInputStateTag);
+		if (const TObjectPtr<APlayerCharacter> Player = Cast<APlayerCharacter>(MeshComp->GetOwner()))
+		{
+			if (const TObjectPtr<UAbilitySystemComponent> OwnerPlayerAbilitySystem = Player->GetAbilitySystemComponent())
+			{
+				OwnerPlayerAbilitySystem->RemoveLooseGameplayTag(SaveInputStateTag);
+			}
+		}
 	}
 }

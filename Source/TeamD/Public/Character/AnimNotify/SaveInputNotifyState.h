@@ -18,8 +18,6 @@ public:
 
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
 
-	TObjectPtr<UAbilitySystemComponent> OwnerPlayerAbilitySystem;
-
 private:
 	inline static const FGameplayTag SaveInputStateTag = FGameplayTag::RequestGameplayTag(FName("Input.SaveInput"));
 };

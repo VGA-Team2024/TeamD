@@ -1,16 +1,17 @@
 #include "Character/Player/WeaponBase.h"
+#include "Character/Monster/MonsterCharacter.h"
 
 AWeaponBase::AWeaponBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
 	// root
-	USceneComponent* DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultSceneRoot"));
+	const TObjectPtr<USceneComponent> DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultSceneRoot"));
 	RootComponent = DefaultSceneRoot;
-
+	
 	// 武器のメッシュ
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-	WeaponMesh->SetupAttachment(RootComponent);
+	WeaponMesh->SetupAttachment(DefaultSceneRoot);
 	// 武器の当たり判定
 	WeaponAttackCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
 	WeaponAttackCollision->SetupAttachment(WeaponMesh);
@@ -43,6 +44,9 @@ void AWeaponBase::BeginPlay()
 void AWeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	// todo コリジョンプリセットで当たらないようにしたい
+	if (!Cast<AMonsterCharacter>(OtherActor)) return;
+	
 	OnHitAttack.Broadcast(OtherActor);
 	
 	UE_LOG(LogTemp, Log, TEXT("Hit Actor Name : %s"), *OtherActor->GetName());
@@ -50,12 +54,18 @@ void AWeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 
 void AWeaponBase::BeginWeaponAttack()
 {
-	WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	if (WeaponAttackCollision)
+	{
+		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	}
 }
 
 void AWeaponBase::EndWeaponAttack()
 {
-	WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (WeaponAttackCollision)
+	{
+		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }
 
 void AWeaponBase::AttachSheathingSocket(USkeletalMeshComponent* AttachMesh)

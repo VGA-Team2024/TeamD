@@ -25,22 +25,25 @@ float UDealDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const 
 	}
 	
 	// 計算済みのダメージ値 初期値にプレイヤーの攻撃力を入れる 調整で100で割る todo プレイヤーの一時的なバフを追加する
-	float CalculatedDamage = OwnerPlayer->WeaponActor->WeaponStatus.AttackPower / 100;
+	float CalculatedDamage = OwnerPlayer->WeaponActor->WeaponStatus.AttackPower / 100.f;
 
 	// アビリティを取得
-	const TObjectPtr<UGameplayAbility> ActiveAbility = PlayerAbilitySystem->GetActivatableAbilities()[0].Ability;
 	TObjectPtr<UPlayerAttackAbilityBase> AttackAbility;
 
-	// 攻撃アビリティからモーション値を掛ける
-	if (ActiveAbility && ((AttackAbility = Cast<UPlayerAttackAbilityBase>(ActiveAbility))))
+	for (FGameplayAbilitySpec AbilitySpec : PlayerAbilitySystem->GetActivatableAbilities())
 	{
-		CalculatedDamage *= AttackAbility->MotionValue;
+		if (AbilitySpec.Ability->IsActive() && ((AttackAbility = Cast<UPlayerAttackAbilityBase>(AbilitySpec.Ability))))
+		{
+			break;
+		}
 	}
-	else
+
+	if (!AttackAbility)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ダメージ計算時に攻撃アビリティを確認できなかった"));
-		return 0.f;
+		UE_LOG(LogTemp, Warning, TEXT("UDealDamageCustomCalculation.cpp : 攻撃アビリティを取得できなかった"));
 	}
+	
+	CalculatedDamage *= AttackAbility->MotionValue;
 
 	// todo 会心、状態補正、肉質
 	

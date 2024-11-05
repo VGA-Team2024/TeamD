@@ -1,21 +1,14 @@
 #include "Character/AnimNotify/AbilityTransitionNotifyState.h"
 
-void UAbilityTransitionNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
-	float TotalDuration)
-{
-	OwnerPlayer = Cast<APlayerCharacter>(MeshComp->GetOwner());
-
-	if (OwnerPlayer)
-	{
-		PlayerAbilitySystemComponent = OwnerPlayer->GetAbilitySystemComponent();
-	}
-}
-
 void UAbilityTransitionNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
 	float FrameDeltaTime)
 {
+	const TObjectPtr<APlayerCharacter> OwnerPlayer = Cast<APlayerCharacter>(MeshComp->GetOwner());
+	if (!OwnerPlayer) return;
+	const TObjectPtr<UAbilitySystemComponent> PlayerAbilitySystemComponent = OwnerPlayer->GetAbilitySystemComponent();
+	
 	// 保存したInputのTagがなければreturn
-	if (!OwnerPlayer || !PlayerAbilitySystemComponent->HasMatchingGameplayTag(SaveInputTagRoot)) return;
+	if (!PlayerAbilitySystemComponent || !PlayerAbilitySystemComponent->HasMatchingGameplayTag(SaveInputTagRoot)) return;
 
 	// Abilityを起動してみる
 	for (const auto Ability : TransitionalAbilities)
@@ -25,20 +18,23 @@ void UAbilityTransitionNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp,
 
 	// ループ中に削除するとバグるので削除予定のTagを一時保存しておく
 	TArray<FGameplayTag> TagsToRemove;
-	
-	// 持ってるTagをループする
-	for (FGameplayTag Tag : PlayerAbilitySystemComponent->GetOwnedGameplayTags().GetGameplayTagArray())
-	{
-		// SaveInputだったら消す
-		if (Tag.MatchesTag(SaveInputTagRoot) || Tag == SaveInputTagRoot)
-		{
-			TagsToRemove.Add(Tag);
-		}
-	}
 
-	// 後で削除
-	for (const FGameplayTag Tag : TagsToRemove)
+	while (PlayerAbilitySystemComponent->HasMatchingGameplayTag(SaveInputTagRoot))
 	{
-		PlayerAbilitySystemComponent->RemoveLooseGameplayTag(Tag);
+		// 持ってるTagをループする
+		for (FGameplayTag Tag : PlayerAbilitySystemComponent->GetOwnedGameplayTags().GetGameplayTagArray())
+		{
+			// SaveInputだったら消す
+			if (Tag.MatchesTag(SaveInputTagRoot) || Tag == SaveInputTagRoot)
+			{
+				TagsToRemove.Add(Tag);
+			}
+		}
+	
+		// 後で削除
+		for (const FGameplayTag Tag : TagsToRemove)
+		{
+			PlayerAbilitySystemComponent->RemoveLooseGameplayTag(Tag);
+		}
 	}
 }
