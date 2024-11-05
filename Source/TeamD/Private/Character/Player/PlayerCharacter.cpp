@@ -185,7 +185,7 @@ void APlayerCharacter::AnimHitStop(AActor* Target)
 	if (!PlayerMesh || !((AnimInstance = PlayerMesh->GetAnimInstance())) || !((CurrentMontage = AnimInstance->GetCurrentActiveMontage()))) return;
 
 	// 再生を一時停止
-	AnimInstance->Montage_SetPlayRate(CurrentMontage, .01f);
+	AnimInstance->Montage_SetPlayRate(CurrentMontage, StopSpeed);
 
 	// タイマーセット ヒットストップの時間はワールド時間
 	FTimerHandle TimerHandle;
