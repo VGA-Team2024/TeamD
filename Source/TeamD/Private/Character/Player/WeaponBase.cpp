@@ -1,5 +1,4 @@
 #include "Character/Player/WeaponBase.h"
-
 #include "Character/Monster/MonsterCharacter.h"
 
 AWeaponBase::AWeaponBase()
@@ -7,12 +6,12 @@ AWeaponBase::AWeaponBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// root
-	USceneComponent* DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultSceneRoot"));
+	const TObjectPtr<USceneComponent> DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultSceneRoot"));
 	RootComponent = DefaultSceneRoot;
-
+	
 	// 武器のメッシュ
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-	WeaponMesh->SetupAttachment(RootComponent);
+	WeaponMesh->SetupAttachment(DefaultSceneRoot);
 	// 武器の当たり判定
 	WeaponAttackCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
 	WeaponAttackCollision->SetupAttachment(WeaponMesh);
@@ -27,7 +26,7 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (WeaponAttackCollision.IsValid())
+	if (WeaponAttackCollision)
 	{
 		WeaponAttackCollision->IgnoreActorWhenMoving(this, true);
 		WeaponAttackCollision->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnBeginOverlap);
@@ -55,7 +54,7 @@ void AWeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 
 void AWeaponBase::BeginWeaponAttack()
 {
-	if (WeaponAttackCollision.IsValid())
+	if (WeaponAttackCollision)
 	{
 		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	}
@@ -63,7 +62,7 @@ void AWeaponBase::BeginWeaponAttack()
 
 void AWeaponBase::EndWeaponAttack()
 {
-	if (WeaponAttackCollision.IsValid())
+	if (WeaponAttackCollision)
 	{
 		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}

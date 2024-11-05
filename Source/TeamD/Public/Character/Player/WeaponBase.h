@@ -37,12 +37,12 @@ protected:
 	virtual void BeginPlay() override;
 
 	// 武器の攻撃当たり判定
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"), Category = "Components")
-	TWeakObjectPtr<UCapsuleComponent> WeaponAttackCollision;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"), Category = "Components")
+	TObjectPtr<UCapsuleComponent> WeaponAttackCollision;
 
 	// 武器のStaticMesh
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
-	UStaticMeshComponent* WeaponMesh;
+	TObjectPtr<UStaticMeshComponent> WeaponMesh;
 
 public:
 	// 武器の性能パラメータ
