@@ -36,6 +36,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaSeconds) override;
+
 	// 武器の攻撃当たり判定
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"), Category = "Components")
 	TObjectPtr<UCapsuleComponent> WeaponAttackCollision;
@@ -55,6 +57,14 @@ public:
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	// Sweepの当たり判定をとる
+	void CheckSweep();
+	
+	// 攻撃判定中か
+	bool IsAttacking;
+
+	// 前フレームの位置
 
 	// 攻撃判定開始
 	void BeginWeaponAttack();
@@ -93,4 +103,12 @@ public:
 	// 抜刀状態ソケットと重なるやつ
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach, meta = (DisplayPriority = -1))
 	TObjectPtr<USceneComponent> DrawingAttachPivot;
+
+	//------------------------デバッグ------------------------
+	
+	bool IsDrawing = false;
+	
+	// TickでPivotの調整を可能にするか
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug)
+	bool ApplyPivotOnTick = true;
 };

@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "Character/CharacterBase.h"
-#include "GAS/Monster/MonsterAttributeSet.h"
 #include "MonsterCharacter.generated.h"
 
 /**

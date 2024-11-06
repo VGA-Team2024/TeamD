@@ -131,6 +131,9 @@ protected:
 	UFUNCTION()
 	void DealDamage(AActor* Target);
 
+	// ダメージを与えた後の情報を受け取る
+	
+
 	// ヒットストップ
 	UFUNCTION()
 	void AnimHitStop(AActor* Target);
