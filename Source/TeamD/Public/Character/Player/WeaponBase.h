@@ -58,14 +58,6 @@ public:
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	// Sweepの当たり判定をとる
-	void CheckSweep();
-	
-	// 攻撃判定中か
-	bool IsAttacking;
-
-	// 前フレームの位置
-
 	// 攻撃判定開始
 	void BeginWeaponAttack();
 

@@ -70,7 +70,7 @@ void AWeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	// todo コリジョンプリセットで当たらないようにしたい
 	if (!Cast<AMonsterCharacter>(OtherActor)) return;
 	
-	OnHitAttack.Broadcast(OtherActor);
+	//OnHitAttack.Broadcast(OtherActor);
 	
 }
 

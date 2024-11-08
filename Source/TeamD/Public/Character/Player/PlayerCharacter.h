@@ -7,7 +7,6 @@
 #include "InputAction.h"
 #include "InputActionValue.h"
 #include "WeaponBase.h"
-#include "GAS/Player/PlayerAttributeSet.h"
 #include "PlayerCharacter.generated.h"
 
 // プレイヤーの装備

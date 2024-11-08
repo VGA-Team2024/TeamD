@@ -4,6 +4,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GAS/Monster/MonsterAttributeSet.h"
+#include "GAS/Player/PlayerAttributeSet.h"
 
 APlayerCharacter::APlayerCharacter()
 {
