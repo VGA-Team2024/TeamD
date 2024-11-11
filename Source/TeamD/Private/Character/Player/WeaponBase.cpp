@@ -29,7 +29,6 @@ void AWeaponBase::BeginPlay()
 	if (WeaponAttackCollision)
 	{
 		WeaponAttackCollision->IgnoreActorWhenMoving(this, true);
-		//WeaponAttackCollision->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnBeginOverlap);
 		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		WeaponAttackCollision->IgnoreActorWhenMoving(GetOwner(), true);
 	}
@@ -64,17 +63,6 @@ void AWeaponBase::Tick(float DeltaSeconds)
 	CheckAttackCollision();
 }
 
-void AWeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-                                 UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (!bCanHit) return;
-	
-	OnHitAttack.Broadcast(OtherActor);
-	bCanHit = false;
-	UE_LOG(LogTemp, Warning, TEXT("Hit Actor : %s, Comp : %s, Bone : %s, Is Sweep : %hd"), *OtherActor->GetName(),
-		*OtherComp->GetName(), *SweepResult.BoneName.ToString(), bFromSweep);
-}
-
 void AWeaponBase::BeginWeaponAttack()
 {
 	if (WeaponAttackCollision)
@@ -107,15 +95,8 @@ void AWeaponBase::CheckAttackCollision()
 	if (GetWorld()->SweepSingleByChannel(HitResult, LastCollisionPosition, EndLocation, FQuat(WeaponAttackCollision->GetComponentRotation()),
 		CollisionChannel, WeaponAttackCollision->GetCollisionShape()))
 	{
-		OnHitAttack.Broadcast(HitResult.GetActor());
+		OnHitAttack.Broadcast(HitResult);
 		bCanHit = false;
-		//UE_LOG(LogTemp, Warning, TEXT("Hit Actor : %s, Comp : %s, Bone : %s"), *HitResult.GetActor()->GetName(),
-			//*HitResult.GetComponent()->GetName(), *HitResult.BoneName.ToString());
-
-		if (AMonsterCharacter* Monster = Cast<AMonsterCharacter>(HitResult.GetActor()))
-		{
-			Monster->ConvertBoneNameToPart(HitResult.BoneName);
-		}
 	}
 	
 	LastCollisionPosition = EndLocation;

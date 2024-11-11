@@ -128,14 +128,11 @@ protected:
 
 	// ダメージを与える
 	UFUNCTION()
-	void DealDamage(AActor* Target);
-
-	// ダメージを与えた後の情報を受け取る
-	
+	void DealDamage(FHitResult HitResult);
 
 	// ヒットストップ
 	UFUNCTION()
-	void AnimHitStop(AActor* Target);
+	void AnimHitStop(FHitResult HitResult);
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
 	float StopSpeed = 0.f;

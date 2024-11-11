@@ -6,7 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "WeaponBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitDelegate, AActor*, Target);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitDelegate, FHitResult, HitResult);
 
 // 武器の性能パラメータ
 USTRUCT(BlueprintType)
@@ -53,17 +53,13 @@ public:
 
 	//------------------------攻撃------------------------
 
-	// 攻撃当たり判定の開始コールバック
-	UFUNCTION()
-	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
 	// 攻撃判定開始
 	void BeginWeaponAttack();
 
 	// 攻撃判定終了
 	void EndWeaponAttack();
 
+	// 当たり判定チェック
 	void CheckAttackCollision();
 
 	// 攻撃ごとのヒットを使ったかどうか todo モンハンは基本的にヒット回数１回だけど...

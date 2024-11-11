@@ -159,15 +159,13 @@ void APlayerCharacter::ApplyWeapon()
 	WeaponActor->OnHitAttack.AddDynamic(this, &APlayerCharacter::AnimHitStop);
 }
 
-void APlayerCharacter::DealDamage(AActor* Target)
+void APlayerCharacter::DealDamage(FHitResult HitResult)
 {
-	if (const ACharacterBase* TargetCharacter = Cast<ACharacterBase>(Target))
+	if (const ACharacterBase* TargetCharacter = Cast<ACharacterBase>(HitResult.GetActor()))
 	{
 		// Spec作成
 		FGameplayEffectContextHandle ContextHandle = AbilitySystemComponent->MakeEffectContext();
 		// HitResultにダメージを与えたActorを登録する
-		FHitResult HitResult;
-		HitResult.HitObjectHandle = FActorInstanceHandle(Target);
 		ContextHandle.AddHitResult(HitResult);
 		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, ContextHandle);
 
@@ -179,7 +177,7 @@ void APlayerCharacter::DealDamage(AActor* Target)
 	}
 }
 
-void APlayerCharacter::AnimHitStop(AActor* Target)
+void APlayerCharacter::AnimHitStop(FHitResult HitResult)
 {
 	TObjectPtr<UAnimInstance> AnimInstance;
 	TObjectPtr<UAnimMontage> CurrentMontage;
