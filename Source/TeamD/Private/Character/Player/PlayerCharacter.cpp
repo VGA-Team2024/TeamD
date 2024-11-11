@@ -3,6 +3,8 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GAS/Monster/MonsterAttributeSet.h"
+#include "GAS/Player/PlayerAttributeSet.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -157,26 +159,25 @@ void APlayerCharacter::ApplyWeapon()
 	WeaponActor->OnHitAttack.AddDynamic(this, &APlayerCharacter::AnimHitStop);
 }
 
-void APlayerCharacter::DealDamage(AActor* Target)
+void APlayerCharacter::DealDamage(FHitResult HitResult)
 {
-	if (const ACharacterBase* TargetCharacter = Cast<ACharacterBase>(Target))
+	if (const ACharacterBase* TargetCharacter = Cast<ACharacterBase>(HitResult.GetActor()))
 	{
 		// Spec作成
-		FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+		FGameplayEffectContextHandle ContextHandle = AbilitySystemComponent->MakeEffectContext();
 		// HitResultにダメージを与えたActorを登録する
-		FHitResult HitResult;
-		HitResult.HitObjectHandle = FActorInstanceHandle(Target);
-		EffectContext.AddHitResult(HitResult);
-		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, EffectContext);
+		ContextHandle.AddHitResult(HitResult);
+		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, ContextHandle);
 
 		if (SpecHandle.IsValid())
 		{
+			// Effectの適用
 			AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetCharacter->GetAbilitySystemComponent());
 		}
 	}
 }
 
-void APlayerCharacter::AnimHitStop(AActor* Target)
+void APlayerCharacter::AnimHitStop(FHitResult HitResult)
 {
 	TObjectPtr<UAnimInstance> AnimInstance;
 	TObjectPtr<UAnimMontage> CurrentMontage;

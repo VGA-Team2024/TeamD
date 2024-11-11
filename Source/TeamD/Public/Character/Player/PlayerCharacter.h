@@ -7,7 +7,6 @@
 #include "InputAction.h"
 #include "InputActionValue.h"
 #include "WeaponBase.h"
-#include "GAS/Player/PlayerAttributeSet.h"
 #include "PlayerCharacter.generated.h"
 
 // プレイヤーの装備
@@ -129,11 +128,11 @@ protected:
 
 	// ダメージを与える
 	UFUNCTION()
-	void DealDamage(AActor* Target);
+	void DealDamage(FHitResult HitResult);
 
 	// ヒットストップ
 	UFUNCTION()
-	void AnimHitStop(AActor* Target);
+	void AnimHitStop(FHitResult HitResult);
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
 	float StopSpeed = 0.f;

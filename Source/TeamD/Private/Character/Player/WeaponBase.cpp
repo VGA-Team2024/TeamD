@@ -29,7 +29,6 @@ void AWeaponBase::BeginPlay()
 	if (WeaponAttackCollision)
 	{
 		WeaponAttackCollision->IgnoreActorWhenMoving(this, true);
-		WeaponAttackCollision->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnBeginOverlap);
 		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		WeaponAttackCollision->IgnoreActorWhenMoving(GetOwner(), true);
 	}
@@ -41,15 +40,27 @@ void AWeaponBase::BeginPlay()
 	
 }
 
-void AWeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AWeaponBase::Tick(float DeltaSeconds)
 {
-	// todo コリジョンプリセットで当たらないようにしたい
-	if (!Cast<AMonsterCharacter>(OtherActor)) return;
-	
-	OnHitAttack.Broadcast(OtherActor);
-	
-	UE_LOG(LogTemp, Log, TEXT("Hit Actor Name : %s"), *OtherActor->GetName());
+	Super::Tick(DeltaSeconds);
+
+	if (ApplyPivotOnTick)
+	{
+		if (IsDrawing)
+		{
+			const FRotator RelativeRotate = DrawingAttachPivot->GetRelativeRotation().GetInverse();
+			SetActorRelativeRotation(RelativeRotate);
+			SetActorRelativeLocation(RelativeRotate.RotateVector(-DrawingAttachPivot->GetRelativeLocation()));
+		}
+		else
+		{
+			const FRotator RelativeRotate = SheathingAttachPivot->GetRelativeRotation().GetInverse();
+			SetActorRelativeRotation(RelativeRotate);
+			SetActorRelativeLocation(RelativeRotate.RotateVector(-SheathingAttachPivot->GetRelativeLocation()));
+		}
+	}
+
+	CheckAttackCollision();
 }
 
 void AWeaponBase::BeginWeaponAttack()
@@ -57,6 +68,7 @@ void AWeaponBase::BeginWeaponAttack()
 	if (WeaponAttackCollision)
 	{
 		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		bCanHit = true;
 	}
 }
 
@@ -65,7 +77,29 @@ void AWeaponBase::EndWeaponAttack()
 	if (WeaponAttackCollision)
 	{
 		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		bCanHit = false;
 	}
+}
+
+void AWeaponBase::CheckAttackCollision()
+{
+	if (!bCanHit)
+	{
+		LastCollisionPosition = WeaponAttackCollision->GetComponentLocation();
+		return;
+	}
+
+	FHitResult HitResult;
+	const FVector EndLocation = WeaponAttackCollision->GetComponentLocation();
+
+	if (GetWorld()->SweepSingleByChannel(HitResult, LastCollisionPosition, EndLocation, FQuat(WeaponAttackCollision->GetComponentRotation()),
+		CollisionChannel, WeaponAttackCollision->GetCollisionShape()))
+	{
+		OnHitAttack.Broadcast(HitResult);
+		bCanHit = false;
+	}
+	
+	LastCollisionPosition = EndLocation;
 }
 
 void AWeaponBase::AttachSheathingSocket(USkeletalMeshComponent* AttachMesh)
@@ -78,6 +112,7 @@ void AWeaponBase::AttachSheathingSocket(USkeletalMeshComponent* AttachMesh)
 		const FRotator RelativeRotate = SheathingAttachPivot->GetRelativeRotation().GetInverse();
 		SetActorRelativeRotation(RelativeRotate);
 		SetActorRelativeLocation(RelativeRotate.RotateVector(-SheathingAttachPivot->GetRelativeLocation()));
+		IsDrawing = false;
 	}
 	else
 	{
@@ -95,6 +130,7 @@ void AWeaponBase::AttachDrawingSocket(USkeletalMeshComponent* AttachMesh)
 		const FRotator RelativeRotate = DrawingAttachPivot->GetRelativeRotation().GetInverse();
 		SetActorRelativeRotation(RelativeRotate);
 		SetActorRelativeLocation(RelativeRotate.RotateVector(-DrawingAttachPivot->GetRelativeLocation()));
+		IsDrawing = true;
 	}
 	else
 	{

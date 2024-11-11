@@ -2,8 +2,26 @@
 
 #include "CoreMinimal.h"
 #include "Character/CharacterBase.h"
-#include "GAS/Monster/MonsterAttributeSet.h"
 #include "MonsterCharacter.generated.h"
+
+// モンスターの部位情報
+USTRUCT(BlueprintType)
+struct FMonsterBodyPart
+{
+	GENERATED_BODY()
+
+	// 名前
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FName PartName;
+
+	// 肉質
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float MeatQuality = 100.f;
+
+	// 部位のコリジョンがついているボーンの名前 改行区切り
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (MultiLine = true))
+	FText BoneNames;
+};
 
 /**
  * 
@@ -16,6 +34,10 @@ class TEAMD_API AMonsterCharacter : public ACharacterBase
 public:
 	AMonsterCharacter();
 
-	// UPROPERTY(BlueprintReadOnly, Category = GAS)
-	// TObjectPtr<UMonsterAttributeSet> MonsterAttributeSet;
+	// モンスターの部位情報
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Status)
+	TArray<FMonsterBodyPart> BodyParts;
+
+	// ボーンの名前から部位を返す
+	FMonsterBodyPart* ConvertBoneNameToPart(const FName& TargetBoneName);
 };
