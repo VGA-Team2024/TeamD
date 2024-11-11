@@ -64,7 +64,17 @@ public:
 	// 攻撃判定終了
 	void EndWeaponAttack();
 
+	void CheckAttackCollision();
+
+	// 攻撃ごとのヒットを使ったかどうか todo モンハンは基本的にヒット回数１回だけど...
+	bool bCanHit;
+
+	FVector LastCollisionPosition;
+
 	FOnHitDelegate OnHitAttack;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TEnumAsByte<ECollisionChannel> CollisionChannel;
 	
 	// 武器の攻撃Ability
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

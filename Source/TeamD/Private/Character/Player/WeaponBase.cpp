@@ -29,7 +29,7 @@ void AWeaponBase::BeginPlay()
 	if (WeaponAttackCollision)
 	{
 		WeaponAttackCollision->IgnoreActorWhenMoving(this, true);
-		WeaponAttackCollision->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnBeginOverlap);
+		//WeaponAttackCollision->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnBeginOverlap);
 		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		WeaponAttackCollision->IgnoreActorWhenMoving(GetOwner(), true);
 	}
@@ -60,18 +60,19 @@ void AWeaponBase::Tick(float DeltaSeconds)
 			SetActorRelativeLocation(RelativeRotate.RotateVector(-SheathingAttachPivot->GetRelativeLocation()));
 		}
 	}
+
+	CheckAttackCollision();
 }
 
 void AWeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                  UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Log, TEXT("Hit Actor : %s, Comp : %s, Bone : %s"), *OtherActor->GetName(), *OtherComp->GetName(), *SweepResult.BoneName.ToString());
+	if (!bCanHit) return;
 	
-	// todo コリジョンプリセットで当たらないようにしたい
-	if (!Cast<AMonsterCharacter>(OtherActor)) return;
-	
-	//OnHitAttack.Broadcast(OtherActor);
-	
+	OnHitAttack.Broadcast(OtherActor);
+	bCanHit = false;
+	UE_LOG(LogTemp, Warning, TEXT("Hit Actor : %s, Comp : %s, Bone : %s, Is Sweep : %hd"), *OtherActor->GetName(),
+		*OtherComp->GetName(), *SweepResult.BoneName.ToString(), bFromSweep);
 }
 
 void AWeaponBase::BeginWeaponAttack()
@@ -79,6 +80,7 @@ void AWeaponBase::BeginWeaponAttack()
 	if (WeaponAttackCollision)
 	{
 		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		bCanHit = true;
 	}
 }
 
@@ -87,7 +89,36 @@ void AWeaponBase::EndWeaponAttack()
 	if (WeaponAttackCollision)
 	{
 		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		bCanHit = false;
 	}
+}
+
+void AWeaponBase::CheckAttackCollision()
+{
+	if (!bCanHit)
+	{
+		LastCollisionPosition = WeaponAttackCollision->GetComponentLocation();
+		return;
+	}
+
+	FHitResult HitResult;
+	const FVector EndLocation = WeaponAttackCollision->GetComponentLocation();
+
+	if (GetWorld()->SweepSingleByChannel(HitResult, LastCollisionPosition, EndLocation, FQuat(WeaponAttackCollision->GetComponentRotation()),
+		CollisionChannel, WeaponAttackCollision->GetCollisionShape()))
+	{
+		OnHitAttack.Broadcast(HitResult.GetActor());
+		bCanHit = false;
+		//UE_LOG(LogTemp, Warning, TEXT("Hit Actor : %s, Comp : %s, Bone : %s"), *HitResult.GetActor()->GetName(),
+			//*HitResult.GetComponent()->GetName(), *HitResult.BoneName.ToString());
+
+		if (AMonsterCharacter* Monster = Cast<AMonsterCharacter>(HitResult.GetActor()))
+		{
+			Monster->ConvertBoneNameToPart(HitResult.BoneName);
+		}
+	}
+	
+	LastCollisionPosition = EndLocation;
 }
 
 void AWeaponBase::AttachSheathingSocket(USkeletalMeshComponent* AttachMesh)
