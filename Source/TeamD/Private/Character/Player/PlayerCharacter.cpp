@@ -3,19 +3,18 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Kismet/KismetSystemLibrary.h"
 
 APlayerCharacter::APlayerCharacter()
 {
 	// コンポーネントの初期化
-	AttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("AttributeSet"));
+	CharacterAttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("PlayerAttributeSet"));
 }
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayerMesh = FindComponentByClass<USkeletalMeshComponent>();
+	PlayerMesh = GetMesh();
 	SetupInput();
 	ApplyWeapon();
 }
@@ -35,9 +34,10 @@ void APlayerCharacter::SetupInput()
 			// Bind Action
 			EnhancedInputComponent->BindAction(MoveInput, ETriggerEvent::Triggered, this, &APlayerCharacter::MovePlayer);
 			EnhancedInputComponent->BindAction(LookInput, ETriggerEvent::Triggered, this, &APlayerCharacter::RotateControllerInput);
-			EnhancedInputComponent->BindAction(NormalAttackInput, ETriggerEvent::Triggered, this, &APlayerCharacter::NormalAttack);
-			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Triggered, this, &APlayerCharacter::PressedDodge);
+			EnhancedInputComponent->BindAction(NormalAttackInput, ETriggerEvent::Started, this, &APlayerCharacter::NormalAttack);
+			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Started, this, &APlayerCharacter::PressedDodge);
 			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Completed, this, &APlayerCharacter::ReleasedDodge);
+			EnhancedInputComponent->BindAction(DashInput, ETriggerEvent::Started, this, &APlayerCharacter::PressedDash);
 		}
 
 		// Input Mapping Contextを登録する
@@ -85,7 +85,28 @@ void APlayerCharacter::RotateControllerInput(const FInputActionValue& Value)
 
 void APlayerCharacter::NormalAttack()
 {
-	AbilitySystemComponent->TryActivateAbilitiesByTag(NormalAttackTag, true);
+	// 抜刀状態かの確認
+	if (IsDrawing) // 抜刀中
+	{
+		// SaveInput状態化の判定
+		if (AbilitySystemComponent->HasMatchingGameplayTag(SaveInputStateTag))
+		{
+			// SaveInputを有効にする
+			AbilitySystemComponent->AddLooseGameplayTag(NormalAttackTag);
+		}
+		else
+		{
+			// 攻撃アビリティの再生
+			AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(NormalAttackTag), true);
+		}
+	}
+	else
+	{
+		// 抜刀アビリティの再生
+		AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(DrawingSwordTag), true);
+		
+		IsDrawing = true;
+	}
 }
 
 void APlayerCharacter::PressedDodge()
@@ -96,6 +117,20 @@ void APlayerCharacter::PressedDodge()
 void APlayerCharacter::ReleasedDodge()
 {
 	StopJumping();
+}
+
+void APlayerCharacter::PressedDash()
+{
+	if (IsDrawing)
+	{
+		// 納刀アビリティの再生
+		AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(SheathingOfSwordTag), true);
+		IsDrawing = false;
+		
+		return;
+	}
+
+	// todo ダッシュってあるのか？
 }
 
 void APlayerCharacter::ApplyWeapon()
@@ -109,10 +144,57 @@ void APlayerCharacter::ApplyWeapon()
 	WeaponActor = GetWorld()->SpawnActor<AWeaponBase>(PlayerEquipment.Weapon, GetActorLocation(), GetActorRotation(), SpawnParams);
 
 	// Meshにアタッチ　あってるか分からん
-	WeaponActor->AttachToComponent(PlayerMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponActor->AttachSocketName);
+	WeaponActor->AttachSheathingSocket(PlayerMesh);
 
+	// 武器のAbilityをPlayerに持たせる
 	for (auto Ability : WeaponActor->AttackAbilities)
 	{
 		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1));
 	}
+
+	// OnHit
+	WeaponActor->OnHitAttack.AddDynamic(this, &APlayerCharacter::DealDamage);
+	WeaponActor->OnHitAttack.AddDynamic(this, &APlayerCharacter::AnimHitStop);
+}
+
+void APlayerCharacter::DealDamage(AActor* Target)
+{
+	if (const ACharacterBase* TargetCharacter = Cast<ACharacterBase>(Target))
+	{
+		// Spec作成
+		FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+		// HitResultにダメージを与えたActorを登録する
+		FHitResult HitResult;
+		HitResult.HitObjectHandle = FActorInstanceHandle(Target);
+		EffectContext.AddHitResult(HitResult);
+		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, EffectContext);
+
+		if (SpecHandle.IsValid())
+		{
+			AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetCharacter->GetAbilitySystemComponent());
+		}
+	}
+}
+
+void APlayerCharacter::AnimHitStop(AActor* Target)
+{
+	TObjectPtr<UAnimInstance> AnimInstance;
+	TObjectPtr<UAnimMontage> CurrentMontage;
+
+	// nullチェックと代入
+	if (!PlayerMesh || !((AnimInstance = PlayerMesh->GetAnimInstance())) || !((CurrentMontage = AnimInstance->GetCurrentActiveMontage()))) return;
+
+	// 再生を一時停止
+	AnimInstance->Montage_SetPlayRate(CurrentMontage, StopSpeed);
+
+	// タイマーセット ヒットストップの時間はワールド時間
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this, AnimInstance, CurrentMontage]()
+	{
+		if (AnimInstance)
+		{
+			// 元の再生速度に戻す
+			AnimInstance->Montage_SetPlayRate(CurrentMontage, 1.f);
+		}
+	}, HitStopDuration, false); // todo ストップ時間の参照
 }

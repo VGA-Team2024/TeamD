@@ -39,6 +39,15 @@ protected:
 	// 自身のSkeletalMesh
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component)
 	TObjectPtr<USkeletalMeshComponent> PlayerMesh;
+
+//------------------------GAS------------------------
+
+	// UPROPERTY(BlueprintReadOnly, Category = GAS)
+	// TObjectPtr<UPlayerAttributeSet> PlayerAttributeSet;
+	
+	// 攻撃のEffect
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GAS)
+	TSubclassOf<UGameplayEffect> DealDamageEffectClass;
 	
 //------------------------input------------------------
 	
@@ -58,10 +67,24 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
 	TObjectPtr<UInputAction> DodgeInput;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	TObjectPtr<UInputAction> DashInput;
+
 	// input tag
 	// 通常攻撃
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
-	FGameplayTagContainer NormalAttackTag;
+	FGameplayTag NormalAttackTag;
+	
+	// 抜刀
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
+	FGameplayTag DrawingSwordTag;
+	
+	// 納刀
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
+	FGameplayTag SheathingOfSwordTag;
+
+	// 入力保存状態のTag
+	inline static const FGameplayTag SaveInputStateTag = FGameplayTag::RequestGameplayTag(FName("Input.SaveInput"));
 
 private:
 	// input設定
@@ -77,16 +100,44 @@ private:
 	// Dodge
 	void PressedDodge();
 	void ReleasedDodge();
+	// Dash
+	void PressedDash();
+	void ReleasedDash(){};
+
+//------------------------状態------------------------
+
+protected:
+	// 抜刀状態か todo EnumとかTagでやってもいい 納刀状態かはプレイヤーが持つか武器が持つか
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = State)
+	bool IsDrawing = false;
 
 //------------------------装備------------------------
 
-protected:
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	FPlayerEquipmentStruct PlayerEquipment;
 
 	// 現在装備している武器のActor
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Equipment)
 	TObjectPtr<AWeaponBase> WeaponActor;
 
+protected:
 	// Playerの装備から武器を適用させる
 	void ApplyWeapon();
+
+//------------------------攻撃------------------------
+
+	// ダメージを与える
+	UFUNCTION()
+	void DealDamage(AActor* Target);
+
+	// ヒットストップ
+	UFUNCTION()
+	void AnimHitStop(AActor* Target);
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
+	float StopSpeed = 0.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
+	float HitStopDuration = 0.f;
 };

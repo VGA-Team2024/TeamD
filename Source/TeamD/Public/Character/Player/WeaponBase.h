@@ -6,6 +6,24 @@
 #include "AbilitySystemComponent.h"
 #include "WeaponBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitDelegate, AActor*, Target);
+
+// 武器の性能パラメータ
+USTRUCT(BlueprintType)
+struct FWeaponStatus
+{
+	GENERATED_BODY()
+
+	// 攻撃力
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int AttackPower;
+
+	FWeaponStatus()
+		: AttackPower(10)
+	{
+	}
+};
+
 // プレイヤーの武器の基底
 UCLASS()
 class TEAMD_API AWeaponBase : public AActor
@@ -19,12 +37,19 @@ protected:
 	virtual void BeginPlay() override;
 
 	// 武器の攻撃当たり判定
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"), Category = "Components")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"), Category = "Components")
 	TObjectPtr<UCapsuleComponent> WeaponAttackCollision;
 
 	// 武器のStaticMesh
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
-	UStaticMeshComponent* WeaponMesh;
+	TObjectPtr<UStaticMeshComponent> WeaponMesh;
+
+public:
+	// 武器の性能パラメータ
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FWeaponStatus WeaponStatus;
+
+	//------------------------攻撃------------------------
 
 	// 攻撃当たり判定の開始コールバック
 	UFUNCTION()
@@ -37,11 +62,35 @@ protected:
 	// 攻撃判定終了
 	void EndWeaponAttack();
 
-public:
+	FOnHitDelegate OnHitAttack;
+	
 	// 武器の攻撃Ability
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<TSubclassOf<UGameplayAbility>> AttackAbilities;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FName AttachSocketName;
+	//------------------------アタッチ------------------------
+
+	// 納刀のソケットにアタッチする
+	UFUNCTION(BlueprintCallable, Category = Attach)
+	void AttachSheathingSocket(USkeletalMeshComponent* AttachMesh);
+	
+	// 抜刀のソケットにアタッチする
+	UFUNCTION(BlueprintCallable, Category = Attach)
+	void AttachDrawingSocket(USkeletalMeshComponent* AttachMesh);
+	
+	// 納刀状態にアタッチするソケット名
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach)
+	FName SheathingAttachSocketName;
+
+	// 納刀状態ソケットと重なるやつ
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach)
+	TObjectPtr<USceneComponent> SheathingAttachPivot;
+
+	// 抜刀状態にアタッチするソケット名
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach)
+	FName DrawingAttachSocketName;
+
+	// 抜刀状態ソケットと重なるやつ
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach, meta = (DisplayPriority = -1))
+	TObjectPtr<USceneComponent> DrawingAttachPivot;
 };
