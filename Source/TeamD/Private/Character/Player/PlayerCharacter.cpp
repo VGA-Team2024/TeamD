@@ -177,6 +177,22 @@ void APlayerCharacter::DealDamage(FHitResult HitResult)
 	}
 }
 
+void APlayerCharacter::OnDealtDamage(float Damage, FVector HitPoint)
+{
+	if (DamageUIClass)
+	{
+		if (const TObjectPtr<UDamageDisplayWidget> DamageUIInstance = CreateWidget<UDamageDisplayWidget>(GetWorld(), DamageUIClass))
+		{
+			DamageUIInstance->AddToViewport();
+
+			if (const TObjectPtr<APlayerController> PlayerController = Cast<APlayerController>(GetController()))
+			{
+				DamageUIInstance->InitDamageDisplay(Damage, HitPoint, PlayerController);
+			}
+		}
+	}
+}
+
 void APlayerCharacter::AnimHitStop(FHitResult HitResult)
 {
 	TObjectPtr<UAnimInstance> AnimInstance;

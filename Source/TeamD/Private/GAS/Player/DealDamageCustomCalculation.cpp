@@ -50,8 +50,12 @@ float UDealDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const 
 	// 肉質
 	CalculatedDamage *= TargetMonster->ConvertBoneNameToPart(Spec.GetEffectContext().GetHitResult()->BoneName)->MeatQuality / 100.f;
 
-	// todo 会心、状態補正、肉質
+	// todo 会心、状態補正
 
 	// 四捨五入して出力
-	return std::round(CalculatedDamage);
+	CalculatedDamage = std::round(CalculatedDamage);
+	// Playerに与えたダメージを通知
+	OwnerPlayer->OnDealtDamage(CalculatedDamage, Spec.GetEffectContext().GetHitResult()->ImpactPoint);
+	
+	return CalculatedDamage;
 }
