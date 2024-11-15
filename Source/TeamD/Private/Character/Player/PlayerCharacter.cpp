@@ -206,12 +206,17 @@ void APlayerCharacter::AnimHitStop(FHitResult HitResult)
 
 	// タイマーセット ヒットストップの時間はワールド時間
 	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this, AnimInstance, CurrentMontage]()
+	// 明示的にFTimerDelegateをバインドすることでエラー起きないみたい
+	FTimerDelegate TimerDelegate;
+
+	TimerDelegate.BindLambda([this, AnimInstance, CurrentMontage]()
 	{
 		if (AnimInstance)
 		{
 			// 元の再生速度に戻す
 			AnimInstance->Montage_SetPlayRate(CurrentMontage, 1.f);
 		}
-	}, HitStopDuration, false); // todo ストップ時間の参照
+	});
+	
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, HitStopDuration, false); // todo ストップ時間の参照
 }

@@ -1,5 +1,4 @@
 #include "GAS/Monster/MonsterAttributeSet.h"
-
 #include "GameplayEffectExtension.h"
 
 UMonsterAttributeSet::UMonsterAttributeSet()
