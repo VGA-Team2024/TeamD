@@ -7,6 +7,7 @@
 #include "InputAction.h"
 #include "InputActionValue.h"
 #include "WeaponBase.h"
+#include "Character/UserInterface/DamageDisplayWidget.h"
 #include "PlayerCharacter.generated.h"
 
 // プレイヤーの装備
@@ -139,4 +140,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
 	float HitStopDuration = 0.f;
+
+public:
+	// 与えたダメージ情報を受け取る
+	void OnDealtDamage(float Damage, FVector HitPoint);
+
+	// ダメージUIのクラス
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
+	TSubclassOf<UDamageDisplayWidget> DamageUIClass;
 };
