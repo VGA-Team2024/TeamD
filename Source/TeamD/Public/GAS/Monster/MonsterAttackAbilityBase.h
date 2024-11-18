@@ -4,6 +4,8 @@
 #include "Abilities/GameplayAbility.h"
 #include "MonsterAttackAbilityBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDelegate);
+
 /**
  * モンスターの攻撃アビリティ基底クラス
  */
@@ -19,6 +21,9 @@ public:
 	// EndAbilityをAddDynamicするため
 	UFUNCTION()
 	void CallEndAbility();
+
+	UPROPERTY(BlueprintAssignable)
+	FDelegate OnEndAbility;
 	
 	// モーション値
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Parameter)

@@ -30,4 +30,5 @@ void UMonsterAttackAbilityBase::ActivateAbility(const FGameplayAbilitySpecHandle
 void UMonsterAttackAbilityBase::CallEndAbility()
 {
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
+	OnEndAbility.Broadcast();
 }

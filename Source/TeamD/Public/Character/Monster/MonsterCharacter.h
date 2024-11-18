@@ -34,6 +34,11 @@ class TEAMD_API AMonsterCharacter : public ACharacterBase
 public:
 	AMonsterCharacter();
 
+	virtual void BeginPlay() override;
+	
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
 	// モンスターの部位情報
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Status)
 	TArray<FMonsterBodyPart> BodyParts;

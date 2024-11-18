@@ -1,9 +1,26 @@
 #include "Character/Monster/MonsterCharacter.h"
 #include "GAS/Monster/MonsterAttributeSet.h"
+#include "PhysicsEngine/BodySetup.h"
 
 AMonsterCharacter::AMonsterCharacter()
 {
 	CharacterAttributeSet = CreateDefaultSubobject<UMonsterAttributeSet>(TEXT("MonsterAttributeSet"));
+}
+
+void AMonsterCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (GetMesh())
+	{
+		GetMesh()->OnComponentHit.AddDynamic(this, &AMonsterCharacter::OnHit);
+	}
+}
+
+void AMonsterCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& Hit)
+{
+	UE_LOG(LogTemp, Log, TEXT("%s"), *Hit.MyBoneName.ToString());
 }
 
 FMonsterBodyPart* AMonsterCharacter::ConvertBoneNameToPart(const FName& TargetBoneName)

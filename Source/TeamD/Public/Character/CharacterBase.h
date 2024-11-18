@@ -30,6 +30,10 @@ protected:
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 
+	// 現在ActiveなAbilityを取得する
+	UFUNCTION(BlueprintCallable, Category = GAS)
+	void GetActiveAbilities(TArray<UGameplayAbility*>& ActiveAbilities);
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = GAS)
 	TObjectPtr<UAttributeSet> CharacterAttributeSet;
 
