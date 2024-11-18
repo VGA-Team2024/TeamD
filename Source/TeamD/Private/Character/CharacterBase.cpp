@@ -30,3 +30,17 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
+void ACharacterBase::GetActiveAbilities(TArray<UGameplayAbility*>& ActiveAbilities)
+{
+	for (auto AbilitySpec : AbilitySystemComponent->GetActivatableAbilities())
+	{
+		if (AbilitySpec.IsActive())
+		{
+			for (UGameplayAbility* ActiveAbility : AbilitySpec.GetAbilityInstances())
+			{
+				ActiveAbilities.Add(ActiveAbility);
+			}
+		}
+	}
+}
+
