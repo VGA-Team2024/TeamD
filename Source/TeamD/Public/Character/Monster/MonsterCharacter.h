@@ -35,10 +35,19 @@ public:
 	AMonsterCharacter();
 
 	virtual void BeginPlay() override;
+
+	//--------------------攻撃を与える--------------------
 	
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
+
+	TArray<FName> EnableShapesBoneName;
+	
+	//--------------------攻撃を受ける--------------------
+	
 	// モンスターの部位情報
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Status)
 	TArray<FMonsterBodyPart> BodyParts;
