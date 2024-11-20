@@ -11,6 +11,8 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangedValue, float, Value);
+
 /**
  * PlayerのAttributeSet
  */
@@ -54,4 +56,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = Damage)
 	FGameplayAttributeData Defense;
 	ATTRIBUTE_ACCESSORS(UPlayerAttributeSet, Defense)
+
+	// healthの変更イベント
+	UPROPERTY(BlueprintAssignable, Category = Event)
+	FOnChangedValue OnChangedHealth;
 };

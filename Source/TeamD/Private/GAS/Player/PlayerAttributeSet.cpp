@@ -16,15 +16,14 @@ void UPlayerAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 {
 	Super::PostGameplayEffectExecute(Data);
 
-	FGameplayEffectContextHandle Context = Data.EffectSpec.GetContext();
+	const FGameplayEffectContextHandle Context = Data.EffectSpec.GetContext();
 	// EffectOwnerのASCを取得
 	TObjectPtr<UAbilitySystemComponent> Source = Context.GetOriginalInstigatorAbilitySystemComponent();
 
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), .0f, GetMaxHealth()));
-
-		// todo 変更通知どうしようかな
+		OnChangedHealth.Broadcast(GetHealth());
 	}
 	else if (Data.EvaluatedData.Attribute == GetStaminaAttribute())
 	{
