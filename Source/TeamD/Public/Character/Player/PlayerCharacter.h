@@ -7,7 +7,7 @@
 #include "InputAction.h"
 #include "InputActionValue.h"
 #include "WeaponBase.h"
-#include "GAS/Player/PlayerAttributeSet.h"
+#include "Character/UserInterface/DamageDisplayWidget.h"
 #include "PlayerCharacter.generated.h"
 
 // プレイヤーの装備
@@ -129,15 +129,23 @@ protected:
 
 	// ダメージを与える
 	UFUNCTION()
-	void DealDamage(AActor* Target);
+	void DealDamage(FHitResult HitResult);
 
 	// ヒットストップ
 	UFUNCTION()
-	void AnimHitStop(AActor* Target);
+	void AnimHitStop(FHitResult HitResult);
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
 	float StopSpeed = 0.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
 	float HitStopDuration = 0.f;
+
+public:
+	// 与えたダメージ情報を受け取る
+	void OnDealtDamage(float Damage, FVector HitPoint);
+
+	// ダメージUIのクラス
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
+	TSubclassOf<UDamageDisplayWidget> DamageUIClass;
 };

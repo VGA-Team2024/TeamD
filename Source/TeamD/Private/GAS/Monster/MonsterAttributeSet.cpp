@@ -1,4 +1,5 @@
 #include "GAS/Monster/MonsterAttributeSet.h"
+#include "GameplayEffectExtension.h"
 
 UMonsterAttributeSet::UMonsterAttributeSet()
 	: Health(100.f)
@@ -9,6 +10,6 @@ UMonsterAttributeSet::UMonsterAttributeSet()
 void UMonsterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
-
-	UE_LOG(LogTemp, Log, TEXT("hp : %f"), GetHealth());
+	
+	UE_LOG(LogTemp, Log, TEXT("damage : %f, hp : %f"), Data.EvaluatedData.Magnitude, GetHealth());
 }

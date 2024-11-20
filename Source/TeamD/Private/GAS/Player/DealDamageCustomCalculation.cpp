@@ -3,6 +3,7 @@
 #include "Character/Player/PlayerCharacter.h"
 #include "AbilitySystemComponent.h"
 #include "GAS/Player/PlayerAttackAbilityBase.h"
+#include <iostream>
 
 float UDealDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
@@ -42,10 +43,19 @@ float UDealDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const 
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UDealDamageCustomCalculation.cpp : 攻撃アビリティを取得できなかった"));
 	}
-	
+
+	// モーション値
 	CalculatedDamage *= AttackAbility->MotionValue;
 
-	// todo 会心、状態補正、肉質
+	// 肉質
+	CalculatedDamage *= TargetMonster->ConvertBoneNameToPart(Spec.GetEffectContext().GetHitResult()->BoneName)->MeatQuality / 100.f;
+
+	// todo 会心、状態補正
+
+	// 四捨五入して出力
+	CalculatedDamage = std::round(CalculatedDamage);
+	// Playerに与えたダメージを通知
+	OwnerPlayer->OnDealtDamage(CalculatedDamage, Spec.GetEffectContext().GetHitResult()->ImpactPoint);
 	
 	return CalculatedDamage;
 }

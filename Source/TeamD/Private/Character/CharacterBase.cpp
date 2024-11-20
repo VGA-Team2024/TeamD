@@ -22,12 +22,25 @@ void ACharacterBase::BeginPlay()
 void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ACharacterBase::GetActiveAbilities(TArray<UGameplayAbility*>& ActiveAbilities)
+{
+	for (auto AbilitySpec : AbilitySystemComponent->GetActivatableAbilities())
+	{
+		if (AbilitySpec.IsActive())
+		{
+			for (UGameplayAbility* ActiveAbility : AbilitySpec.GetAbilityInstances())
+			{
+				ActiveAbilities.Add(ActiveAbility);
+			}
+		}
+	}
 }
 
