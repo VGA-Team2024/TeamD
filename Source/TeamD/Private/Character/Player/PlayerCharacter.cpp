@@ -19,6 +19,15 @@ void APlayerCharacter::BeginPlay()
 	PlayerMesh = GetMesh();
 	SetupInput();
 	ApplyWeapon();
+
+	// widgetの表示
+	if (PlayerCommonWidgetClass)
+	{
+		if (const TObjectPtr<UUserWidget> WidgetInstance = CreateWidget<UUserWidget>(GetWorld(), PlayerCommonWidgetClass))
+		{
+			WidgetInstance->AddToViewport();
+		}
+	}
 }
 
 void APlayerCharacter::SetupInput()

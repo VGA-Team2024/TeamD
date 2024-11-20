@@ -40,6 +40,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component)
 	TObjectPtr<USkeletalMeshComponent> PlayerMesh;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UUserWidget> PlayerCommonWidgetClass;
+
 //------------------------GAS------------------------
 
 	// UPROPERTY(BlueprintReadOnly, Category = GAS)
