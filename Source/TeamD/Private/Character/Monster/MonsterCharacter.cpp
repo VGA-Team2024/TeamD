@@ -37,8 +37,6 @@ void AMonsterCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAc
 				// Effectの適用
 				AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetPlayer->GetAbilitySystemComponent());
 			}
-
-			TargetPlayer->GetMesh()->GetAnimInstance()->Montage_Play(PlayerHitMontage);
 		}
 	}
 }

@@ -30,6 +30,11 @@ void APlayerCharacter::BeginPlay()
 	}
 }
 
+UPlayerAttributeSet* APlayerCharacter::GetPlayerAttributeSet()
+{
+	return Cast<UPlayerAttributeSet>(CharacterAttributeSet);
+}
+
 void APlayerCharacter::SetupInput()
 {
 	// PlayerControllerの取得
