@@ -5,7 +5,10 @@ ACharacterBase::ACharacterBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// 初期化
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	CustomAbilitySystemComponent = nullptr;
+	CustomAbilitySystemComponent = CreateDefaultSubobject<UCustomAbilitySystemComponent>(TEXT("CustomAbilitySystemComponent"));
+
+	if (!CustomAbilitySystemComponent) UE_LOG(LogTemp, Warning, TEXT("ASCが無い"));
 }
 
 void ACharacterBase::BeginPlay()
@@ -15,7 +18,7 @@ void ACharacterBase::BeginPlay()
 	// Abilityを与える
 	for (auto Ability : InitialAbilities)
 	{
-		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1, this));
+		CustomAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1, this));
 	}
 }
 
@@ -32,7 +35,7 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ACharacterBase::GetActiveAbilities(TArray<UGameplayAbility*>& ActiveAbilities)
 {
-	for (auto AbilitySpec : AbilitySystemComponent->GetActivatableAbilities())
+	for (auto AbilitySpec : CustomAbilitySystemComponent->GetActivatableAbilities())
 	{
 		if (AbilitySpec.IsActive())
 		{

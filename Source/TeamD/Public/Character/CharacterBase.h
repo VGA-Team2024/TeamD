@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
-#include "AbilitySystemComponent.h"
+#include "GAS/CustomAbilitySystemComponent.h"
 #include "CharacterBase.generated.h"
 
 UCLASS()
@@ -25,10 +25,10 @@ public:
 //------------------GAS------------------
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = GAS, meta = (AllowPrivateAccess = "true"))
-	UAbilitySystemComponent* AbilitySystemComponent = nullptr;
+	TObjectPtr<UCustomAbilitySystemComponent> CustomAbilitySystemComponent = nullptr;
 
 public:
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
+	virtual UCustomAbilitySystemComponent* GetAbilitySystemComponent() const override { return CustomAbilitySystemComponent; }
 
 	// 現在ActiveなAbilityを取得する
 	UFUNCTION(BlueprintCallable, Category = GAS)
