@@ -27,18 +27,16 @@ void AMonsterCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAc
 		if (const TObjectPtr<APlayerCharacter> TargetPlayer = Cast<APlayerCharacter>(OtherActor))
 		{
 			// Spec作成
-			FGameplayEffectContextHandle ContextHandle = AbilitySystemComponent->MakeEffectContext();
+			FGameplayEffectContextHandle ContextHandle = CustomAbilitySystemComponent->MakeEffectContext();
 			// HitResultにダメージを与えたActorを登録する
 			ContextHandle.AddHitResult(Hit);
-			const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DamageEffectClass, 0, ContextHandle);
+			const FGameplayEffectSpecHandle SpecHandle = CustomAbilitySystemComponent->MakeOutgoingSpec(DamageEffectClass, 0, ContextHandle);
 
 			if (SpecHandle.IsValid())
 			{
-				// Effectの適用
-				AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetPlayer->GetAbilitySystemComponent());
+				// Effectを適用
+				CustomAbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetPlayer->GetAbilitySystemComponent());
 			}
-
-			TargetPlayer->GetMesh()->GetAnimInstance()->Montage_Play(PlayerHitMontage);
 		}
 	}
 }

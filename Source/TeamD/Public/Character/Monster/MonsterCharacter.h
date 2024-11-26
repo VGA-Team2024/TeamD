@@ -45,10 +45,6 @@ public:
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 
 	TArray<FName> EnableShapesBoneName;
-
-	// ヒットアニメーション
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Parameter)
-	TObjectPtr<UAnimMontage> PlayerHitMontage;
 	
 	//--------------------攻撃を受ける--------------------
 	
