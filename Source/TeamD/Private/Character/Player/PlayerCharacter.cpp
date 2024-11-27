@@ -30,6 +30,11 @@ void APlayerCharacter::BeginPlay()
 	}
 }
 
+UPlayerAttributeSet* APlayerCharacter::GetPlayerAttributeSet()
+{
+	return Cast<UPlayerAttributeSet>(CharacterAttributeSet);
+}
+
 void APlayerCharacter::SetupInput()
 {
 	// PlayerControllerの取得
@@ -100,21 +105,21 @@ void APlayerCharacter::NormalAttack()
 	if (IsDrawing) // 抜刀中
 	{
 		// SaveInput状態化の判定
-		if (AbilitySystemComponent->HasMatchingGameplayTag(SaveInputStateTag))
+		if (CustomAbilitySystemComponent->HasMatchingGameplayTag(SaveInputStateTag))
 		{
 			// SaveInputを有効にする
-			AbilitySystemComponent->AddLooseGameplayTag(NormalAttackTag);
+			CustomAbilitySystemComponent->AddLooseGameplayTag(NormalAttackTag);
 		}
 		else
 		{
 			// 攻撃アビリティの再生
-			AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(NormalAttackTag), true);
+			CustomAbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(NormalAttackTag), true);
 		}
 	}
 	else
 	{
 		// 抜刀アビリティの再生
-		AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(DrawingSwordTag), true);
+		CustomAbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(DrawingSwordTag), true);
 		
 		IsDrawing = true;
 	}
@@ -135,7 +140,7 @@ void APlayerCharacter::PressedDash()
 	if (IsDrawing)
 	{
 		// 納刀アビリティの再生
-		AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(SheathingOfSwordTag), true);
+		CustomAbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(SheathingOfSwordTag), true);
 		IsDrawing = false;
 		
 		return;
@@ -160,7 +165,7 @@ void APlayerCharacter::ApplyWeapon()
 	// 武器のAbilityをPlayerに持たせる
 	for (auto Ability : WeaponActor->AttackAbilities)
 	{
-		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1));
+		CustomAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1));
 	}
 
 	// OnHit
@@ -173,15 +178,15 @@ void APlayerCharacter::DealDamage(FHitResult HitResult)
 	if (const ACharacterBase* TargetCharacter = Cast<ACharacterBase>(HitResult.GetActor()))
 	{
 		// Spec作成
-		FGameplayEffectContextHandle ContextHandle = AbilitySystemComponent->MakeEffectContext();
+		FGameplayEffectContextHandle ContextHandle = CustomAbilitySystemComponent->MakeEffectContext();
 		// HitResultにダメージを与えたActorを登録する
 		ContextHandle.AddHitResult(HitResult);
-		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, ContextHandle);
+		const FGameplayEffectSpecHandle SpecHandle = CustomAbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, ContextHandle);
 
 		if (SpecHandle.IsValid())
 		{
 			// Effectの適用
-			AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetCharacter->GetAbilitySystemComponent());
+			CustomAbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetCharacter->GetAbilitySystemComponent());
 		}
 	}
 }
