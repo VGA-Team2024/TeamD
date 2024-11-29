@@ -2,9 +2,9 @@ name: TeamUEBuild
 
 on:
   workflow_dispatch: {}
-  schedule:
-      # UTCなので9時間引いた値 JST換算だと午前4時
-      - cron: '0 19 * * *'
+  # schedule:
+  #     # UTCなので9時間引いた値 JST換算だと午前4時
+  #     - cron: '0 19 * * *'
 
 jobs:
   build:
