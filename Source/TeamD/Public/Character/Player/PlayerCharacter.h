@@ -40,11 +40,16 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component)
 	TObjectPtr<USkeletalMeshComponent> PlayerMesh;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UUserWidget> PlayerCommonWidgetClass;
+
 //------------------------GAS------------------------
 
-	// UPROPERTY(BlueprintReadOnly, Category = GAS)
-	// TObjectPtr<UPlayerAttributeSet> PlayerAttributeSet;
-	
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UPlayerAttributeSet* GetPlayerAttributeSet();
+
+protected:
 	// 攻撃のEffect
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GAS)
 	TSubclassOf<UGameplayEffect> DealDamageEffectClass;

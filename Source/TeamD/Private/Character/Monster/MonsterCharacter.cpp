@@ -1,6 +1,6 @@
 #include "Character/Monster/MonsterCharacter.h"
+#include "Character/Player/PlayerCharacter.h"
 #include "GAS/Monster/MonsterAttributeSet.h"
-#include "PhysicsEngine/BodySetup.h"
 
 AMonsterCharacter::AMonsterCharacter()
 {
@@ -20,7 +20,25 @@ void AMonsterCharacter::BeginPlay()
 void AMonsterCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Log, TEXT("%s"), *Hit.MyBoneName.ToString());
+	// 攻撃中のShapeかチェック
+	if (EnableShapesBoneName.Contains(Hit.MyBoneName))
+	{
+		// 当たった対象がPlayerかチェック
+		if (const TObjectPtr<APlayerCharacter> TargetPlayer = Cast<APlayerCharacter>(OtherActor))
+		{
+			// Spec作成
+			FGameplayEffectContextHandle ContextHandle = CustomAbilitySystemComponent->MakeEffectContext();
+			// HitResultにダメージを与えたActorを登録する
+			ContextHandle.AddHitResult(Hit);
+			const FGameplayEffectSpecHandle SpecHandle = CustomAbilitySystemComponent->MakeOutgoingSpec(DamageEffectClass, 0, ContextHandle);
+
+			if (SpecHandle.IsValid())
+			{
+				// Effectを適用
+				CustomAbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetPlayer->GetAbilitySystemComponent());
+			}
+		}
+	}
 }
 
 FMonsterBodyPart* AMonsterCharacter::ConvertBoneNameToPart(const FName& TargetBoneName)
