@@ -2,14 +2,13 @@
 #include "Character/Monster/MonsterCharacter.h"
 #include "Character/Player/PlayerCharacter.h"
 #include "GAS/Monster/MonsterAttackAbilityBase.h"
-#include "Kismet/GameplayStatics.h"
 
 float UDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
 	// 攻撃したモンスター
 	const TObjectPtr<AMonsterCharacter> OwnerMonster = Cast<AMonsterCharacter>(Spec.GetEffectContext().GetInstigator());
-	// 攻撃されたプレイヤー ゴリ押し取得
-	TObjectPtr<APlayerCharacter> TargetPlayer = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(OwnerMonster->GetWorld(), 0));
+	// 攻撃されたプレイヤー
+	TObjectPtr<APlayerCharacter> TargetPlayer = Cast<APlayerCharacter>(Spec.GetEffectContext().GetHitResult()->GetActor());
 
 	// if (Spec.GetContext().GetSourceObject()) todo TargetPlayerを取得できない　謎が深い
 	// {

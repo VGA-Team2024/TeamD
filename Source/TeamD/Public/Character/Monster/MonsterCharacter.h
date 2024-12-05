@@ -37,9 +37,14 @@ public:
 	virtual void BeginPlay() override;
 
 	//--------------------攻撃を与える--------------------
-	
+
+	// Meshからのコールバック
 	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	void OnHitMesh(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	// ダメージを呼び出す
+	UFUNCTION(BlueprintCallable)
+	void DealDamage(AActor* TargetActor);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
 	TSubclassOf<UGameplayEffect> DamageEffectClass;

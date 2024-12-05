@@ -13,30 +13,53 @@ void AMonsterCharacter::BeginPlay()
 
 	if (GetMesh())
 	{
-		GetMesh()->OnComponentHit.AddDynamic(this, &AMonsterCharacter::OnHit);
+		GetMesh()->OnComponentHit.AddDynamic(this, &AMonsterCharacter::OnHitMesh);
 	}
 }
 
-void AMonsterCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+void AMonsterCharacter::OnHitMesh(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	FVector NormalImpulse, const FHitResult& Hit)
 {
 	// 攻撃中のShapeかチェック
 	if (EnableShapesBoneName.Contains(Hit.MyBoneName))
 	{
-		// 当たった対象がPlayerかチェック
-		if (const TObjectPtr<APlayerCharacter> TargetPlayer = Cast<APlayerCharacter>(OtherActor))
-		{
-			// Spec作成
-			FGameplayEffectContextHandle ContextHandle = CustomAbilitySystemComponent->MakeEffectContext();
-			// HitResultにダメージを与えたActorを登録する
-			ContextHandle.AddHitResult(Hit);
-			const FGameplayEffectSpecHandle SpecHandle = CustomAbilitySystemComponent->MakeOutgoingSpec(DamageEffectClass, 0, ContextHandle);
+		DealDamage(OtherActor);
 
-			if (SpecHandle.IsValid())
-			{
-				// Effectを適用
-				CustomAbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetPlayer->GetAbilitySystemComponent());
-			}
+		// 当たった対象がPlayerかチェック
+		// if (const TObjectPtr<APlayerCharacter> TargetPlayer = Cast<APlayerCharacter>(OtherActor))
+		// {
+		// 	// Spec作成
+		// 	FGameplayEffectContextHandle ContextHandle = CustomAbilitySystemComponent->MakeEffectContext();
+		// 	// HitResultにダメージを与えたActorを登録する
+		// 	const FHitResult HitResult = FHitResult(OtherActor, nullptr, FVector(), FVector());
+		// 	ContextHandle.AddHitResult(HitResult);
+		// 	const FGameplayEffectSpecHandle SpecHandle = CustomAbilitySystemComponent->MakeOutgoingSpec(DamageEffectClass, 0, ContextHandle);
+		//
+		// 	if (SpecHandle.IsValid())
+		// 	{
+		// 		// Effectを適用
+		// 		CustomAbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetPlayer->GetAbilitySystemComponent());
+		// 	}
+		// }
+	}
+}
+
+void AMonsterCharacter::DealDamage(AActor* TargetActor)
+{
+	// 当たった対象がPlayerかチェック
+	if (const TObjectPtr<APlayerCharacter> TargetPlayer = Cast<APlayerCharacter>(TargetActor))
+	{
+		// Spec作成
+		FGameplayEffectContextHandle ContextHandle = CustomAbilitySystemComponent->MakeEffectContext();
+		// HitResultにダメージを与えたActorを登録する
+		const FHitResult HitResult = FHitResult(TargetActor, nullptr, FVector(), FVector());
+		ContextHandle.AddHitResult(HitResult);
+		const FGameplayEffectSpecHandle SpecHandle = CustomAbilitySystemComponent->MakeOutgoingSpec(DamageEffectClass, 0, ContextHandle);
+
+		if (SpecHandle.IsValid())
+		{
+			// Effectを適用
+			CustomAbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetPlayer->GetAbilitySystemComponent());
 		}
 	}
 }
