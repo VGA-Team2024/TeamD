@@ -25,6 +25,11 @@ float UDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const FGam
 		return 0.f;
 	}
 
+	if (TargetPlayer->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Player.Invincible"))))
+	{
+		return  0.f;
+	}
+
 	TObjectPtr<UMonsterAttackAbilityBase> AttackAbility;
 
 	for (FGameplayAbilitySpec AbilitySpec : MonsterAbilitySystem->GetActivatableAbilities())
@@ -45,6 +50,9 @@ float UDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const FGam
 	float CalculatedDamage = AttackAbility->MotionValue;
 
 	// todo プレイヤー側の計算
+
+	// プレイヤーにダメージ通知を送る
+	TargetPlayer->OnReceiveDamage(CalculatedDamage, OwnerMonster->GetActorForwardVector(), AttackAbility);
 	
 	return CalculatedDamage;
 }
