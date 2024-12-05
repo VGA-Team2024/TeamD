@@ -32,4 +32,12 @@ public:
 	// モーションアニメーション
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Parameter)
 	TObjectPtr<UAnimMontage> MontageToPlay;
+
+	// 正面から食らった時のHitMotionTag
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Parameter)
+	FGameplayTag DamageMotionTagOfFront;
+
+	// 背面から食らった時のHitMotionTag
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, category = Parameter)
+	FGameplayTag DamageMotionTagOfBehind;
 };

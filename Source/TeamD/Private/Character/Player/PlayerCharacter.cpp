@@ -28,6 +28,12 @@ void APlayerCharacter::BeginPlay()
 			WidgetInstance->AddToViewport();
 		}
 	}
+
+	// ヒットモーションんは別定義だからここで登録する
+	for (auto Ability : DamageMotions)
+	{
+		CustomAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1, this));
+	}
 }
 
 UPlayerAttributeSet* APlayerCharacter::GetPlayerAttributeSet()
@@ -205,6 +211,23 @@ void APlayerCharacter::OnDealtDamage(float Damage, FVector HitPoint)
 			}
 		}
 	}
+}
+
+void APlayerCharacter::OnReceiveDamage(float Damage, const FVector& DamageDirection, const TObjectPtr<UMonsterAttackAbilityBase>& AttackAbility)
+{
+	// 攻撃の向きに対する自分の向きからリアクションを変える
+	// 正面からの攻撃であるか
+	bool IsForward = DamageDirection.Dot(GetActorForwardVector()) < 0;
+	// todo モーションが無いので向きを正面からで固定してある
+	IsForward = true;
+	
+	// 向きを変える
+	SetActorRotation((DamageDirection * (IsForward ? -1.f : 1.f)).Rotation());
+	
+	// DamageMotionの再生
+	FGameplayTagContainer TagContainer;
+	TagContainer.AddTag(IsForward ? AttackAbility->DamageMotionTagOfFront : AttackAbility->DamageMotionTagOfBehind);
+	CustomAbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer);
 }
 
 void APlayerCharacter::AnimHitStop(FHitResult HitResult)

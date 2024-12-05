@@ -3,7 +3,6 @@
 #include "Character/Player/PlayerCharacter.h"
 #include "AbilitySystemComponent.h"
 #include "GAS/Player/PlayerAttackAbilityBase.h"
-#include <iostream>
 
 float UDealDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
