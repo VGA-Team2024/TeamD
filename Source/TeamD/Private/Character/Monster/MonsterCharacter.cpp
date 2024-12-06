@@ -11,9 +11,22 @@ void AMonsterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (GetMesh())
+	// if (GetMesh())
+	// {
+	// 	GetMesh()->OnComponentHit.AddDynamic(this, &AMonsterCharacter::OnHitMesh);
+	// }
+
+	const TArray<TObjectPtr<USceneComponent>>& ChildrenComp = GetMesh()->GetAttachChildren();
+	
+	for (TObjectPtr<USceneComponent> Child : ChildrenComp)
 	{
-		GetMesh()->OnComponentHit.AddDynamic(this, &AMonsterCharacter::OnHitMesh);
+		TObjectPtr<UShapeComponent> ShapeComp;
+		
+		if (Child && ((ShapeComp = Cast<UShapeComponent>(Child))))
+		{
+			AttackCollisions.Add(ShapeComp);
+			ShapeComp->OnComponentBeginOverlap.AddDynamic(this, &AMonsterCharacter::OnBeginOverlapAttack);
+		}
 	}
 }
 
@@ -41,6 +54,23 @@ void AMonsterCharacter::OnHitMesh(UPrimitiveComponent* HitComponent, AActor* Oth
 		// 		CustomAbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetPlayer->GetAbilitySystemComponent());
 		// 	}
 		// }
+	}
+}
+
+void AMonsterCharacter::OnBeginOverlapAttack(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	DealDamage(OtherActor);
+}
+
+void AMonsterCharacter::SetAttackCollisionResponse(FName BoneName, ECollisionResponse NewResponse)
+{
+	for (const auto AttackCollision : AttackCollisions)
+	{
+		if (AttackCollision->GetAttachSocketName() == BoneName)
+		{
+			AttackCollision->SetCollisionResponseToChannel(ECC_Pawn, NewResponse);
+		}
 	}
 }
 

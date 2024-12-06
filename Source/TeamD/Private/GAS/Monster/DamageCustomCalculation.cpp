@@ -33,9 +33,12 @@ float UDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const FGam
 
 	for (FGameplayAbilitySpec AbilitySpec : MonsterAbilitySystem->GetActivatableAbilities())
 	{
-		if (AbilitySpec.Ability->IsActive() && ((AttackAbility = Cast<UMonsterAttackAbilityBase>(AbilitySpec.Ability))))
+		if (AbilitySpec.IsActive())
 		{
-			break;
+			if ((AttackAbility = Cast<UMonsterAttackAbilityBase>(AbilitySpec.Ability)))
+			{
+				break;
+			}
 		}
 	}
 
