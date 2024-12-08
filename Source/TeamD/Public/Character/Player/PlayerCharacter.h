@@ -8,6 +8,8 @@
 #include "InputActionValue.h"
 #include "WeaponBase.h"
 #include "Character/UserInterface/DamageDisplayWidget.h"
+#include "GAS/PlayMontageAbility.h"
+#include "GAS/Monster/MonsterAttackAbilityBase.h"
 #include "PlayerCharacter.generated.h"
 
 // プレイヤーの装備
@@ -153,4 +155,12 @@ public:
 	// ダメージUIのクラス
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
 	TSubclassOf<UDamageDisplayWidget> DamageUIClass;
+
+	//------------------------被弾------------------------
+
+	// 食らったダメージ情報を受け取る
+	void OnReceiveDamage(float Damage, const FVector& DamageDirection, const TObjectPtr<UMonsterAttackAbilityBase>& AttackAbility);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Damage)
+	TArray<TSubclassOf<UPlayMontageAbility>> DamageMotions;
 };

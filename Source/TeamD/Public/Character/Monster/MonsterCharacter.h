@@ -37,9 +37,24 @@ public:
 	virtual void BeginPlay() override;
 
 	//--------------------攻撃を与える--------------------
-	
+
+	// Meshからのコールバック
 	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	void OnHitMesh(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	// AttackCollisionからのコールバック
+	UFUNCTION()
+	void OnBeginOverlapAttack(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
+						bool bFromSweep, const FHitResult& SweepResult);
+
+	// 特定のボーンにアタッチされているAttackCollisionのResponseを変更する
+	void SetAttackCollisionResponse(FName BoneName, ECollisionResponse NewResponse);
+	
+	// ダメージを呼び出す
+	UFUNCTION(BlueprintCallable)
+	void DealDamage(AActor* TargetActor);
+
+	TArray<TObjectPtr<UShapeComponent>> AttackCollisions;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
