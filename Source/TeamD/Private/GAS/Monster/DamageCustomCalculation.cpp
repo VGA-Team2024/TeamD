@@ -2,14 +2,13 @@
 #include "Character/Monster/MonsterCharacter.h"
 #include "Character/Player/PlayerCharacter.h"
 #include "GAS/Monster/MonsterAttackAbilityBase.h"
-#include "Kismet/GameplayStatics.h"
 
 float UDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
 	// 攻撃したモンスター
 	const TObjectPtr<AMonsterCharacter> OwnerMonster = Cast<AMonsterCharacter>(Spec.GetEffectContext().GetInstigator());
-	// 攻撃されたプレイヤー ゴリ押し取得
-	TObjectPtr<APlayerCharacter> TargetPlayer = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(OwnerMonster->GetWorld(), 0));
+	// 攻撃されたプレイヤー
+	TObjectPtr<APlayerCharacter> TargetPlayer = Cast<APlayerCharacter>(Spec.GetEffectContext().GetHitResult()->GetActor());
 
 	// if (Spec.GetContext().GetSourceObject()) todo TargetPlayerを取得できない　謎が深い
 	// {
@@ -25,13 +24,21 @@ float UDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const FGam
 		return 0.f;
 	}
 
+	if (TargetPlayer->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Player.Invincible"))))
+	{
+		return  0.f;
+	}
+
 	TObjectPtr<UMonsterAttackAbilityBase> AttackAbility;
 
 	for (FGameplayAbilitySpec AbilitySpec : MonsterAbilitySystem->GetActivatableAbilities())
 	{
-		if (AbilitySpec.Ability->IsActive() && ((AttackAbility = Cast<UMonsterAttackAbilityBase>(AbilitySpec.Ability))))
+		if (AbilitySpec.IsActive())
 		{
-			break;
+			if ((AttackAbility = Cast<UMonsterAttackAbilityBase>(AbilitySpec.Ability)))
+			{
+				break;
+			}
 		}
 	}
 
@@ -45,6 +52,9 @@ float UDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const FGam
 	float CalculatedDamage = AttackAbility->MotionValue;
 
 	// todo プレイヤー側の計算
+
+	// プレイヤーにダメージ通知を送る
+	TargetPlayer->OnReceiveDamage(CalculatedDamage, OwnerMonster->GetActorForwardVector(), AttackAbility);
 	
 	return CalculatedDamage;
 }

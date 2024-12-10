@@ -7,6 +7,11 @@ void UMonsterAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UA
 	if (const TObjectPtr<AMonsterCharacter> OwnerMonster = Cast<AMonsterCharacter>(MeshComp->GetOwner()))
 	{
 		OwnerMonster->EnableShapesBoneName = EnableShapesBoneName;
+
+		for (const auto EnableBoneName : EnableShapesBoneName)
+		{
+			OwnerMonster->SetAttackCollisionResponse(EnableBoneName, ECR_Overlap);
+		}
 	}
 }
 
@@ -15,5 +20,10 @@ void UMonsterAttackNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAni
 	if (const TObjectPtr<AMonsterCharacter> OwnerMonster = Cast<AMonsterCharacter>(MeshComp->GetOwner()))
 	{
 		OwnerMonster->EnableShapesBoneName.Empty();
+
+		for (const auto EnableBoneName : EnableShapesBoneName)
+		{
+			OwnerMonster->SetAttackCollisionResponse(EnableBoneName, ECR_Block);
+		}
 	}
 }
