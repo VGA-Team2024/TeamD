@@ -2480,7 +2480,10 @@ namespace Atom
 
 	// debug
 #if UE_BUILD_DEBUG
-	extern "C" CriBool CRIAPI criAtomExPlayback_DebugGetDistanceFactor(CriAtomExPlaybackId id, CriFloat32 * distance_factor);
+	extern "C" CriBool CRIAPI criAtomExPlayback_DebugGetDistanceFactor(CriAtomExPlaybackId id, CriFloat32 * distance_factor)
+    {
+        return false;
+    }
 #endif
 
 	void FAtomExPlayback::UpdateSpatialization()
