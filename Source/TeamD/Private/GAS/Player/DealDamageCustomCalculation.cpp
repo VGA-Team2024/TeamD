@@ -32,7 +32,7 @@ float UDealDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const 
 
 	for (FGameplayAbilitySpec AbilitySpec : PlayerAbilitySystem->GetActivatableAbilities())
 	{
-		if (AbilitySpec.Ability->IsActive() && ((AttackAbility = Cast<UPlayerAttackAbilityBase>(AbilitySpec.Ability))))
+		if (AbilitySpec.IsActive() && ((AttackAbility = Cast<UPlayerAttackAbilityBase>(AbilitySpec.Ability))))
 		{
 			break;
 		}
