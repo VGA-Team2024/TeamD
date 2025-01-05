@@ -41,6 +41,7 @@ float UDealDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const 
 	if (!AttackAbility)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UDealDamageCustomCalculation.cpp : 攻撃アビリティを取得できなかった"));
+		return 0.f;
 	}
 
 	// モーション値
