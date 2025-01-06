@@ -48,6 +48,13 @@ void AMonsterAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedAct
 		{
 			// 視界に入ったらBlackboardに登録する
 			Blackboard->SetValueAsObject(TargetActorKeyName, PerceptionInfo.Target);
+
+			// 戦闘BGMを流す
+			if (!AtomComponent && ((AtomComponent = NewObject<UAtomComponent>(this))))
+			{
+				AtomComponent->SetSound(BattleBGM);
+				AtomComponent->Play();
+			}
 		}
 	}
 }
