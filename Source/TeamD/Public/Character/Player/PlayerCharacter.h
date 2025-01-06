@@ -90,6 +90,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
 	FGameplayTag SheathingOfSwordTag;
 
+	// Dodge
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
+	FGameplayTag DodgeInputTag;
+
 	// 入力保存状態のTag
 	inline static const FGameplayTag SaveInputStateTag = FGameplayTag::RequestGameplayTag(FName("Input.SaveInput"));
 
