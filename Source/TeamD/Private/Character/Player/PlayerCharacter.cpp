@@ -133,12 +133,12 @@ void APlayerCharacter::NormalAttack()
 
 void APlayerCharacter::PressedDodge()
 {
-	Jump();
+	CustomAbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(DodgeInputTag), true);
 }
 
 void APlayerCharacter::ReleasedDodge()
 {
-	StopJumping();
+	
 }
 
 void APlayerCharacter::PressedDash()

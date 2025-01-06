@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/CapsuleComponent.h"
 #include "AbilitySystemComponent.h"
+#include "Atom/AtomSoundBase.h"
 #include "WeaponBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitDelegate, FHitResult, HitResult);
@@ -62,6 +63,9 @@ public:
 	// 当たり判定チェック
 	void CheckAttackCollision();
 
+	// 攻撃が当たったとき
+	void OnAttackHit(const FHitResult& HitResult);
+
 	// 攻撃ごとのヒットを使ったかどうか todo モンハンは基本的にヒット回数１回だけど...
 	bool bCanHit;
 
@@ -101,6 +105,12 @@ public:
 	// 抜刀状態ソケットと重なるやつ
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach, meta = (DisplayPriority = -1))
 	TObjectPtr<USceneComponent> DrawingAttachPivot;
+
+	//------------------------音------------------------
+
+	// 攻撃がヒットしたときの音 全武器共通でもここにあったほうが
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sound)
+	TObjectPtr<UAtomSoundBase> HitSound;
 
 	//------------------------デバッグ------------------------
 	

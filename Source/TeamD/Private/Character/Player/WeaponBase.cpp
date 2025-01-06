@@ -1,5 +1,5 @@
 #include "Character/Player/WeaponBase.h"
-#include "Character/Monster/MonsterCharacter.h"
+#include "Atom/AtomComponent.h"
 
 AWeaponBase::AWeaponBase()
 {
@@ -92,14 +92,31 @@ void AWeaponBase::CheckAttackCollision()
 	FHitResult HitResult;
 	const FVector EndLocation = WeaponAttackCollision->GetComponentLocation();
 
+	// Sweepで当たり判定をとる
 	if (GetWorld()->SweepSingleByChannel(HitResult, LastCollisionPosition, EndLocation, FQuat(WeaponAttackCollision->GetComponentRotation()),
 		CollisionChannel, WeaponAttackCollision->GetCollisionShape()))
 	{
-		OnHitAttack.Broadcast(HitResult);
-		bCanHit = false;
+		// 当たった処理を呼び出す
+		OnAttackHit(HitResult);
 	}
 	
 	LastCollisionPosition = EndLocation;
+}
+
+void AWeaponBase::OnAttackHit(const FHitResult& HitResult)
+{
+	OnHitAttack.Broadcast(HitResult);
+	// ヒット回数
+	bCanHit = false;
+	
+	// ヒット音の再生
+	const TObjectPtr<UAtomComponent> AtomComponent = NewObject<UAtomComponent>(this);
+
+	if (AtomComponent && HitSound)
+	{
+		AtomComponent->SetSound(HitSound);
+		AtomComponent->Play();
+	}
 }
 
 void AWeaponBase::AttachSheathingSocket(USkeletalMeshComponent* AttachMesh)
