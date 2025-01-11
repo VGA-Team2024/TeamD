@@ -11,7 +11,7 @@ void USaveInputNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimS
 	{
 		if (const TObjectPtr<UAbilitySystemComponent> OwnerPlayerAbilitySystem = Player->GetAbilitySystemComponent())
 		{
-			OwnerPlayerAbilitySystem->AddLooseGameplayTag(SaveInputStateTag);
+			OwnerPlayerAbilitySystem->AddLooseGameplayTag(Player->GetSaveInputStateTag());
 		}
 	}
 }
@@ -24,7 +24,7 @@ void USaveInputNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSeq
 		{
 			if (const TObjectPtr<UAbilitySystemComponent> OwnerPlayerAbilitySystem = Player->GetAbilitySystemComponent())
 			{
-				OwnerPlayerAbilitySystem->RemoveLooseGameplayTag(SaveInputStateTag);
+				OwnerPlayerAbilitySystem->RemoveLooseGameplayTag(Player->GetSaveInputStateTag());
 			}
 		}
 	}
