@@ -18,7 +18,7 @@ public:
 
 protected:
 	// 保存したInputTagのRoot
-	inline static const FGameplayTag SaveInputTagRoot = FGameplayTag::RequestGameplayTag(FName("Input"));
+	//inline static const FGameplayTag SaveInputTagRoot = FGameplayTag::RequestGameplayTag(FName("Input"));
 
 	// 遷移できるAbility
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

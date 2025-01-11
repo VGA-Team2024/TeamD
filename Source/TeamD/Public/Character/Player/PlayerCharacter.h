@@ -95,7 +95,16 @@ protected:
 	FGameplayTag DodgeInputTag;
 
 	// 入力保存状態のTag
-	inline static const FGameplayTag SaveInputStateTag = FGameplayTag::RequestGameplayTag(FName("Input.SaveInput"));
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
+	FGameplayTag SaveInputStateTag;// = FGameplayTag::RequestGameplayTag(FName("Input.SaveInput"));
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
+	FGameplayTag SaveInputStateTagRoot;
+
+public:
+	FGameplayTag GetSaveInputStateTag() const { return SaveInputStateTag; }
+
+	FGameplayTag GetSaveInputStateTagRoot() const { return SaveInputStateTagRoot; }
 
 private:
 	// input設定

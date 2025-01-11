@@ -6,6 +6,7 @@ void UAbilityTransitionNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp,
 	const TObjectPtr<APlayerCharacter> OwnerPlayer = Cast<APlayerCharacter>(MeshComp->GetOwner());
 	if (!OwnerPlayer) return;
 	const TObjectPtr<UAbilitySystemComponent> PlayerAbilitySystemComponent = OwnerPlayer->GetAbilitySystemComponent();
+	const FGameplayTag SaveInputTagRoot = OwnerPlayer->GetSaveInputStateTagRoot();
 	
 	// 保存したInputのTagがなければreturn
 	if (!PlayerAbilitySystemComponent || !PlayerAbilitySystemComponent->HasMatchingGameplayTag(SaveInputTagRoot)) return;

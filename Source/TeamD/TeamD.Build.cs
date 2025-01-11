@@ -10,7 +10,8 @@ public class TeamD : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
-			"Core", "CoreUObject", "Engine", "InputCore" , "EnhancedInput" , "GameplayAbilities", "GameplayTags", "GameplayTasks", "CriWareCore"
+			"Core", "CoreUObject", "Engine", "InputCore" , "EnhancedInput", "GameplayAbilities", "GameplayTags", 
+			"GameplayTasks", "CriWareCore", "UMG", "AIModule"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
