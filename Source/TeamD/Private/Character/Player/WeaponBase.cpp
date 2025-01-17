@@ -63,6 +63,19 @@ void AWeaponBase::Tick(float DeltaSeconds)
 	CheckAttackCollision();
 }
 
+void AWeaponBase::SheathingWeapon(const APlayerCharacter* TargetPlayer)
+{
+	// アタッチして武器の位置を変える
+	AttachSheathingSocket(TargetPlayer->GetMesh());
+
+	// todo:不器用の入力を消す
+}
+
+void AWeaponBase::DrawingWeapon(const APlayerCharacter* TargetPlayer)
+{
+	// todo:
+}
+
 void AWeaponBase::BeginWeaponAttack()
 {
 	if (WeaponAttackCollision)

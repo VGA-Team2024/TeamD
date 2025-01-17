@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/CapsuleComponent.h"
 #include "AbilitySystemComponent.h"
+#include "PlayerCharacter.h"
 #include "Atom/AtomSoundBase.h"
 #include "WeaponBase.generated.h"
 
@@ -52,7 +53,24 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FWeaponStatus WeaponStatus;
 
+	//------------------------Input------------------------
+
+	// MappingContext
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputMappingContext> WeaponMappingContext;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputAction> MoveInput;
+
 	//------------------------攻撃------------------------
+
+	// 納刀
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	void SheathingWeapon(const APlayerCharacter* TargetPlayer);
+
+	// 抜刀
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	void DrawingWeapon(const APlayerCharacter* TargetPlayer);
 
 	// 攻撃判定開始
 	void BeginWeaponAttack();

@@ -77,7 +77,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
 	TObjectPtr<UInputAction> DashInput;
 
-	// input tag
+	// Ability再生用input tag
 	// 通常攻撃
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
 	FGameplayTag NormalAttackTag;
