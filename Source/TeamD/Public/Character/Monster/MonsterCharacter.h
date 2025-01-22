@@ -1,7 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "LevelSequence.h"
 #include "Character/CharacterBase.h"
+#include "GAS/Monster/MonsterAttributeSet.h"
 #include "MonsterCharacter.generated.h"
 
 // モンスターの部位情報
@@ -36,6 +38,11 @@ public:
 
 	virtual void BeginPlay() override;
 
+	//------------------------GAS------------------------
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UMonsterAttributeSet* GetMonsterAttributeSet() { return Cast<UMonsterAttributeSet>(CharacterAttributeSet); }
+
 	//--------------------攻撃を与える--------------------
 
 	// Meshからのコールバック
@@ -69,4 +76,16 @@ public:
 
 	// ボーンの名前から部位を返す
 	FMonsterBodyPart* ConvertBoneNameToPart(const FName& TargetBoneName);
+
+protected:
+	// ダメージ受けたときのコールバック
+	UFUNCTION()
+	void OnReceiveDamage(float Health);
+
+	// 死んだときのシーケンス
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, category = Damage)
+	TSoftObjectPtr<ULevelSequence> DeadSequence;
+
+	// 死んだとき
+	void OnDead();
 };

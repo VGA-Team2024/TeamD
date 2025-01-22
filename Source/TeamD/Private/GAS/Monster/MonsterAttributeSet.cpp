@@ -12,4 +12,10 @@ void UMonsterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 	Super::PostGameplayEffectExecute(Data);
 	
 	UE_LOG(LogTemp, Log, TEXT("damage : %f, hp : %f"), Data.EvaluatedData.Magnitude, GetHealth());
+
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		SetHealth(FMath::Clamp(GetHealth(), .0f, GetMaxHealth()));
+		OnChangedHealth.Broadcast(GetHealth());
+	}
 }
