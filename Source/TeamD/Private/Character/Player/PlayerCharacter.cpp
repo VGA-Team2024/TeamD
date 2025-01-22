@@ -29,7 +29,7 @@ void APlayerCharacter::BeginPlay()
 		}
 	}
 
-	// ヒットモーションんは別定義だからここで登録する
+	// ヒットモーションは別定義だからここで登録する
 	for (auto Ability : DamageMotions)
 	{
 		CustomAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1, this));

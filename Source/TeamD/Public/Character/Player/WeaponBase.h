@@ -4,7 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/CapsuleComponent.h"
 #include "AbilitySystemComponent.h"
-#include "PlayerCharacter.h"
+#include "InputMappingContext.h"
 #include "Atom/AtomSoundBase.h"
 #include "WeaponBase.generated.h"
 

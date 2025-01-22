@@ -1,6 +1,8 @@
 #include "Character/Monster/MonsterCharacter.h"
+#include "DefaultLevelSequenceInstanceData.h"
+#include "LevelSequenceActor.h"
+#include "LevelSequencePlayer.h"
 #include "Character/Player/PlayerCharacter.h"
-#include "GAS/Monster/MonsterAttributeSet.h"
 
 AMonsterCharacter::AMonsterCharacter()
 {
@@ -11,11 +13,7 @@ void AMonsterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// if (GetMesh())
-	// {
-	// 	GetMesh()->OnComponentHit.AddDynamic(this, &AMonsterCharacter::OnHitMesh);
-	// }
-
+	// 攻撃の当たり判定のShapeCompを登録する
 	const TArray<TObjectPtr<USceneComponent>>& ChildrenComp = GetMesh()->GetAttachChildren();
 	
 	for (TObjectPtr<USceneComponent> Child : ChildrenComp)
@@ -28,6 +26,9 @@ void AMonsterCharacter::BeginPlay()
 			ShapeComp->OnComponentBeginOverlap.AddDynamic(this, &AMonsterCharacter::OnBeginOverlapAttack);
 		}
 	}
+
+	// 被ダメージのイベントを登録
+	GetMonsterAttributeSet()->OnChangedHealth.AddDynamic(this, &AMonsterCharacter::OnReceiveDamage);
 }
 
 void AMonsterCharacter::OnHitMesh(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -116,4 +117,38 @@ FMonsterBodyPart* AMonsterCharacter::ConvertBoneNameToPart(const FName& TargetBo
 	// どこにも当てはまらなかったら最初を返す
 	UE_LOG(LogTemp, Log, TEXT("設定されてないボーン名が入力されましたので先頭の要素 : %s, ボーン名 : %s"), *BodyParts[0].PartName.ToString(), *TargetBoneName.ToString());
 	return &BodyParts[0];
+}
+
+void AMonsterCharacter::OnReceiveDamage(float Health)
+{
+	if (Health <= 0)
+	{
+		OnDead();
+	}
+}
+
+void AMonsterCharacter::OnDead()
+{
+	UE_LOG(LogTemp, Log, TEXT("monster dead"));
+
+	// DeadのSequenceを生成する
+	if (DeadSequence)
+	{
+		ALevelSequenceActor* LevelSequenceActor;
+		FMovieSceneSequencePlaybackSettings PlaybackSettings;
+        TObjectPtr<ULevelSequencePlayer> SequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
+			GetWorld(),
+			DeadSequence.Get(),
+			PlaybackSettings,
+			LevelSequenceActor
+        );
+		// Sequence位置の修正
+		LevelSequenceActor->bOverrideInstanceData = true;
+		Cast<UDefaultLevelSequenceInstanceData>(LevelSequenceActor->DefaultInstanceData)->TransformOrigin = GetMesh()->GetComponentTransform();
+		// 再生
+		SequencePlayer->Play();
+		
+		// 自身は削除
+		Destroy();
+	}
 }
