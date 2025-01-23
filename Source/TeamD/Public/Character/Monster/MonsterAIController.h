@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Atom/AtomSoundBase.h"
+#include <Atom/AtomComponent.h>
 #include "MonsterAIController.generated.h"
 
 /**
@@ -39,4 +41,9 @@ protected:
 	// AIPerception
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = AIPerception)
 	TObjectPtr<UAIPerceptionComponent> AIPerceptionComponent;
+
+	TObjectPtr<UAtomComponent> AtomComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Cri)
+	TObjectPtr<UAtomSoundBase> BattleBGM;
 };

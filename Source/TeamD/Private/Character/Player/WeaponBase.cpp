@@ -1,5 +1,6 @@
 #include "Character/Player/WeaponBase.h"
 #include "Atom/AtomComponent.h"
+#include "Character/Player/PlayerCharacter.h"
 
 AWeaponBase::AWeaponBase()
 {
@@ -63,11 +64,25 @@ void AWeaponBase::Tick(float DeltaSeconds)
 	CheckAttackCollision();
 }
 
+void AWeaponBase::SheathingWeapon(const APlayerCharacter* TargetPlayer)
+{
+	// todo:includeの相互参照が問題　PlayerCharacter.hとWeaponBase.cppが互いにincludeしている　.cppなら別にいいのかな？
+	// アタッチして武器の位置を変える
+	AttachSheathingSocket(TargetPlayer->GetMesh());
+
+	// todo:不器用の入力を消す
+}
+
+void AWeaponBase::DrawingWeapon(const APlayerCharacter* TargetPlayer)
+{
+	// todo:
+}
+
 void AWeaponBase::BeginWeaponAttack()
 {
 	if (WeaponAttackCollision)
 	{
-		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		//WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		bCanHit = true;
 	}
 }
@@ -76,7 +91,7 @@ void AWeaponBase::EndWeaponAttack()
 {
 	if (WeaponAttackCollision)
 	{
-		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		//WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		bCanHit = false;
 	}
 }

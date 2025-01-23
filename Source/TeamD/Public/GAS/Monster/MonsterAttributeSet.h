@@ -11,6 +11,9 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+// todo:プレイヤーのAttributeSetのDelegateと名前がかぶっているのでどこかで定義しなおした方がいいかも
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMonsChangedValue, float, Value);
+
 /**
  * 
  */
@@ -34,4 +37,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = Health)
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UMonsterAttributeSet, MaxHealth)
+
+	// healthの変更イベント
+	UPROPERTY(BlueprintAssignable, Category = Event)
+	FOnMonsChangedValue OnChangedHealth;
 };
