@@ -6,6 +6,7 @@
 #include "InputMappingContext.h"
 #include "InputAction.h"
 #include "InputActionValue.h"
+#include "LevelSequence.h"
 #include "WeaponBase.h"
 #include "Character/UserInterface/DamageDisplayWidget.h"
 #include "GAS/PlayMontageAbility.h"
@@ -174,6 +175,18 @@ public:
 	// 食らったダメージ情報を受け取る
 	void OnReceiveDamage(float Damage, const FVector& DamageDirection, const TObjectPtr<UMonsterAttackAbilityBase>& AttackAbility);
 
+	// AttributeSetからのコールバック todo:CharacterBaseでまとめたいし、名前も要相談
+	UFUNCTION()
+	void OnReceiveDamage(float Health);
+
+	// 死んだとき todo:これも
+	void OnDead();
+
+	// 被弾時のAbility
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Damage)
 	TArray<TSubclassOf<UPlayMontageAbility>> DamageMotions;
+
+	// 死んだときのシーケンス
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Damage)
+	TSoftObjectPtr<ULevelSequence> DeadSequence;
 };

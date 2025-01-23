@@ -20,6 +20,8 @@ void ACharacterBase::BeginPlay()
 	{
 		CustomAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1, this));
 	}
+
+	InitAttributeSetParam();
 }
 
 void ACharacterBase::Tick(float DeltaTime)
@@ -43,6 +45,22 @@ void ACharacterBase::GetActiveAbilities(TArray<UGameplayAbility*>& ActiveAbiliti
 			{
 				ActiveAbilities.Add(ActiveAbility);
 			}
+		}
+	}
+}
+
+void ACharacterBase::InitAttributeSetParam()
+{
+	if (InitStatusEffectClass)
+	{
+		// Spec作成
+		FGameplayEffectContextHandle ContextHandle = CustomAbilitySystemComponent->MakeEffectContext();
+		const FGameplayEffectSpecHandle SpecHandle = CustomAbilitySystemComponent->MakeOutgoingSpec(InitStatusEffectClass, 0, ContextHandle);
+
+		if (SpecHandle.IsValid())
+		{
+			// Effectの適用
+			CustomAbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), CustomAbilitySystemComponent);
 		}
 	}
 }

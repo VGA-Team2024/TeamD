@@ -1,8 +1,11 @@
 #include "Character/Player/PlayerCharacter.h"
+#include "DefaultLevelSequenceInstanceData.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "LevelSequenceActor.h"
+#include "LevelSequencePlayer.h"
 #include "GAS/Monster/MonsterAttributeSet.h"
 #include "GAS/Player/PlayerAttributeSet.h"
 
@@ -34,6 +37,9 @@ void APlayerCharacter::BeginPlay()
 	{
 		CustomAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1, this));
 	}
+
+	// ダメージコールバックを登録する
+	GetPlayerAttributeSet()->OnChangedHealth.AddDynamic(this, &APlayerCharacter::OnReceiveDamage);
 }
 
 UPlayerAttributeSet* APlayerCharacter::GetPlayerAttributeSet()
@@ -228,6 +234,39 @@ void APlayerCharacter::OnReceiveDamage(float Damage, const FVector& DamageDirect
 	FGameplayTagContainer TagContainer;
 	TagContainer.AddTag(IsForward ? AttackAbility->DamageMotionTagOfFront : AttackAbility->DamageMotionTagOfBehind);
 	CustomAbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer);
+}
+
+void APlayerCharacter::OnReceiveDamage(float Health)
+{
+	if (Health <= 0)
+	{
+		OnDead();
+	}
+}
+
+void APlayerCharacter::OnDead()
+{
+	UE_LOG(LogTemp, Log, TEXT("player dead"));
+	
+	// DeadのSequenceを生成する
+	if (DeadSequence)
+	{
+		ALevelSequenceActor* LevelSequenceActor;
+		FMovieSceneSequencePlaybackSettings PlaybackSettings;
+		TObjectPtr<ULevelSequencePlayer> SequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
+			GetWorld(),
+			DeadSequence.Get(),
+			PlaybackSettings,
+			LevelSequenceActor
+		);
+		// Sequence位置の修正
+		LevelSequenceActor->bOverrideInstanceData = true;
+		Cast<UDefaultLevelSequenceInstanceData>(LevelSequenceActor->DefaultInstanceData)->TransformOrigin = GetMesh()->GetComponentTransform();
+		// 再生
+		SequencePlayer->Play();
+
+		// todo:死亡モーションの再生
+	}
 }
 
 void APlayerCharacter::AnimHitStop(FHitResult HitResult)
