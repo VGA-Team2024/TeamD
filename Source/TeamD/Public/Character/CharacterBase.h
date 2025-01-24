@@ -41,4 +41,11 @@ protected:
 	// このCharacterに初期セットするAbility
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GAS)
 	TArray<TSubclassOf<UGameplayAbility>> InitialAbilities;
+
+	// AttributeSetの値をステータスに初期化する
+	void InitAttributeSetParam();
+	
+	// 初期パラメータのEffect
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GAS) // todo:カテゴリーはこれでいいのか
+	TSubclassOf<UGameplayEffect> InitStatusEffectClass;
 };

@@ -6,10 +6,12 @@
 #include "InputMappingContext.h"
 #include "InputAction.h"
 #include "InputActionValue.h"
+#include "LevelSequence.h"
 #include "WeaponBase.h"
 #include "Character/UserInterface/DamageDisplayWidget.h"
 #include "GAS/PlayMontageAbility.h"
 #include "GAS/Monster/MonsterAttackAbilityBase.h"
+#include "GAS/Player/PlayerAttributeSet.h"
 #include "PlayerCharacter.generated.h"
 
 // プレイヤーの装備
@@ -96,7 +98,7 @@ protected:
 
 	// 入力保存状態のTag
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
-	FGameplayTag SaveInputStateTag;// = FGameplayTag::RequestGameplayTag(FName("Input.SaveInput"));
+	FGameplayTag SaveInputStateTag;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
 	FGameplayTag SaveInputStateTagRoot;
@@ -125,11 +127,6 @@ private:
 	void ReleasedDash(){};
 
 //------------------------状態------------------------
-
-protected:
-	// 抜刀状態か todo EnumとかTagでやってもいい 納刀状態かはプレイヤーが持つか武器が持つか
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = State)
-	bool IsDrawing = false;
 
 //------------------------装備------------------------
 
@@ -174,6 +171,18 @@ public:
 	// 食らったダメージ情報を受け取る
 	void OnReceiveDamage(float Damage, const FVector& DamageDirection, const TObjectPtr<UMonsterAttackAbilityBase>& AttackAbility);
 
+	// AttributeSetからのコールバック todo:CharacterBaseでまとめたいし、名前も要相談
+	UFUNCTION()
+	void OnReceiveDamage(float Health);
+
+	// 死んだとき todo:これも
+	void OnDead();
+
+	// 被弾時のAbility
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Damage)
 	TArray<TSubclassOf<UPlayMontageAbility>> DamageMotions;
+
+	// 死んだときのシーケンス
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Damage)
+	TSoftObjectPtr<ULevelSequence> DeadSequence;
 };
