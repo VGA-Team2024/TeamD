@@ -114,7 +114,7 @@ void APlayerCharacter::RotateControllerInput(const FInputActionValue& Value)
 void APlayerCharacter::NormalAttack()
 {
 	// 抜刀状態かの確認
-	if (IsDrawing) // 抜刀中
+	if (WeaponActor->IsDrawing) // 抜刀中
 	{
 		// SaveInput状態化の判定
 		if (CustomAbilitySystemComponent->HasMatchingGameplayTag(SaveInputStateTag))
@@ -132,8 +132,6 @@ void APlayerCharacter::NormalAttack()
 	{
 		// 抜刀アビリティの再生
 		CustomAbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(DrawingSwordTag), true);
-		
-		IsDrawing = true;
 	}
 }
 
@@ -149,11 +147,10 @@ void APlayerCharacter::ReleasedDodge()
 
 void APlayerCharacter::PressedDash()
 {
-	if (IsDrawing)
+	if (WeaponActor->IsDrawing)
 	{
 		// 納刀アビリティの再生
 		CustomAbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(SheathingOfSwordTag), true);
-		IsDrawing = false;
 		
 		return;
 	}

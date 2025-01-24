@@ -130,8 +130,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sound)
 	TObjectPtr<UAtomSoundBase> HitSound;
 
-	//------------------------デバッグ------------------------
-	
+	//------------------------仮------------------------
+
+	UPROPERTY(editanywhere, BlueprintReadOnly, Category = Debug)
 	bool IsDrawing = false;
 	
 	// TickでPivotの調整を可能にするか
