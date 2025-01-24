@@ -8,6 +8,7 @@
 #include "InputActionValue.h"
 #include "LevelSequence.h"
 #include "WeaponBase.h"
+#include "WeaponController.h"
 #include "Character/UserInterface/DamageDisplayWidget.h"
 #include "GAS/PlayMontageAbility.h"
 #include "GAS/Monster/MonsterAttackAbilityBase.h"
@@ -131,6 +132,10 @@ private:
 //------------------------装備------------------------
 
 public:
+	// 武器コントローラー
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, category = Component)
+	TObjectPtr<UWeaponController> WeaponController;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	FPlayerEquipmentStruct PlayerEquipment;
 

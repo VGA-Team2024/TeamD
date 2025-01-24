@@ -1,5 +1,13 @@
 #include "GAS/CustomAbilitySystemComponent.h"
 
+void UCustomAbilitySystemComponent::TickComponent(float DeltaTime, enum ELevelTick TickType,
+	FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	TryActivateAbilitiesBySavedInputTagInTick(DeltaTime);
+}
+
 FGameplayAbilitySpecHandle UCustomAbilitySystemComponent::GiveAbilityAndActivateOnce(
 	TSubclassOf<UGameplayAbility> AbilityClass)
 {
@@ -37,4 +45,36 @@ void UCustomAbilitySystemComponent::RemoveAbilityByClass(TSubclassOf<UGameplayAb
 void UCustomAbilitySystemComponent::OnAbilityEnded(UGameplayAbility* Ability)
 {
 	RemoveAbilityByClass(Ability->GetClass());
+}
+
+void UCustomAbilitySystemComponent::SaveTagTryActivateAbilities(const FGameplayTag InputTag)
+{
+	if (!InputTag.IsValid())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid InputTag"));
+		return;
+	}
+	
+	// Activate出来なかった場合
+	if (!TryActivateAbilitiesByTag(FGameplayTagContainer(InputTag), true))
+	{
+		SavedInputTag = InputTag;
+		// タイマーリセット
+		SaveInputTimer = TimeToSaveInput;
+	}
+}
+
+void UCustomAbilitySystemComponent::TryActivateAbilitiesBySavedInputTagInTick(float DeltaTime)
+{
+	if (SaveInputTimer <= 0) return;
+
+	if (SavedInputTag.IsValid() && TryActivateAbilitiesByTag(FGameplayTagContainer(SavedInputTag), true))
+	{
+		// タイマーリセットして終了
+		SaveInputTimer = 0;
+		return;
+	}
+
+	// タイマーを進める
+	SaveInputTimer -= DeltaTime;
 }
