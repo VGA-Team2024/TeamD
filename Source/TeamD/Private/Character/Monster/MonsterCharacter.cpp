@@ -132,13 +132,13 @@ void AMonsterCharacter::OnDead()
 	UE_LOG(LogTemp, Log, TEXT("monster dead"));
 
 	// DeadのSequenceを生成する
-	if (DeadSequence)
+	if (!DeadSequenceAsset.IsNull())
 	{
 		ALevelSequenceActor* LevelSequenceActor;
 		FMovieSceneSequencePlaybackSettings PlaybackSettings;
         TObjectPtr<ULevelSequencePlayer> SequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
 			GetWorld(),
-			DeadSequence.Get(),
+			DeadSequenceAsset.LoadSynchronous(),
 			PlaybackSettings,
 			LevelSequenceActor
         );
@@ -151,4 +151,5 @@ void AMonsterCharacter::OnDead()
 		// 自身は削除
 		Destroy();
 	}
+	else UE_LOG(LogTemp, Error, TEXT("not find DeadSequence"));
 }

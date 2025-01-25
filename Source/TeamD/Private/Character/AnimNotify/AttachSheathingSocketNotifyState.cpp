@@ -5,6 +5,6 @@ void UAttachSheathingSocketNotifyState::Notify(USkeletalMeshComponent* MeshComp,
 {
 	if (const TObjectPtr<APlayerCharacter> OwnerPlayer = Cast<APlayerCharacter>(MeshComp->GetOwner()))
 	{
-		OwnerPlayer->WeaponActor->AttachSheathingSocket(MeshComp);
+		OwnerPlayer->WeaponController->SheathingWeapon();
 	}
 }

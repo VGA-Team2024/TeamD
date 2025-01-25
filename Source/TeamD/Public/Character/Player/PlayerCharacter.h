@@ -15,22 +15,6 @@
 #include "GAS/Player/PlayerAttributeSet.h"
 #include "PlayerCharacter.generated.h"
 
-// プレイヤーの装備
-USTRUCT(BlueprintType)
-struct FPlayerEquipmentStruct
-{
-	GENERATED_BODY()
-
-	// 武器
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AWeaponBase> Weapon;
-	
-	FPlayerEquipmentStruct()
-		: Weapon(nullptr)
-	{
-	}
-};
-
 UCLASS()
 class TEAMD_API APlayerCharacter : public ACharacterBase
 {
@@ -40,10 +24,6 @@ protected:
 	APlayerCharacter();
 	
 	virtual void BeginPlay() override;
-
-	// 自身のSkeletalMesh
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component)
-	TObjectPtr<USkeletalMeshComponent> PlayerMesh;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UUserWidget> PlayerCommonWidgetClass;
@@ -55,10 +35,6 @@ public:
 	UPlayerAttributeSet* GetPlayerAttributeSet();
 
 protected:
-	// 攻撃のEffect
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GAS)
-	TSubclassOf<UGameplayEffect> DealDamageEffectClass;
-	
 //------------------------input------------------------
 	
 	// MappingContext
@@ -70,9 +46,6 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
 	TObjectPtr<UInputAction> LookInput;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
-	TObjectPtr<UInputAction> NormalAttackInput;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
 	TObjectPtr<UInputAction> DodgeInput;
@@ -81,17 +54,6 @@ protected:
 	TObjectPtr<UInputAction> DashInput;
 
 	// Ability再生用input tag
-	// 通常攻撃
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
-	FGameplayTag NormalAttackTag;
-	
-	// 抜刀
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
-	FGameplayTag DrawingSwordTag;
-	
-	// 納刀
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
-	FGameplayTag SheathingOfSwordTag;
 
 	// Dodge
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
@@ -118,68 +80,28 @@ private:
 	void MovePlayer(const FInputActionValue& Value);
 	// Look
 	void RotateControllerInput(const FInputActionValue& Value);
-	// Attack
-	void NormalAttack();
 	// Dodge
 	void PressedDodge();
-	void ReleasedDodge();
 	// Dash
 	void PressedDash();
-	void ReleasedDash(){};
-
-//------------------------状態------------------------
 
 //------------------------装備------------------------
 
 public:
 	// 武器コントローラー
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, category = Component)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component)
 	TObjectPtr<UWeaponController> WeaponController;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	FPlayerEquipmentStruct PlayerEquipment;
-
-	// 現在装備している武器のActor
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Equipment)
-	TObjectPtr<AWeaponBase> WeaponActor;
-
-protected:
-	// Playerの装備から武器を適用させる
-	void ApplyWeapon();
-
-//------------------------攻撃------------------------
-
-	// ダメージを与える
-	UFUNCTION()
-	void DealDamage(FHitResult HitResult);
-
-	// ヒットストップ
-	UFUNCTION()
-	void AnimHitStop(FHitResult HitResult);
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
-	float StopSpeed = 0.f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
-	float HitStopDuration = 0.f;
-
-public:
-	// 与えたダメージ情報を受け取る
-	void OnDealtDamage(float Damage, FVector HitPoint);
-
-	// ダメージUIのクラス
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attack)
-	TSubclassOf<UDamageDisplayWidget> DamageUIClass;
 
 	//------------------------被弾------------------------
 
-	// 食らったダメージ情報を受け取る
+	// 食らったダメージ情報を直接受け取る
 	void OnReceiveDamage(float Damage, const FVector& DamageDirection, const TObjectPtr<UMonsterAttackAbilityBase>& AttackAbility);
 
 	// AttributeSetからのコールバック todo:CharacterBaseでまとめたいし、名前も要相談
 	UFUNCTION()
 	void OnReceiveDamage(float Health);
 
+protected:
 	// 死んだとき todo:これも
 	void OnDead();
 

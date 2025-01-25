@@ -4,7 +4,6 @@
 #include "GameFramework/Actor.h"
 #include "Components/CapsuleComponent.h"
 #include "AbilitySystemComponent.h"
-#include "InputMappingContext.h"
 #include "Atom/AtomSoundBase.h"
 #include "WeaponBase.generated.h"
 
@@ -26,7 +25,9 @@ struct FWeaponStatus
 	}
 };
 
-// プレイヤーの武器の基底
+/**
+ * プレイヤーの武器の基底
+ */
 UCLASS()
 class TEAMD_API AWeaponBase : public AActor
 {
@@ -53,24 +54,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FWeaponStatus WeaponStatus;
 
-	//------------------------Input------------------------
-
-	// MappingContext
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
-	TObjectPtr<UInputMappingContext> WeaponMappingContext;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
-	TObjectPtr<UInputAction> MoveInput;
-
-	//------------------------攻撃------------------------
-
-	// 納刀
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	void SheathingWeapon(const APlayerCharacter* TargetPlayer);
-
-	// 抜刀
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	void DrawingWeapon(const APlayerCharacter* TargetPlayer);
+	//------------------------攻撃判定------------------------
 
 	// 攻撃判定開始
 	void BeginWeaponAttack();
@@ -99,14 +83,6 @@ public:
 	TArray<TSubclassOf<UGameplayAbility>> AttackAbilities;
 
 	//------------------------アタッチ------------------------
-
-	// 納刀のソケットにアタッチする
-	UFUNCTION(BlueprintCallable, Category = Attach)
-	void AttachSheathingSocket(USkeletalMeshComponent* AttachMesh);
-	
-	// 抜刀のソケットにアタッチする
-	UFUNCTION(BlueprintCallable, Category = Attach)
-	void AttachDrawingSocket(USkeletalMeshComponent* AttachMesh);
 	
 	// 納刀状態にアタッチするソケット名
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach)
@@ -129,13 +105,4 @@ public:
 	// 攻撃がヒットしたときの音 全武器共通でもここにあったほうが
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sound)
 	TObjectPtr<UAtomSoundBase> HitSound;
-
-	//------------------------仮------------------------
-
-	UPROPERTY(editanywhere, BlueprintReadOnly, Category = Debug)
-	bool IsDrawing = false;
-	
-	// TickでPivotの調整を可能にするか
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug)
-	bool ApplyPivotOnTick = true;
 };

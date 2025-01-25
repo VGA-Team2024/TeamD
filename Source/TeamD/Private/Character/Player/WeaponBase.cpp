@@ -1,6 +1,5 @@
 #include "Character/Player/WeaponBase.h"
 #include "Atom/AtomComponent.h"
-#include "Character/Player/PlayerCharacter.h"
 
 AWeaponBase::AWeaponBase()
 {
@@ -33,67 +32,24 @@ void AWeaponBase::BeginPlay()
 		WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		WeaponAttackCollision->IgnoreActorWhenMoving(GetOwner(), true);
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("null WeaponAttackCollision"));
-	}
-
-	
+	else UE_LOG(LogTemp, Warning, TEXT("null WeaponAttackCollision"));
 }
 
 void AWeaponBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (ApplyPivotOnTick)
-	{
-		if (IsDrawing)
-		{
-			const FRotator RelativeRotate = DrawingAttachPivot->GetRelativeRotation().GetInverse();
-			SetActorRelativeRotation(RelativeRotate);
-			SetActorRelativeLocation(RelativeRotate.RotateVector(-DrawingAttachPivot->GetRelativeLocation()));
-		}
-		else
-		{
-			const FRotator RelativeRotate = SheathingAttachPivot->GetRelativeRotation().GetInverse();
-			SetActorRelativeRotation(RelativeRotate);
-			SetActorRelativeLocation(RelativeRotate.RotateVector(-SheathingAttachPivot->GetRelativeLocation()));
-		}
-	}
-
 	CheckAttackCollision();
-}
-
-void AWeaponBase::SheathingWeapon(const APlayerCharacter* TargetPlayer)
-{
-	// todo:includeの相互参照が問題　PlayerCharacter.hとWeaponBase.cppが互いにincludeしている　.cppなら別にいいのかな？
-	// アタッチして武器の位置を変える
-	AttachSheathingSocket(TargetPlayer->GetMesh());
-
-	// todo:不器用の入力を消す
-}
-
-void AWeaponBase::DrawingWeapon(const APlayerCharacter* TargetPlayer)
-{
-	// todo:
 }
 
 void AWeaponBase::BeginWeaponAttack()
 {
-	if (WeaponAttackCollision)
-	{
-		//WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-		bCanHit = true;
-	}
+	if (WeaponAttackCollision) bCanHit = true;
 }
 
 void AWeaponBase::EndWeaponAttack()
 {
-	if (WeaponAttackCollision)
-	{
-		//WeaponAttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		bCanHit = false;
-	}
+	if (WeaponAttackCollision) bCanHit = false;
 }
 
 void AWeaponBase::CheckAttackCollision()
@@ -120,7 +76,6 @@ void AWeaponBase::CheckAttackCollision()
 
 void AWeaponBase::OnAttackHit(const FHitResult& HitResult)
 {
-	OnHitAttack.Broadcast(HitResult);
 	// ヒット回数
 	bCanHit = false;
 	
@@ -132,41 +87,6 @@ void AWeaponBase::OnAttackHit(const FHitResult& HitResult)
 		AtomComponent->SetSound(HitSound);
 		AtomComponent->Play();
 	}
+	
+	OnHitAttack.Broadcast(HitResult);
 }
-
-void AWeaponBase::AttachSheathingSocket(USkeletalMeshComponent* AttachMesh)
-{
-	// ソケットの切替
-	if (AttachMesh->DoesSocketExist(SheathingAttachSocketName))
-	{
-		AttachToComponent(AttachMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, SheathingAttachSocketName);
-		// 位置、回転の補正
-		const FRotator RelativeRotate = SheathingAttachPivot->GetRelativeRotation().GetInverse();
-		SetActorRelativeRotation(RelativeRotate);
-		SetActorRelativeLocation(RelativeRotate.RotateVector(-SheathingAttachPivot->GetRelativeLocation()));
-		IsDrawing = false;
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("ソケットないよ"));
-	}
-}
-
-void AWeaponBase::AttachDrawingSocket(USkeletalMeshComponent* AttachMesh)
-{
-	// ソケットの切替
-	if (AttachMesh->DoesSocketExist(DrawingAttachSocketName))
-	{
-		AttachToComponent(AttachMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, DrawingAttachSocketName);
-		// 位置、回転の補正
-		const FRotator RelativeRotate = DrawingAttachPivot->GetRelativeRotation().GetInverse();
-		SetActorRelativeRotation(RelativeRotate);
-		SetActorRelativeLocation(RelativeRotate.RotateVector(-DrawingAttachPivot->GetRelativeLocation()));
-		IsDrawing = true;
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("ソケットないよ"));
-	}
-}
-

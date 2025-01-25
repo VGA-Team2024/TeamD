@@ -84,7 +84,7 @@ protected:
 
 	// 死んだときのシーケンス
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, category = Damage)
-	TSoftObjectPtr<ULevelSequence> DeadSequence;
+	TSoftObjectPtr<ULevelSequence> DeadSequenceAsset;
 
 	// 死んだとき
 	void OnDead();

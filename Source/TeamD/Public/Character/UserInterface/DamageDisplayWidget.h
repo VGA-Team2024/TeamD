@@ -16,7 +16,12 @@ class TEAMD_API UDamageDisplayWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 	
-	// 初期化処理
+	/**
+	 * UI初期化処理
+	 * @param Value 表示する値
+	 * @param Location 攻撃を与えた位置
+	 * @param PlayerController Display上の座標にするために必要
+	 */
 	UFUNCTION(BlueprintCallable)
 	void InitDamageDisplay(int Value, const FVector& Location, APlayerController* PlayerController);
 

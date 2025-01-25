@@ -25,7 +25,7 @@ float UDealDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const 
 	}
 	
 	// 計算済みのダメージ値 初期値にプレイヤーの攻撃力を入れる 調整で100で割る todo プレイヤーの一時的なバフを追加する
-	float CalculatedDamage = OwnerPlayer->WeaponActor->WeaponStatus.AttackPower / 100.f;
+	float CalculatedDamage = OwnerPlayer->WeaponController->GetWeaponActor()->WeaponStatus.AttackPower / 100.f;
 
 	// アビリティを取得
 	TObjectPtr<UPlayerAttackAbilityBase> AttackAbility;
@@ -55,7 +55,7 @@ float UDealDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const 
 	// 四捨五入して出力
 	CalculatedDamage = std::round(CalculatedDamage);
 	// Playerに与えたダメージを通知
-	OwnerPlayer->OnDealtDamage(CalculatedDamage, Spec.GetEffectContext().GetHitResult()->ImpactPoint);
+	OwnerPlayer->WeaponController->OnDealtDamage(CalculatedDamage, Spec.GetEffectContext().GetHitResult()->ImpactPoint);
 	
 	return CalculatedDamage;
 }

@@ -5,7 +5,7 @@ void UEnableAttackCollisionNotifyState::NotifyBegin(USkeletalMeshComponent* Mesh
 {
 	if ((OwnerPlayer = Cast<APlayerCharacter>(MeshComp->GetOwner())))
 	{
-		OwnerPlayer->WeaponActor->BeginWeaponAttack();
+		OwnerPlayer->WeaponController->GetWeaponActor()->BeginWeaponAttack();
 	}
 }
 
@@ -13,6 +13,6 @@ void UEnableAttackCollisionNotifyState::NotifyEnd(USkeletalMeshComponent* MeshCo
 {
 	if (OwnerPlayer)
 	{
-		OwnerPlayer->WeaponActor->EndWeaponAttack();
+		OwnerPlayer->WeaponController->GetWeaponActor()->EndWeaponAttack();
 	}
 }
