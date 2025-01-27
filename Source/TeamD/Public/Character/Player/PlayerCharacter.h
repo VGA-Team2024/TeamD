@@ -7,6 +7,7 @@
 #include "InputAction.h"
 #include "InputActionValue.h"
 #include "LevelSequence.h"
+#include "PlayerItemManager.h"
 #include "WeaponBase.h"
 #include "WeaponController.h"
 #include "Character/UserInterface/DamageDisplayWidget.h"
@@ -85,12 +86,16 @@ private:
 	// Dash
 	void PressedDash();
 
-//------------------------装備------------------------
+//------------------------コンポーネント------------------------
 
 public:
 	// 武器コントローラー
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component)
 	TObjectPtr<UWeaponController> WeaponController;
+	
+	// アイテム管理
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component)
+	TObjectPtr<UPlayerItemManager> PlayerItemManager;
 
 	//------------------------被弾------------------------
 

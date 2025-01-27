@@ -14,6 +14,7 @@ APlayerCharacter::APlayerCharacter()
 	// コンポーネントの初期化
 	CharacterAttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("PlayerAttributeSet"));
 	WeaponController = CreateDefaultSubobject<UWeaponController>(TEXT("WeaponController"));
+	PlayerItemManager = CreateDefaultSubobject<UPlayerItemManager>(TEXT("PlayerItemManager"));
 }
 
 void APlayerCharacter::BeginPlay()

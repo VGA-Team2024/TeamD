@@ -1,0 +1,47 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "ItemBase.generated.h"
+
+/**
+ * プレイヤーが使用するアイテムの基底
+ */
+UCLASS(Blueprintable)
+class TEAMD_API UItemBase : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	// アイテムの使用
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void UseItem();
+
+	// todo:これでC++、Blueprintの両方でoverride出来るけど、いずれ全ての処理はC++に書きたい
+	virtual void UseItem_Implementation();
+
+	// アイテムの効果
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void ApplyItemEffect();
+
+	// todo:上に同じ
+	virtual void ApplyItemEffect_Implementation();
+
+	// アイテムの追加
+	void AddStack(int32 Value);
+
+	// 最大スタック数
+	UFUNCTION(BlueprintPure)
+	int32 GetMaxStack() const;
+
+	// 現在のスタック数
+	UFUNCTION(BlueprintPure)
+	int32 GetCurrentStack() const;
+
+protected:
+	// 最大スタック数
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 MaxStackNum = 10;
+
+	// 現在のスタック数
+	int32 CurrentStackNum = 0;
+};
