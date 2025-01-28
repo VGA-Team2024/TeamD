@@ -13,18 +13,18 @@ class TEAMD_API ACharacterBase : public ACharacter, public IAbilitySystemInterfa
 
 public:
 	ACharacterBase();
-
-protected:
+	
+	virtual void PostInitializeComponents() override;
+	
 	virtual void BeginPlay() override;
 
-public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 //------------------GAS------------------
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = GAS, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = GAS, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCustomAbilitySystemComponent> CustomAbilitySystemComponent = nullptr;
 
 public:

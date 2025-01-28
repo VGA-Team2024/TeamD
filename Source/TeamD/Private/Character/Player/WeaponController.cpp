@@ -83,6 +83,10 @@ void UWeaponController::DrawingWeapon()
 	AttachWeaponToMesh(OwnerCharacter->GetMesh(), WeaponActor->DrawingAttachSocketName, WeaponActor->DrawingAttachPivot);
 	// 状態の切替
 	bIsDrawing = true;
+	// 納刀状態のTagを削除
+	CustomAbilitySystemComponent->RemoveTagsWithParent(WeaponSheathedStateTag);
+	// 抜刀状態のTagを付与
+	CustomAbilitySystemComponent->AddLooseGameplayTag(WeaponDrawnStateTag);
 }
 
 void UWeaponController::SheathingWeapon()
@@ -91,6 +95,10 @@ void UWeaponController::SheathingWeapon()
 	AttachWeaponToMesh(OwnerCharacter->GetMesh(), WeaponActor->SheathingAttachSocketName, WeaponActor->SheathingAttachPivot);
 	// 状態の切替
 	bIsDrawing = false;
+	// 抜刀状態のTagを削除
+	CustomAbilitySystemComponent->RemoveTagsWithParent(WeaponDrawnStateTag);
+	// 納刀状態のTagを付与
+	CustomAbilitySystemComponent->AddLooseGameplayTag(WeaponSheathedStateTag);
 }
 
 void UWeaponController::AttachWeaponToMesh(USkeletalMeshComponent* SkeletalMeshComponent, const FName AttachSocketName,
@@ -199,11 +207,15 @@ void UWeaponController::ApplyEquipment()
 	// 初期は納刀
 	SheathingWeapon();
 
-	// 武器のAbilityをPlayerに持たせる
-	for (auto Ability : WeaponActor->AttackAbilities)
+	if (CustomAbilitySystemComponent)
 	{
-		CustomAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1));
+		// 武器のAbilityをPlayerに持たせる
+		for (auto Ability : WeaponActor->AttackAbilities)
+		{
+			CustomAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1));
+		}
 	}
+	else UE_LOG(LogTemp, Warning, TEXT("UWeaponController::ApplyEquipment : CustomAbilitySystemComponent is nullptr"));
 
 	WeaponActor->OnHitAttack.AddDynamic(this, &UWeaponController::DealDamage);
 	WeaponActor->OnHitAttack.AddDynamic(this, &UWeaponController::AnimHitStop);

@@ -140,8 +140,16 @@ public:
 	
 protected:
 	// 抜刀状態であるか
-	UPROPERTY(BlueprintReadOnly, Category = State)
+	UPROPERTY(BlueprintReadOnly, Category = WeaponState)
 	bool bIsDrawing = false;
+
+	// 納刀状態のTag
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = WeaponState)
+	FGameplayTag WeaponSheathedStateTag;
+
+	// 抜刀状態のTag
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = WeaponState)
+	FGameplayTag WeaponDrawnStateTag;
 
 public:
 	bool GetIsDrawing() const { return bIsDrawing; }

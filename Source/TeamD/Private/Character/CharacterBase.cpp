@@ -5,15 +5,31 @@ ACharacterBase::ACharacterBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// 初期化
-	CustomAbilitySystemComponent = nullptr;
 	CustomAbilitySystemComponent = CreateDefaultSubobject<UCustomAbilitySystemComponent>(TEXT("CustomAbilitySystemComponent"));
+}
 
-	if (!CustomAbilitySystemComponent) UE_LOG(LogTemp, Warning, TEXT("ASCが無い"));
+void ACharacterBase::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	
+	// ASCの初期化が必要らしい
+	if (CustomAbilitySystemComponent)
+	{
+		CustomAbilitySystemComponent->InitAbilityActorInfo(this, this);
+		UE_LOG(LogTemp, Log, TEXT("init custom asc"));
+	}
+	else UE_LOG(LogTemp, Error, TEXT("APlayerCharacter::PostInitializeComponents : null CustomAbilitySystemComponent"));
 }
 
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (!CustomAbilitySystemComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("APlayerCharacter::BeginPlay : null CustomAbilitySystemComponent"));
+		return;
+	}
 
 	// Abilityを与える
 	for (auto Ability : InitialAbilities)

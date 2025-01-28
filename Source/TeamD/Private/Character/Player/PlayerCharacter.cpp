@@ -23,6 +23,12 @@ void APlayerCharacter::BeginPlay()
 
 	SetupInput();
 
+	// ヒットモーションは別定義だからここで登録する todo:GiveAbilityAndActivateOnceを使ってもいい
+	for (auto Ability : DamageMotions)
+	{
+		CustomAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1, this));
+	}
+
 	// widgetの表示
 	if (PlayerCommonWidgetClass)
 	{
@@ -30,12 +36,6 @@ void APlayerCharacter::BeginPlay()
 		{
 			WidgetInstance->AddToViewport();
 		}
-	}
-
-	// ヒットモーションは別定義だからここで登録する todo:GiveAbilityAndActivateOnceを使ってもいい
-	for (auto Ability : DamageMotions)
-	{
-		CustomAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1, this));
 	}
 
 	// ダメージコールバックを登録する

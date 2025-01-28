@@ -5,7 +5,7 @@ void UCustomAbilitySystemComponent::TickComponent(float DeltaTime, enum ELevelTi
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	TryActivateAbilitiesBySavedInputTagInTick(DeltaTime);
+	if (bUseSaveInput) TryActivateAbilitiesBySavedInputTagInTick(DeltaTime);
 }
 
 FGameplayAbilitySpecHandle UCustomAbilitySystemComponent::GiveAbilityAndActivateOnce(
@@ -51,7 +51,7 @@ void UCustomAbilitySystemComponent::SaveTagTryActivateAbilities(const FGameplayT
 {
 	if (!InputTag.IsValid())
 	{
-		UE_LOG(LogTemp, Error, TEXT("Invalid InputTag"));
+		UE_LOG(LogTemp, Error, TEXT("Invalid InputTag:%d"), __LINE__);
 		return;
 	}
 	
@@ -61,20 +61,51 @@ void UCustomAbilitySystemComponent::SaveTagTryActivateAbilities(const FGameplayT
 		SavedInputTag = InputTag;
 		// タイマーリセット
 		SaveInputTimer = TimeToSaveInput;
+		// 入力Tagを上書き
+		RemoveInputTags();
+		AddLooseGameplayTag(InputTag);
 	}
 }
 
 void UCustomAbilitySystemComponent::TryActivateAbilitiesBySavedInputTagInTick(float DeltaTime)
 {
-	if (SaveInputTimer <= 0) return;
-
-	if (SavedInputTag.IsValid() && TryActivateAbilitiesByTag(FGameplayTagContainer(SavedInputTag), true))
+	if (SaveInputTimer <= 0 ||
+		(SavedInputTag.IsValid() && TryActivateAbilitiesByTag(FGameplayTagContainer(SavedInputTag), true)))
 	{
-		// タイマーリセットして終了
+		// タイマーリセット
 		SaveInputTimer = 0;
+		// Tagをリセット
+		SavedInputTag = FGameplayTag::EmptyTag;
+		// InputTagを削除
+		RemoveTagsWithParent(InputTagRoot);
+		
 		return;
 	}
 
 	// タイマーを進める
 	SaveInputTimer -= DeltaTime;
 }
+
+void UCustomAbilitySystemComponent::RemoveTagsWithParent(const FGameplayTag& ParentTag)
+{
+	if (!ParentTag.IsValid())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid InputTag:%s"), *GetOwner()->GetName());
+		return;
+	}
+
+	// 現在のすべてのアクティブなタグを取得
+	FGameplayTagContainer ActiveTags;
+	GetOwnedGameplayTags(ActiveTags);
+
+	// 親タグ以下のすべてのタグを探して全て削除
+	for (const FGameplayTag& Tag : ActiveTags)
+	{
+		if (Tag.MatchesTag(ParentTag)) // 親タグと一致するかチェック
+		{
+			SetLooseGameplayTagCount(Tag, 0);
+		}
+	}
+}
+
+void UCustomAbilitySystemComponent::RemoveInputTags() { RemoveTagsWithParent(InputTagRoot); }
