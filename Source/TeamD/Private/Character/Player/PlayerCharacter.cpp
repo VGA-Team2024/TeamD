@@ -168,6 +168,7 @@ void APlayerCharacter::OnDead()
 		// 再生
 		SequencePlayer->Play();
 
-		// todo:死亡モーションの再生
+		// 死亡モーションAbilityの再生
+		CustomAbilitySystemComponent->GiveAbilityAndActivateOnce(PlayerDeadAbility);
 	}
 }

@@ -110,6 +110,10 @@ protected:
 	// 死んだとき todo:これも
 	void OnDead();
 
+	// 死んだときのAbility
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Damage)
+	TSubclassOf<UGameplayAbility> PlayerDeadAbility;
+
 	// 被弾時のAbility
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Damage)
 	TArray<TSubclassOf<UPlayMontageAbility>> DamageMotions;
