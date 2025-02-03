@@ -1,50 +1,81 @@
 #include "GAS/CustomAbilitySystemComponent.h"
+#include "Framework/CustomFramework.h"
 
 void UCustomAbilitySystemComponent::TickComponent(float DeltaTime, enum ELevelTick TickType,
-	FActorComponentTickFunction* ThisTickFunction)
+                                                  FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	if (bUseSaveInput) TryActivateAbilitiesBySavedInputTagInTick(DeltaTime);
 }
 
-FGameplayAbilitySpecHandle UCustomAbilitySystemComponent::GiveAbilityAndActivateOnce(
-	TSubclassOf<UGameplayAbility> AbilityClass)
+FGameplayAbilitySpec UCustomAbilitySystemComponent::GiveAbilityAndActivateOnce(
+	const TSubclassOf<UGameplayAbility> AbilityClass)
 {
-	if (!AbilityClass) return FGameplayAbilitySpecHandle();
+	if (!AbilityClass)
+	{
+		LOG_INFO(Error, "Invalid Ability Class");
+		return nullptr;
+	}
+    
+	// SpecをAbilitySystemに一時的に追加
+	const FGameplayAbilitySpecHandle SpecHandle = GiveAbility(FGameplayAbilitySpec(AbilityClass));
 
-	// Abilityを付与する
-	const FGameplayAbilitySpec AbilitySpec(AbilityClass);
-	const FGameplayAbilitySpecHandle SpecHandle = GiveAbility(AbilitySpec);
+	// Abilityを発動 発動出来なかったらAbilityを削除して終了
+	if (const bool bActivated = TryActivateAbility(SpecHandle); !bActivated)
+	{
+		LOG_INFO(Log, "Failed to activate temporary ability");
+		ClearAbility(SpecHandle);
+		return nullptr;
+	}
 
-	// Abilityを起動する
-	TryActivateAbility(SpecHandle);
+	// アクティブなAbilityインスタンス取得
+	if (UGameplayAbility* ActiveAbility = GetActiveAbility(SpecHandle))
+	{
+		// Ability終了時に削除する処理を登録
+		ActiveAbility->OnGameplayAbilityEnded.AddUObject(this, &UCustomAbilitySystemComponent::RemoveAbilityByReference);
+	}
+	else
+	{
+		LOG_INFO(Warning, "ActiveInstance is null, ability may have already ended");
+		ClearAbility(SpecHandle);
+	}
 
-	// Abilityが終了したときの処理を登録する
-	AbilitySpec.Ability->OnGameplayAbilityEnded.AddUObject(this, &UCustomAbilitySystemComponent::OnAbilityEnded);
-
-	return SpecHandle;
+	// Specを返す
+	return *FindAbilitySpecFromHandle(SpecHandle);
 }
 
-void UCustomAbilitySystemComponent::RemoveAbilityByClass(TSubclassOf<UGameplayAbility> AbilityClass)
+void UCustomAbilitySystemComponent::RemoveAbilityByReference(UGameplayAbility* Ability)
 {
-	if (!AbilityClass) return;
+	ClearAbility(Ability->GetCurrentAbilitySpecHandle());
+}
 
-	// 一致するAbilityを探す
-	for (const FGameplayAbilitySpec& Spec : GetActivatableAbilities())
+TArray<UGameplayAbility*> UCustomAbilitySystemComponent::GetActiveAbilities()
+{
+	TArray<UGameplayAbility*> ActiveAbilities;
+	
+	for (FGameplayAbilitySpec AbilitySpec : GetActivatableAbilities())
 	{
-		if (Spec.Ability && Spec.Ability.GetClass() == AbilityClass)
+		if (AbilitySpec.IsActive())
 		{
-			// 削除
-			ClearAbility(Spec.Handle);
-			return;
+			ActiveAbilities.Append(AbilitySpec.GetAbilityInstances());
 		}
 	}
+
+	return ActiveAbilities;
 }
 
-void UCustomAbilitySystemComponent::OnAbilityEnded(UGameplayAbility* Ability)
+UGameplayAbility* UCustomAbilitySystemComponent::GetActiveAbility(const FGameplayAbilitySpecHandle SpecHandle)
 {
-	RemoveAbilityByClass(Ability->GetClass());
+	for (UGameplayAbility* Ability : GetActiveAbilities())
+	{
+		if (Ability->GetCurrentAbilitySpecHandle() == SpecHandle)
+		{
+			return Ability;
+		}
+	}
+
+	return nullptr;
 }
 
 void UCustomAbilitySystemComponent::SaveTagTryActivateAbilities(const FGameplayTag InputTag)

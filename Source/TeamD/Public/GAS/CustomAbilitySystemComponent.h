@@ -17,17 +17,29 @@ public:
 
 	//------------------------Ability------------------------
 	
-	// Abilityを発動して捨てる
+	/**
+	 * Abilityを発動して捨てる
+	 * @param AbilityClass 再生するAbilityClass
+	 * @return 再生したAbilitySpec
+	 */
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
-	FGameplayAbilitySpecHandle GiveAbilityAndActivateOnce(TSubclassOf<UGameplayAbility> AbilityClass);
+	FGameplayAbilitySpec GiveAbilityAndActivateOnce(TSubclassOf<UGameplayAbility> AbilityClass);
+	
+	// Ability参照からAbilityを削除する
+	UFUNCTION(blueprintcallable, Category = "Abilities")
+	void RemoveAbilityByReference(UGameplayAbility* Ability);
 
-	// 特定のAbilityを削除する
+	// 現在ActiveなAbilityを取得する
+	UFUNCTION(BlueprintCallable, BlueprintPure, category = "Abilities")
+	TArray<UGameplayAbility*> GetActiveAbilities();
+
+	/**
+	 * 指定したSpecHandleで最初に取得した再生中のAbility参照を返す
+	 * @param SpecHandle 取得するAbilityのSpecHandle
+	 * @return 再生中のAbility参照　再生中でなければnullptr
+	 */
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
-	void RemoveAbilityByClass(TSubclassOf<UGameplayAbility> AbilityClass);
-
-	// GiveAbilityAndActivateOnceでAbility終了を受け取る用
-	UFUNCTION()
-	void OnAbilityEnded(UGameplayAbility* Ability);
+	UGameplayAbility* GetActiveAbility(FGameplayAbilitySpecHandle SpecHandle);
 
 	//------------------------入力保存------------------------
 

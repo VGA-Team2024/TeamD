@@ -25,7 +25,12 @@ void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (!CustomAbilitySystemComponent)
+	if (CustomAbilitySystemComponent)
+	{
+		CustomAbilitySystemComponent->InitAbilityActorInfo(this, this);
+		UE_LOG(LogTemp, Log, TEXT("init custom asc"));
+	}
+	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("APlayerCharacter::BeginPlay : null CustomAbilitySystemComponent"));
 		return;

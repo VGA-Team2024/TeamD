@@ -18,14 +18,16 @@ class TEAMD_API UPlayerItemManager : public UActorComponent
 public:
 	UPlayerItemManager();
 
-protected:
 	virtual void BeginPlay() override;
 
-public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	//------------------------Input------------------------
 protected:
+	UPROPERTY()
+	TObjectPtr<UCustomAbilitySystemComponent> CustomAbilitySystemComponent;
+
+	//------------------------Input------------------------
+
 	// 入力初期設定
 	void SetupInput();
 
@@ -33,7 +35,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputMappingContext> ItemMappingContext;
 
-	// 通常攻撃
+	// アイテム使用InputAction
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> UseItemInput;
 

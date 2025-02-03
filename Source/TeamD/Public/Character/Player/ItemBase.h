@@ -1,6 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Character/CharacterBase.h"
+#include "GAS/Player/ItemAbilityBase.h"
 #include "ItemBase.generated.h"
 
 /**
@@ -12,6 +14,18 @@ class TEAMD_API UItemBase : public UObject
 	GENERATED_BODY()
 
 public:
+	// 初期化
+	void Init(const TObjectPtr<UCustomAbilitySystemComponent>& CustomAbilitySystemComponent);
+
+	UPROPERTY()
+	TObjectPtr<UCustomAbilitySystemComponent> OwnerCustomASC;
+
+	//------------------------ItemAction------------------------
+	
+	// アイテム使用のAbility再生用
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+	TSubclassOf<UItemAbilityBase> ItemAbilityClass;
+	
 	// アイテムの使用
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void UseItem();
@@ -29,6 +43,8 @@ public:
 	// アイテムの追加
 	void AddStack(int32 Value);
 
+	//------------------------ItemProperty------------------------
+	
 	// 最大スタック数
 	UFUNCTION(BlueprintPure)
 	int32 GetMaxStack() const;

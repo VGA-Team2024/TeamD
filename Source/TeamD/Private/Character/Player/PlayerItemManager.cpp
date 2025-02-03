@@ -2,6 +2,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Character/Player/PlayerCharacter.h"
 
 UPlayerItemManager::UPlayerItemManager()
 {
@@ -13,6 +14,10 @@ void UPlayerItemManager::BeginPlay()
 	Super::BeginPlay();
 
 	SetupInput();
+
+	// アイテムに参照を渡すため
+	CustomAbilitySystemComponent = Cast<APlayerCharacter>(GetOwner())->GetAbilitySystemComponent();
+	if (!CustomAbilitySystemComponent) UE_LOG(LogTemp, Error, TEXT("customASC is not player"));
 }
 
 void UPlayerItemManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -62,7 +67,7 @@ void UPlayerItemManager::AddItem(TSubclassOf<UItemBase> ItemToAdd, int32 Num)
 	// すでに持っているアイテムかをループしてみる
 	for (auto ItemInPossession : ItemsInPossession)
 	{
-		if (ItemInPossession.GetClass() == ItemToAdd)
+		if (ItemInPossession && ItemInPossession.GetClass() == ItemToAdd)
 		{
 			ItemInPossession->AddStack(Num);
 			return;
@@ -71,6 +76,7 @@ void UPlayerItemManager::AddItem(TSubclassOf<UItemBase> ItemToAdd, int32 Num)
 
 	// 持ってないアイテムなので新しく追加する
     TObjectPtr<UItemBase> NewItem = NewObject<UItemBase>(this, ItemToAdd);
+	NewItem->Init(CustomAbilitySystemComponent);
 	NewItem->AddStack(Num);
 	ItemsInPossession.Add(NewItem);
 }
