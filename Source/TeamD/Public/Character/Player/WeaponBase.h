@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/CapsuleComponent.h"
 #include "AbilitySystemComponent.h"
+#include "NiagaraSystem.h"
 #include "Atom/AtomSoundBase.h"
 #include "WeaponBase.generated.h"
 
@@ -100,9 +101,17 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Attach, meta = (DisplayPriority = -1))
 	TObjectPtr<USceneComponent> DrawingAttachPivot;
 
-	//------------------------音------------------------
+	//------------------------Effect------------------------
 
 	// 攻撃がヒットしたときの音 全武器共通でもここにあったほうが
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sound)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Effect)
 	TObjectPtr<UAtomSoundBase> HitSound;
+
+	// ヒットエフェクト
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Effect)
+	TObjectPtr<UNiagaraSystem> HitEffect;
+
+protected:
+	// NiagaraSystemを指定位置にスポーンさせる
+	void SpawnNiagaraEffect(const TObjectPtr<UNiagaraSystem>& NiagaraEffect, const FVector& Location, const FRotator& Rotation = FRotator::ZeroRotator) const;
 };

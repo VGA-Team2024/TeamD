@@ -19,6 +19,10 @@ void UDamageDisplayWidget::InitDamageDisplay(const int Value, const FVector& Loc
 	
 	WorldLocation = Location;
 	DisplayController = PlayerController;
+	// Offsetを決定して保存
+	RandomOffset = FVector2D(
+		FMath::FRandRange(-RandomOffsetRange.X, RandomOffsetRange.X),
+		FMath::FRandRange(-RandomOffsetRange.Y, RandomOffsetRange.Y));
 }
 
 void UDamageDisplayWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -30,6 +34,8 @@ void UDamageDisplayWidget::NativeTick(const FGeometry& MyGeometry, float InDelta
 		// テキスト位置をセット
 		FVector2D ScreenPosition;
 		DisplayController->ProjectWorldLocationToScreen(WorldLocation, ScreenPosition);
+		// offsetを追加
+		ScreenPosition += RandomOffset;
 		SetPositionInViewport(ScreenPosition);
 	}
 }

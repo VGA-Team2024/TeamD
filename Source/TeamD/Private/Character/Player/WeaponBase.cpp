@@ -1,5 +1,7 @@
 #include "Character/Player/WeaponBase.h"
 #include "Atom/AtomComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Framework/CustomFramework.h"
 
 AWeaponBase::AWeaponBase()
 {
@@ -87,6 +89,23 @@ void AWeaponBase::OnAttackHit(const FHitResult& HitResult)
 		AtomComponent->SetSound(HitSound);
 		AtomComponent->Play();
 	}
+
+	// ヒットエフェクトの再生
+	SpawnNiagaraEffect(HitEffect, HitResult.ImpactPoint, FRotator::ZeroRotator);
 	
 	OnHitAttack.Broadcast(HitResult);
+}
+
+void AWeaponBase::SpawnNiagaraEffect(const TObjectPtr<UNiagaraSystem>& NiagaraEffect, const FVector& Location, const FRotator& Rotation) const
+{
+	if (!NiagaraEffect)
+	{
+		LOG_INFO(Warning, TEXT("SpawnNiagaraEffect is nullptr"));
+		return;
+	}
+	
+	if (const TObjectPtr<UWorld> World = GetWorld())
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, NiagaraEffect, Location, Rotation);
+	}
 }

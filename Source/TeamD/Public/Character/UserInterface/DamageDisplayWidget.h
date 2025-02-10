@@ -44,4 +44,11 @@ protected:
 	// 表示するPlayerController
 	UPROPERTY()
 	TObjectPtr<APlayerController> DisplayController;
+
+	// 表示位置のランダムなOffsetの範囲
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "DamageDisplay")
+	FVector2D RandomOffsetRange;
+
+	// ランダムOffset保存用
+	FVector2D RandomOffset;
 };
