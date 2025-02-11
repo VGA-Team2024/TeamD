@@ -5,6 +5,8 @@
 #include "GAS/Player/ItemAbilityBase.h"
 #include "ItemBase.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(OneParamDelegate, int32);
+
 /**
  * プレイヤーが使用するアイテムの基底
  */
@@ -42,6 +44,9 @@ public:
 
 	// アイテムの追加
 	void AddStack(int32 Value);
+
+	// アイテムが消費されたとき
+	OneParamDelegate OnItemStackChanged;
 
 	//------------------------ItemProperty------------------------
 	

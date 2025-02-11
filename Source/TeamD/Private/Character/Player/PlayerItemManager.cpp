@@ -1,4 +1,7 @@
 #include "Character/Player/PlayerItemManager.h"
+
+#include <rapidjson/document.h>
+
 #include "Kismet/GameplayStatics.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -55,10 +58,10 @@ void UPlayerItemManager::UseItem()
 	UE_LOG(LogTemp, Log, TEXT("call use item"));
 
 	// index判定
-	if (ItemsInPossession.Num() > SelectedItems)
+	if (ItemsInPossession.Num() > SelectedItemIndex)
 	{
 		// アイテムの使用を呼び出す
-		ItemsInPossession[SelectedItems]->UseItem();
+		ItemsInPossession[SelectedItemIndex]->UseItem();
 	}
 }
 
@@ -77,6 +80,10 @@ void UPlayerItemManager::AddItem(TSubclassOf<UItemBase> ItemToAdd, int32 Num)
 	// 持ってないアイテムなので新しく追加する
     TObjectPtr<UItemBase> NewItem = NewObject<UItemBase>(this, ItemToAdd);
 	NewItem->Init(CustomAbilitySystemComponent);
-	NewItem->AddStack(Num);
+	NewItem->OnItemStackChanged.AddLambda([this](int32 Value)
+	{
+		OnItemInfoChanged.Broadcast(ItemsInPossession, SelectedItemIndex);
+	});
 	ItemsInPossession.Add(NewItem);
+	NewItem->AddStack(Num);
 }

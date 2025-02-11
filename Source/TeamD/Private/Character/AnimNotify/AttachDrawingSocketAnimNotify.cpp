@@ -5,6 +5,6 @@ void UAttachDrawingSocketAnimNotify::Notify(USkeletalMeshComponent* MeshComp, UA
 {
 	if (const TObjectPtr<APlayerCharacter> OwnerPlayer = Cast<APlayerCharacter>(MeshComp->GetOwner()))
 	{
-		OwnerPlayer->WeaponController->DrawingWeapon();
+		OwnerPlayer->GetWeaponController()->DrawingWeapon();
 	}
 }

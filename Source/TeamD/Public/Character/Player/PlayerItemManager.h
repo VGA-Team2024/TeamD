@@ -7,6 +7,8 @@
 #include "ItemBase.h"
 #include "PlayerItemManager.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_TwoParams(FItemInfoDelegate, TArray<TObjectPtr<UItemBase>>, int32);
+
 /**
  * プレイヤーの所持しているアイテムを管理
  */
@@ -46,11 +48,16 @@ protected:
 
 	// 所有しているアイテム
 	TArray<TObjectPtr<UItemBase>> ItemsInPossession;
+	
+	// 選択しているアイテムIndex
+	int32 SelectedItemIndex = 0;
 
 public:
 	// 所有しているアイテムを取得する
-	UFUNCTION(BlueprintPure, Category = Item)
-	const TArray<UItemBase*>& GetItemsInPossession() const { return ItemsInPossession; }
+	const TArray<TObjectPtr<UItemBase>>& GetItemsInPossession() const { return ItemsInPossession; }
+
+	// 所有アイテムが変更されたとき
+	FItemInfoDelegate OnItemInfoChanged;
 
 	/**
 	 * アイテムを追加する
@@ -60,7 +67,6 @@ public:
 	UFUNCTION(BlueprintCallable, category = Item)
 	void AddItem(TSubclassOf<UItemBase> ItemToAdd, int32 Num);
 
-protected:
-	// 選択しているアイテムIndex
-	int32 SelectedItems = 0;
+	// 選択のIndexを取得
+	int32 GetSelectedItemIndex() const { return SelectedItemIndex; }
 };

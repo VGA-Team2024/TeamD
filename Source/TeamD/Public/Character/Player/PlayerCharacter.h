@@ -88,7 +88,7 @@ private:
 
 //------------------------コンポーネント------------------------
 
-public:
+protected:
 	// 武器コントローラー
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component)
 	TObjectPtr<UWeaponController> WeaponController;
@@ -96,6 +96,11 @@ public:
 	// アイテム管理
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component)
 	TObjectPtr<UPlayerItemManager> PlayerItemManager;
+
+public:
+	TObjectPtr<UWeaponController> GetWeaponController() { return WeaponController; }
+
+	TObjectPtr<UPlayerItemManager> GetPlayerItemManager() { return PlayerItemManager; }
 
 	//------------------------被弾------------------------
 

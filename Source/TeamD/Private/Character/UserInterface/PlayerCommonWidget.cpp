@@ -1,5 +1,6 @@
 #include "Character/UserInterface/PlayerCommonWidget.h"
 #include "Character/Player/PlayerCharacter.h"
+#include "Framework/CustomFramework.h"
 
 void UPlayerCommonWidget::NativeConstruct()
 {
@@ -13,6 +14,13 @@ void UPlayerCommonWidget::NativeConstruct()
 			PlayerAttributeSet->OnChangedHealth.AddDynamic(this, &UPlayerCommonWidget::OnChangedHealthEvent);
 		}
 		else UE_LOG(LogTemp, Warning, TEXT("UPlayerCommonWidget : Attributeがnull"));
+
+		if ((PlayerItemManager = Player->GetPlayerItemManager()))
+		{
+			PlayerItemManager->OnItemInfoChanged.AddUObject(this, &UPlayerCommonWidget::OnItemInfoChanged);
+			OnItemInfoChanged(PlayerItemManager->GetItemsInPossession(), PlayerItemManager->GetSelectedItemIndex());
+		}
+		else LOG_INFO(Warning, "PlayerItemManager null");
 	}
 	else
 	{
@@ -23,4 +31,9 @@ void UPlayerCommonWidget::NativeConstruct()
 void UPlayerCommonWidget::OnChangedHealthEvent(float Value)
 {
 	HealthBar->SetPercent(Value / PlayerAttributeSet->GetMaxHealth());
+}
+
+void UPlayerCommonWidget::OnItemInfoChanged(TArray<TObjectPtr<UItemBase>> ItemsInPossession, int32 SelectedIndex)
+{
+	ItemStackText->SetText(FText::AsNumber(ItemsInPossession[SelectedIndex]->GetCurrentStack()));
 }

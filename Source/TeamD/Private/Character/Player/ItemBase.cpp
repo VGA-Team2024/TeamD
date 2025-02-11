@@ -8,6 +8,12 @@ void UItemBase::Init(const TObjectPtr<UCustomAbilitySystemComponent>& CustomAbil
 
 void UItemBase::UseItem_Implementation()
 {
+	if (CurrentStackNum <= 0)
+	{
+		CurrentStackNum = 0;
+		return;
+	}
+	
 	const FGameplayAbilitySpec Spec = OwnerCustomASC->GiveAbilityAndActivateOnce(ItemAbilityClass);
 	// Abilityを再生 再生できなかったら終了
 	if (!Spec.IsActive())
@@ -24,12 +30,13 @@ void UItemBase::UseItem_Implementation()
 	}
 
 	// アイテム効果のイベントに登録
-	ActiveItemAbility->OnActivateEffect.AddDynamic(this, &UItemBase::ApplyItemEffect);
+	ActiveItemAbility->OnActivateEffect.AddUObject(this, &UItemBase::ApplyItemEffect);
 }
 
 void UItemBase::ApplyItemEffect_Implementation()
 {
 	CurrentStackNum--;
+	OnItemStackChanged.Broadcast(CurrentStackNum);
 	
 	LOG_INFO(Log, TEXT("%d"), CurrentStackNum);
 }
@@ -37,6 +44,7 @@ void UItemBase::ApplyItemEffect_Implementation()
 void UItemBase::AddStack(int32 Value)
 {
 	CurrentStackNum = FMath::Min(CurrentStackNum + Value, MaxStackNum);
+	OnItemStackChanged.Broadcast(CurrentStackNum);
 }
 
 int32 UItemBase::GetMaxStack() const { return MaxStackNum; }
