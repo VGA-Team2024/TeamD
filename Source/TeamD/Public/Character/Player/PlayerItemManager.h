@@ -59,6 +59,8 @@ public:
 	// 所有アイテムが変更されたとき
 	FItemInfoDelegate OnItemInfoChanged;
 
+	void ItemInfoChangedBroadcast() const;
+
 	/**
 	 * アイテムを追加する
 	 * @param ItemToAdd 追加するアイテムクラス

@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Character/Player/PlayerCharacter.h"
+#include "Framework/CustomFramework.h"
 
 UPlayerItemManager::UPlayerItemManager()
 {
@@ -60,9 +61,20 @@ void UPlayerItemManager::UseItem()
 	// index判定
 	if (ItemsInPossession.Num() > SelectedItemIndex)
 	{
+		if (!ItemsInPossession[SelectedItemIndex])
+		{
+			LOG_INFO(Error, "nullptr");
+			return;
+		}
+	
 		// アイテムの使用を呼び出す
 		ItemsInPossession[SelectedItemIndex]->UseItem();
 	}
+}
+
+void UPlayerItemManager::ItemInfoChangedBroadcast() const
+{
+	OnItemInfoChanged.Broadcast(ItemsInPossession, SelectedItemIndex);
 }
 
 void UPlayerItemManager::AddItem(TSubclassOf<UItemBase> ItemToAdd, int32 Num)
@@ -82,7 +94,7 @@ void UPlayerItemManager::AddItem(TSubclassOf<UItemBase> ItemToAdd, int32 Num)
 	NewItem->Init(CustomAbilitySystemComponent);
 	NewItem->OnItemStackChanged.AddLambda([this](int32 Value)
 	{
-		OnItemInfoChanged.Broadcast(ItemsInPossession, SelectedItemIndex);
+		ItemInfoChangedBroadcast();
 	});
 	ItemsInPossession.Add(NewItem);
 	NewItem->AddStack(Num);

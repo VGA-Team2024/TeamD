@@ -24,7 +24,7 @@ float UDamageCustomCalculation::CalculateBaseMagnitude_Implementation(const FGam
 		return 0.f;
 	}
 
-	if (TargetPlayer->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Player.Invincible"))))
+	if (TargetPlayer->GetAbilitySystemComponent()->HasMatchingGameplayTag(HitstunStateTag))
 	{
 		return  0.f;
 	}

@@ -14,4 +14,9 @@ class TEAMD_API UDamageCustomCalculation : public UGameplayModMagnitudeCalculati
 
 public:
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
+
+protected:
+	// プレイヤーがダメージを受けない状態であるHitstunのStateTag
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag HitstunStateTag;
 };
