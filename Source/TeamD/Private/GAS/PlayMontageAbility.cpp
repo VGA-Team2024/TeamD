@@ -5,6 +5,8 @@ void UPlayMontageAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
 	const FGameplayEventData* TriggerEventData)
 {
+	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+	
 	if (!MontageToPlay) return;
 	
 	// 発動条件をチェックする
