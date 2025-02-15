@@ -47,6 +47,7 @@ protected:
 	//------------------------アイテム管理------------------------
 
 	// 所有しているアイテム
+	UPROPERTY()
 	TArray<TObjectPtr<UItemBase>> ItemsInPossession;
 	
 	// 選択しているアイテムIndex

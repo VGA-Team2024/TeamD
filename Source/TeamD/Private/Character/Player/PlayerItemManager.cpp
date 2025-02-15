@@ -59,11 +59,11 @@ void UPlayerItemManager::UseItem()
 	UE_LOG(LogTemp, Log, TEXT("call use item"));
 
 	// index判定
-	if (ItemsInPossession.Num() > SelectedItemIndex)
+	if (ItemsInPossession.IsValidIndex(SelectedItemIndex))
 	{
-		if (!ItemsInPossession[SelectedItemIndex])
+		if (!IsValid(ItemsInPossession[SelectedItemIndex]))
 		{
-			LOG_INFO(Error, "nullptr");
+			LOG_INFO(Error, "not valid");
 			return;
 		}
 	

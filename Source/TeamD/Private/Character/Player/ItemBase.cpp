@@ -6,7 +6,7 @@ void UItemBase::Init(const TObjectPtr<UCustomAbilitySystemComponent>& CustomAbil
 	OwnerCustomASC = CustomAbilitySystemComponent;
 }
 
-void UItemBase::UseItem_Implementation()
+void UItemBase::UseItem()
 {
 	if (CurrentStackNum <= 0)
 	{

@@ -29,11 +29,7 @@ public:
 	TSubclassOf<UItemAbilityBase> ItemAbilityClass;
 	
 	// アイテムの使用
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void UseItem();
-
-	// todo:これでC++、Blueprintの両方でoverride出来るけど、いずれ全ての処理はC++に書きたい
-	virtual void UseItem_Implementation();
+	virtual void UseItem();
 
 	// アイテムの効果
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
