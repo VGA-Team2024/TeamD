@@ -84,11 +84,35 @@ private:
 	// Dodge
 	void PressedDodge();
 	// Dash
-	void PressedDash();
+	void DownDash();
+	void ReleasedDash();
+
+	//------------------------移動------------------------
+
+	// 移動速度を状態に応じて更新する
+	void UpdateMovementSpeed();
+
+protected:
+	// 歩く速度 CharacterMovementから初期化する
+	float WalkSpeed;
+
+	// 走る速度
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Movement)
+	float DashSpeed;
+
+	bool bIsDashing = false;
+
+	// 抜刀納刀モーション中の速度
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Movement)
+	float SheathingOrDrawingSpeed;
+
+
+	// 抜刀納刀モーション中の状態Tag
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Movement)
+	FGameplayTag SheathingOrDrawingStateTag;
 
 //------------------------コンポーネント------------------------
 
-protected:
 	// 武器コントローラー
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Component)
 	TObjectPtr<UWeaponController> WeaponController;

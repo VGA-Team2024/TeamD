@@ -6,6 +6,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "LevelSequenceActor.h"
 #include "LevelSequencePlayer.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/Monster/MonsterAttributeSet.h"
 #include "GAS/Player/PlayerAttributeSet.h"
 
@@ -40,6 +41,8 @@ void APlayerCharacter::BeginPlay()
 
 	// ダメージコールバックを登録する
 	GetPlayerAttributeSet()->OnChangedHealth.AddDynamic(this, &APlayerCharacter::OnReceiveDamage);
+	// 移動スピードを取得
+	WalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
 
 UPlayerAttributeSet* APlayerCharacter::GetPlayerAttributeSet()
@@ -63,7 +66,8 @@ void APlayerCharacter::SetupInput()
 			EnhancedInputComponent->BindAction(MoveInput, ETriggerEvent::Triggered, this, &APlayerCharacter::MovePlayer);
 			EnhancedInputComponent->BindAction(LookInput, ETriggerEvent::Triggered, this, &APlayerCharacter::RotateControllerInput);
 			EnhancedInputComponent->BindAction(DodgeInput, ETriggerEvent::Started, this, &APlayerCharacter::PressedDodge);
-			EnhancedInputComponent->BindAction(DashInput, ETriggerEvent::Started, this, &APlayerCharacter::PressedDash);
+			EnhancedInputComponent->BindAction(DashInput, ETriggerEvent::Triggered, this, &APlayerCharacter::DownDash);
+			EnhancedInputComponent->BindAction(DashInput, ETriggerEvent::Completed, this, &APlayerCharacter::ReleasedDash);
 		}
 
 		// Input Mapping Contextを登録する
@@ -79,6 +83,9 @@ void APlayerCharacter::SetupInput()
 
 void APlayerCharacter::MovePlayer(const FInputActionValue& Value)
 {
+	// 移動時に速度を更新する
+	UpdateMovementSpeed();
+	
 	// Vector2dにする
 	const FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -114,11 +121,31 @@ void APlayerCharacter::PressedDodge()
 	CustomAbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(DodgeInputTag), true);
 }
 
-void APlayerCharacter::PressedDash()
+void APlayerCharacter::DownDash()
 {
-	if (!WeaponController->GetIsDrawing())
+	bIsDashing = true;
+}
+
+void APlayerCharacter::ReleasedDash()
+{
+	bIsDashing = false;
+}
+
+void APlayerCharacter::UpdateMovementSpeed()
+{
+	if (CustomAbilitySystemComponent->HasMatchingGameplayTag(SheathingOrDrawingStateTag))
 	{
-		// todo:ダッシュ
+		// 抜刀納刀中のSpeed
+		GetCharacterMovement()->MaxWalkSpeed = SheathingOrDrawingSpeed;
+	}
+	else if (bIsDashing && !WeaponController->GetIsDrawing())
+	{
+		// Dash入力中 && 納刀中
+		GetCharacterMovement()->MaxWalkSpeed = DashSpeed;
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	}
 }
 
