@@ -138,6 +138,11 @@ void APlayerCharacter::UpdateMovementSpeed()
 		// 抜刀納刀中のSpeed
 		GetCharacterMovement()->MaxWalkSpeed = SheathingOrDrawingSpeed;
 	}
+	else if (CustomAbilitySystemComponent->HasMatchingGameplayTag(UsingItemStateTag))
+	{
+		// Item使用中のSpeed
+		GetCharacterMovement()->MaxWalkSpeed = UsingItemSpeed;
+	}
 	else if (bIsDashing && !WeaponController->GetIsDrawing())
 	{
 		// Dash入力中 && 納刀中

@@ -106,10 +106,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Movement)
 	float SheathingOrDrawingSpeed;
 
+	// 抜刀納刀モーション中の速度
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Movement)
+	float UsingItemSpeed;
 
 	// 抜刀納刀モーション中の状態Tag
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Movement)
 	FGameplayTag SheathingOrDrawingStateTag;
+
+	// 抜刀納刀モーション中の状態Tag
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Movement)
+	FGameplayTag UsingItemStateTag;
 
 //------------------------コンポーネント------------------------
 
