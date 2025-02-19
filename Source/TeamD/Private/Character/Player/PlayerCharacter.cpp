@@ -131,7 +131,7 @@ void APlayerCharacter::ReleasedDash()
 	bIsDashing = false;
 }
 
-void APlayerCharacter::UpdateMovementSpeed()
+void APlayerCharacter::UpdateMovementSpeed() const
 {
 	if (CustomAbilitySystemComponent->HasMatchingGameplayTag(SheathingOrDrawingStateTag))
 	{

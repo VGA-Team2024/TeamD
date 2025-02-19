@@ -90,7 +90,7 @@ private:
 	//------------------------移動------------------------
 
 	// 移動速度を状態に応じて更新する
-	void UpdateMovementSpeed();
+	void UpdateMovementSpeed() const;
 
 protected:
 	// 歩く速度 CharacterMovementから初期化する
