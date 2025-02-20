@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "LevelSequence.h"
+#include "MonsterAIController.h"
 #include "Character/CharacterBase.h"
 #include "GAS/Monster/MonsterAttributeSet.h"
 #include "MonsterCharacter.generated.h"
@@ -38,10 +39,11 @@ public:
 
 	virtual void BeginPlay() override;
 
-	//------------------------GAS------------------------
-
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	UMonsterAttributeSet* GetMonsterAttributeSet() { return Cast<UMonsterAttributeSet>(CharacterAttributeSet); }
+	UMonsterAttributeSet* GetMonsterAttributeSet() const { return Cast<UMonsterAttributeSet>(CharacterAttributeSet); }
+
+	// MonsterのAIControllerを取得する
+	TObjectPtr<AMonsterAIController> GetAIController() const { return Cast<AMonsterAIController>(GetController()); }
 
 	//--------------------攻撃を与える--------------------
 

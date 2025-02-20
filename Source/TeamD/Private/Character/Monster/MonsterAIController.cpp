@@ -36,6 +36,11 @@ void AMonsterAIController::BeginPlay()
 	}
 }
 
+TObjectPtr<AActor> AMonsterAIController::GetTargetActor() const
+{
+	return Cast<AActor>(Blackboard->GetValueAsObject(TargetActorKeyName));
+}
+
 void AMonsterAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 {
 	for (const auto UpdatedActor : UpdatedActors)
