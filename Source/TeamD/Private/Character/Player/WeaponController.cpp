@@ -2,6 +2,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Character/CharacterBase.h"
+#include "Character/Player/PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 UWeaponController::UWeaponController()
@@ -26,14 +27,14 @@ void UWeaponController::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 void UWeaponController::GetReference()
 {
 	// CharacterBaseからCustomASCとCharacterを取得
-	if (const TObjectPtr<ACharacterBase> OwnerCharacterBase = Cast<ACharacterBase>(GetOwner()))
+	if (const TObjectPtr<APlayerCharacter> OwnerPlayer = Cast<APlayerCharacter>(GetOwner()))
 	{
-		if (!((CustomAbilitySystemComponent = OwnerCharacterBase->GetAbilitySystemComponent())))
+		if (!((PlayerAbilitySystemComponent = Cast<UPlayerAbilitySystemComponent>(OwnerPlayer->GetAbilitySystemComponent()))))
 		{
 			UE_LOG(LogTemp, Error, TEXT("null CustomAbilitySystemComponent"));
 		}
 
-		OwnerCharacter = OwnerCharacterBase;
+		OwnerCharacter = OwnerPlayer;
 	}
 	else UE_LOG(LogTemp, Error, TEXT("OwnerがCharacterBaseではない"));
 }
@@ -65,16 +66,16 @@ void UWeaponController::SetupInput()
 
 void UWeaponController::NormalAttack()
 {
-	if (!CustomAbilitySystemComponent) return;
+	if (!PlayerAbilitySystemComponent) return;
 
-	if (bIsDrawing) CustomAbilitySystemComponent->SaveTagTryActivateAbilities(NormalAttackInputTag);
-	else CustomAbilitySystemComponent->SaveTagTryActivateAbilities(DrawingSwordInputTag);
+	if (bIsDrawing) PlayerAbilitySystemComponent->SaveTagTryActivateAbilities(NormalAttackInputTag);  
+	else PlayerAbilitySystemComponent->SaveTagTryActivateAbilities(DrawingSwordInputTag);
 }
 
 void UWeaponController::SheathingOfSword()
 {
 	// todo:状態をTagで持ってAbilityのほうで発動判定してもいい
-	if (bIsDrawing) CustomAbilitySystemComponent->SaveTagTryActivateAbilities(SheathingOfSwordInputTag);
+	if (bIsDrawing) PlayerAbilitySystemComponent->SaveTagTryActivateAbilities(SheathingOfSwordInputTag);
 }
 
 void UWeaponController::DrawingWeapon()
@@ -84,9 +85,9 @@ void UWeaponController::DrawingWeapon()
 	// 状態の切替
 	bIsDrawing = true;
 	// 納刀状態のTagを削除
-	CustomAbilitySystemComponent->RemoveTagsWithParent(WeaponSheathedStateTag);
+	PlayerAbilitySystemComponent->RemoveTagsWithParent(WeaponSheathedStateTag);
 	// 抜刀状態のTagを付与
-	CustomAbilitySystemComponent->AddLooseGameplayTag(WeaponDrawnStateTag);
+	PlayerAbilitySystemComponent->AddLooseGameplayTag(WeaponDrawnStateTag);
 }
 
 void UWeaponController::SheathingWeapon()
@@ -96,9 +97,9 @@ void UWeaponController::SheathingWeapon()
 	// 状態の切替
 	bIsDrawing = false;
 	// 抜刀状態のTagを削除
-	CustomAbilitySystemComponent->RemoveTagsWithParent(WeaponDrawnStateTag);
+	PlayerAbilitySystemComponent->RemoveTagsWithParent(WeaponDrawnStateTag);
 	// 納刀状態のTagを付与
-	CustomAbilitySystemComponent->AddLooseGameplayTag(WeaponSheathedStateTag);
+	PlayerAbilitySystemComponent->AddLooseGameplayTag(WeaponSheathedStateTag);
 }
 
 void UWeaponController::AttachWeaponToMesh(USkeletalMeshComponent* SkeletalMeshComponent, const FName AttachSocketName,
@@ -127,15 +128,15 @@ void UWeaponController::DealDamage(FHitResult HitResult)
 	if (const ACharacterBase* TargetCharacter = Cast<ACharacterBase>(HitResult.GetActor()))
 	{
 		// Spec作成
-		FGameplayEffectContextHandle ContextHandle = CustomAbilitySystemComponent->MakeEffectContext();
+		FGameplayEffectContextHandle ContextHandle = PlayerAbilitySystemComponent->MakeEffectContext();
 		// HitResultにダメージを与えたActorを登録する
 		ContextHandle.AddHitResult(HitResult);
-		const FGameplayEffectSpecHandle SpecHandle = CustomAbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, ContextHandle);
+		const FGameplayEffectSpecHandle SpecHandle = PlayerAbilitySystemComponent->MakeOutgoingSpec(DealDamageEffectClass, 0, ContextHandle);
 
 		if (SpecHandle.IsValid())
 		{
 			// Effectの適用
-			CustomAbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetCharacter->GetAbilitySystemComponent());
+			PlayerAbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetCharacter->GetAbilitySystemComponent());
 		}
 	}
 }
@@ -207,12 +208,12 @@ void UWeaponController::ApplyEquipment()
 	// 初期は納刀
 	SheathingWeapon();
 
-	if (CustomAbilitySystemComponent)
+	if (PlayerAbilitySystemComponent)
 	{
 		// 武器のAbilityをPlayerに持たせる
 		for (auto Ability : WeaponActor->AttackAbilities)
 		{
-			CustomAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1));
+			PlayerAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), 0, -1));
 		}
 	}
 	else UE_LOG(LogTemp, Warning, TEXT("UWeaponController::ApplyEquipment : CustomAbilitySystemComponent is nullptr"));

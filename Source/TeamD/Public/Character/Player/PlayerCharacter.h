@@ -34,10 +34,10 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	UPlayerAttributeSet* GetPlayerAttributeSet();
+	
+//------------------------input------------------------
 
 protected:
-//------------------------input------------------------
-	
 	// MappingContext
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
@@ -89,6 +89,7 @@ private:
 
 	//------------------------移動------------------------
 
+private:
 	// 移動速度を状態に応じて更新する
 	void UpdateMovementSpeed() const;
 

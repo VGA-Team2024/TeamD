@@ -8,7 +8,7 @@
 #include "WeaponBase.h"
 #include "Character/UserInterface/DamageDisplayWidget.h"
 #include "Components/ActorComponent.h"
-#include "GAS/CustomAbilitySystemComponent.h"
+#include "GAS/Player/PlayerAbilitySystemComponent.h"
 #include "WeaponController.generated.h"
 
 /**
@@ -35,7 +35,7 @@ public:
 	TObjectPtr<ACharacter> OwnerCharacter;
 	
 	UPROPERTY()
-	TObjectPtr<UCustomAbilitySystemComponent> CustomAbilitySystemComponent;
+	TObjectPtr<UPlayerAbilitySystemComponent> PlayerAbilitySystemComponent;
 
 	//------------------------Input------------------------
 protected:

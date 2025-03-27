@@ -5,8 +5,6 @@ void UCustomAbilitySystemComponent::TickComponent(float DeltaTime, enum ELevelTi
                                                   FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if (bUseSaveInput) TryActivateAbilitiesBySavedInputTagInTick(DeltaTime);
 }
 
 FGameplayAbilitySpec UCustomAbilitySystemComponent::GiveAbilityAndActivateOnce(
@@ -78,45 +76,6 @@ UGameplayAbility* UCustomAbilitySystemComponent::GetActiveAbility(const FGamepla
 	return nullptr;
 }
 
-void UCustomAbilitySystemComponent::SaveTagTryActivateAbilities(const FGameplayTag InputTag)
-{
-	if (!InputTag.IsValid())
-	{
-		UE_LOG(LogTemp, Error, TEXT("Invalid InputTag:%d"), __LINE__);
-		return;
-	}
-	
-	// Activate出来なかった場合
-	if (!TryActivateAbilitiesByTag(FGameplayTagContainer(InputTag), true))
-	{
-		SavedInputTag = InputTag;
-		// タイマーリセット
-		SaveInputTimer = TimeToSaveInput;
-		// 入力Tagを上書き
-		RemoveInputTags();
-		AddLooseGameplayTag(InputTag);
-	}
-}
-
-void UCustomAbilitySystemComponent::TryActivateAbilitiesBySavedInputTagInTick(float DeltaTime)
-{
-	if (SaveInputTimer <= 0 ||
-		(SavedInputTag.IsValid() && TryActivateAbilitiesByTag(FGameplayTagContainer(SavedInputTag), true)))
-	{
-		// タイマーリセット
-		SaveInputTimer = 0;
-		// Tagをリセット
-		SavedInputTag = FGameplayTag::EmptyTag;
-		// InputTagを削除
-		RemoveTagsWithParent(InputTagRoot);
-		
-		return;
-	}
-
-	// タイマーを進める
-	SaveInputTimer -= DeltaTime;
-}
-
 void UCustomAbilitySystemComponent::RemoveTagsWithParent(const FGameplayTag& ParentTag)
 {
 	if (!ParentTag.IsValid())
@@ -138,5 +97,3 @@ void UCustomAbilitySystemComponent::RemoveTagsWithParent(const FGameplayTag& Par
 		}
 	}
 }
-
-void UCustomAbilitySystemComponent::RemoveInputTags() { RemoveTagsWithParent(InputTagRoot); }

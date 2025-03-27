@@ -16,6 +16,15 @@ APlayerCharacter::APlayerCharacter()
 	CharacterAttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("PlayerAttributeSet"));
 	WeaponController = CreateDefaultSubobject<UWeaponController>(TEXT("WeaponController"));
 	PlayerItemManager = CreateDefaultSubobject<UPlayerItemManager>(TEXT("PlayerItemManager"));
+
+	// ASCはPlayer用に置き換える
+	if (CustomAbilitySystemComponent)
+	{
+		CustomAbilitySystemComponent->DestroyComponent();
+		CustomAbilitySystemComponent = nullptr;
+	}
+
+	CustomAbilitySystemComponent = CreateDefaultSubobject<UPlayerAbilitySystemComponent>(TEXT("PlayerAbilitySystemComponent"));
 }
 
 void APlayerCharacter::BeginPlay()

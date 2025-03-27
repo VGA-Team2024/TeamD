@@ -16,7 +16,6 @@ void ACharacterBase::PostInitializeComponents()
 	if (CustomAbilitySystemComponent)
 	{
 		CustomAbilitySystemComponent->InitAbilityActorInfo(this, this);
-		UE_LOG(LogTemp, Log, TEXT("init custom asc"));
 	}
 	else UE_LOG(LogTemp, Error, TEXT("APlayerCharacter::PostInitializeComponents : null CustomAbilitySystemComponent"));
 }
@@ -28,7 +27,6 @@ void ACharacterBase::BeginPlay()
 	if (CustomAbilitySystemComponent)
 	{
 		CustomAbilitySystemComponent->InitAbilityActorInfo(this, this);
-		UE_LOG(LogTemp, Log, TEXT("init custom asc"));
 	}
 	else
 	{

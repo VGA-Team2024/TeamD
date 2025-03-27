@@ -1,15 +1,20 @@
 #include "Character/AnimNotify/AbilityTransitionNotifyState.h"
 
+#include "Framework/CustomFramework.h"
+
 void UAbilityTransitionNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
-	float FrameDeltaTime)
+                                               float FrameDeltaTime)
 {
 	const TObjectPtr<APlayerCharacter> OwnerPlayer = Cast<APlayerCharacter>(MeshComp->GetOwner());
+	
 	if (!OwnerPlayer)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Owner is not player:%d%d"), __FILE__, __LINE__);
 		return;
 	}
-	const TObjectPtr<UCustomAbilitySystemComponent> PlayerAbilitySystemComponent = OwnerPlayer->GetAbilitySystemComponent();
+	
+	const TObjectPtr<UPlayerAbilitySystemComponent> PlayerAbilitySystemComponent = Cast<UPlayerAbilitySystemComponent>(OwnerPlayer->GetAbilitySystemComponent());
+
 	if (!PlayerAbilitySystemComponent)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("custom asc is nullptr:%d%d"), __FILE__, __LINE__);
@@ -17,7 +22,10 @@ void UAbilityTransitionNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp,
 	}
 
 	// 入力保存してないなら終了
-	if (!PlayerAbilitySystemComponent->IsSavingInput()) return;
+	if (!PlayerAbilitySystemComponent->IsSavingInput())
+	{
+		return;
+	}
 	
 	// Abilityを起動してみる
 	for (const auto Ability : TransitionalAbilities)
